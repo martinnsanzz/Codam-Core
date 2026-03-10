@@ -1,4 +1,5 @@
 NAME = libft.a
+OBJS_DIR = objs
 
 SRCS = ft_isalpha.c \
 	ft_isdigit.c \
@@ -44,23 +45,25 @@ SRCS = ft_isalpha.c \
 	ft_lstiter.c \
 	ft_lstmap.c
 
-OBJS = $(SRCS:.c=.o)
+OBJS = $(SRCS:%.c=$(OBJS_DIR)/%.o)
 
 CC = cc
 CFLAGS = -Wall -Werror -Wextra
-RM = rm -f
+RM = rm -rf
 
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
-
+all: $(NAME)
 $(NAME): $(OBJS)
 		ar rc $(NAME) $(OBJS)
 		ranlib $(NAME)
 
-all: $(NAME)
+$(OBJS_DIR)/%.o: %.c | $(OBJS_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJS_DIR):
+	mkdir -p $(OBJS_DIR)
 
 clean:
-	$(RM) $(OBJS)
+	$(RM) $(OBJS_DIR)
 
 fclean: clean
 	$(RM) $(NAME)

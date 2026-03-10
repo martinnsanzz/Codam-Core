@@ -1,29 +1,33 @@
 .DEFAULT_GOAL = re
 NAME = a.out
 SRC_DIR = attempt_1
+OBJS_DIR = $(SRC_DIR)/objs
 
-SRCS = $(wildcard attempt_1/ft_*.c)
+SRCS = $(wildcard $(SRC_DIR)/ft_*.c)
 MAIN = main.c
-OBJS = $(SRCS:.c=.o)
+OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJS_DIR)/%.o)
 
 CC = cc
 CFLAGS = -Wall -Werror -Wextra
-RM = rm -f
-
-%.o:%.c
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(MAIN) -o $@ $^
+RM = rm -rf
 
 all: $(NAME)
 
+$(NAME): $(OBJS)
+	$(CC) $(CFLAGS) $(MAIN) $(OBJS) -o $(NAME)
+
+$(OBJS_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJS_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJS_DIR):
+	mkdir -p $(OBJS_DIR)
+
 clean:
-	$(RM) $(OBJS)
+	$(RM) $(OBJS_DIR)
 
 fclean: clean
 	$(RM) $(NAME)
 
 re: fclean all
 
-.PHONY: all clean flcean re
+.PHONY: all clean fclean re
