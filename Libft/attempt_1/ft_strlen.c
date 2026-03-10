@@ -6,8 +6,18 @@
 /*   By: masanz-s <masanz-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 09:40:28 by masanz-s          #+#    #+#             */
-/*   Updated: 2026/03/10 10:05:01 by masanz-s         ###   ########.fr       */
+/*   Updated: 2026/03/10 17:12:01 by masanz-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+
+size_t	ft_strlen(const char *s)
+{
+	size_t	len;
+
+	len = 0;
+	while (s[len] != '\0')
+		len++;
+	return (len);
+}

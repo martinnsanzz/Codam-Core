@@ -4,6 +4,8 @@
 
 int	main(void)
 {
-	printf("Is A alpha: %d\n", ft_isalpha(123));
+	const char	*str = "Hello";
+
+	printf("Size of %s is: %zu\n", str, ft_strlen(&str[0]));
 	return (0);
 }

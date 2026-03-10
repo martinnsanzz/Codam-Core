@@ -22,6 +22,9 @@ $(OBJS_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJS_DIR)
 $(OBJS_DIR):
 	mkdir -p $(OBJS_DIR)
 
+run: $(NAME)
+	./$(NAME)
+
 clean:
 	$(RM) $(OBJS_DIR)
 
@@ -30,4 +33,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all run clean fclean re

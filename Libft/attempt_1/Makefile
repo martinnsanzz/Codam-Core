@@ -52,6 +52,7 @@ CFLAGS = -Wall -Werror -Wextra
 RM = rm -rf
 
 all: $(NAME)
+
 $(NAME): $(OBJS)
 		ar rc $(NAME) $(OBJS)
 		ranlib $(NAME)

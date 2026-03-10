@@ -6,7 +6,7 @@
 /*   By: masanz-s <masanz-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 09:18:34 by masanz-s          #+#    #+#             */
-/*   Updated: 2026/03/10 12:59:28 by masanz-s         ###   ########.fr       */
+/*   Updated: 2026/03/10 16:38:23 by masanz-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int				ft_memcmp(const void *s1, const void *s2, size_t n);
 int				ft_memcmp(const void *s1, const void *s2, size_t n);
 int				ft_atoi(const char *nptr);
 void			*ft_calloc(size_t nmemb, size_t size);
-void			*ft_calloc(size_t nmemb, size_t size);
+char			*strdup(const char *s);
 
 /* --- PART 2 - Additional functions --- */
 char			*ft_substr(char const *s, unsigned int start, size_t len);
