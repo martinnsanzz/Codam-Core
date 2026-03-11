@@ -1,11 +1,17 @@
 
 #include "attempt_1/libft.h"
 #include <stdio.h>
+#include <string.h>
 
 int	main(void)
 {
-	const char	*str = "Hello";
+	char	str[7] = "Hello";
 
-	printf("Size of %s is: %zu\n", str, ft_strlen(&str[0]));
+	ft_bzero(&str[3], 1);
+	for (size_t i = 0; i < 7; i++)
+	{
+		printf("%c ", str[i]);
+	}
+	printf("\n");
 	return (0);
 }

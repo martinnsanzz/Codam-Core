@@ -3,7 +3,8 @@ NAME = a.out
 SRC_DIR = attempt_1
 OBJS_DIR = $(SRC_DIR)/objs
 
-SRCS = $(wildcard $(SRC_DIR)/ft_*.c)
+#SRCS = $(wildcard $(SRC_DIR)/ft_*.c)
+SRCS = $(SRC_DIR)/ft_bzero.c
 MAIN = main.c
 OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJS_DIR)/%.o)
 
@@ -22,7 +23,7 @@ $(OBJS_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJS_DIR)
 $(OBJS_DIR):
 	mkdir -p $(OBJS_DIR)
 
-run: $(NAME)
+run: re $(NAME)
 	./$(NAME)
 
 clean:
