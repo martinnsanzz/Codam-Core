@@ -6,14 +6,17 @@
 /*   By: masanz-s <masanz-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 09:39:21 by masanz-s          #+#    #+#             */
-/*   Updated: 2026/03/10 16:36:12 by masanz-s         ###   ########.fr       */
+/*   Updated: 2026/03/11 15:13:46 by masanz-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+/*
+** Checks whether a value belongs to the ASCII table.
+*/
 int	ft_isascii(int c)
 {
+	c = (unsigned char)c;
 	return (c >= 0 && c <= 127);
 }
-

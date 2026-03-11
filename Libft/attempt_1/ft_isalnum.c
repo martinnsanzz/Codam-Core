@@ -6,17 +6,19 @@
 /*   By: masanz-s <masanz-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 09:39:16 by masanz-s          #+#    #+#             */
-/*   Updated: 2026/03/10 16:34:05 by masanz-s         ###   ########.fr       */
+/*   Updated: 2026/03/11 15:15:46 by masanz-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+/*
+** Checks whether a character is an alphanumeric character.
+** An alphanumeric character is either a letter (A-Z, a-z)
+** or a digit (0-9).
+*/
 int	ft_isalnum(int c)
 {
-	if ((c >= 65 && c <= 90) || (c >= 97 && c <= 122))
-		return (1);
-	else if ((c >= 48 && c <= 57))
-		return (1);
-	return (0);
+	c = (unsigned char)c;
+	return (ft_isalpha(c) || ft_isdigit(c));
 }

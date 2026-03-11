@@ -1,5 +1,12 @@
+###
+### Build configuration for libft.a
+### - Compiles each libft source file into an object file in $(OBJS_DIR)
+### - Packs all object files into the static library $(NAME)
+### - Updates the library index so the linker can resolve symbols correctly
+###
+
 NAME = libft.a
-OBJS_DIR = objs
+OBJS_DIR = objs # Directory used to store generated object files
 
 SRCS = ft_isalpha.c \
 	ft_isdigit.c \
@@ -45,21 +52,31 @@ SRCS = ft_isalpha.c \
 	ft_lstiter.c \
 	ft_lstmap.c
 
+# Convert each source file name into its matching object path inside $(OBJS_DIR)
 OBJS = $(SRCS:%.c=$(OBJS_DIR)/%.o)
 
+# Standard build tools and flags
 CC = cc
 CFLAGS = -Wall -Werror -Wextra
 RM = rm -rf
 
 all: $(NAME)
 
+# Build the static library from all compiled object files
 $(NAME): $(OBJS)
-		ar rc $(NAME) $(OBJS)
-		ranlib $(NAME)
+# `ar` creates an archive file (.a) containing the object files
+# `r` replaces existing members in the archive if needed
+# `c` creates the archive if it does not already exist
+	ar rc $(NAME) $(OBJS)
+# Generate/update the archive index so the linker can find symbols quickly
+	ranlib $(NAME)
 
+# Compile each .c file into a .o file inside $(OBJS_DIR)
+# The order-only prerequisite ensures the directory exists before compilation
 $(OBJS_DIR)/%.o: %.c | $(OBJS_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
+# Create the object directory only if it does not already exist
 $(OBJS_DIR):
 	mkdir -p $(OBJS_DIR)
 
@@ -69,6 +86,8 @@ clean:
 fclean: clean
 	$(RM) $(NAME)
 
+# Full rebuild from scratch
 re: fclean all
 
-.PHONY: all clean flcean re
+# Declare targets that do not represent real files
+.PHONY: all clean fclean re
