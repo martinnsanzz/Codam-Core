@@ -9,17 +9,21 @@
 .DEFAULT_GOAL = re# Run `make re` when no target is specified
 NAME = libft.a
 EXEC = a.out
+
+#Directories of files
 SRC_DIR = attempt_1
 OBJS_DIR = $(SRC_DIR)/objs# Directory used to store generated object files
+TEST_DIR = test_func
 
-#SRCS = $(wildcard $(SRC_DIR)/ft_*.c)
-SRCS = $(SRC_DIR)/ft_memcpy.c
-MAIN = main.c
+SRCS = $(wildcard $(SRC_DIR)/ft_*.c)
 OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJS_DIR)/%.o)# Map source paths to matching object paths
+
+TEST = $(TEST_DIR)/$(PARAM)
 
 # Standard build tools and flags
 CC = cc
 CFLAGS = -Wall -Werror -Wextra
+AR = ar rcs
 RM = rm -rf
 
 all: $(EXEC)
@@ -27,8 +31,8 @@ all: $(EXEC)
 
 #-L.  -> search library in current directory
 #-lft -> links libft.a
-$(EXEC): $(NAME) $(OBJS)
-	$(CC) $(CFLAGS) $(MAIN) -L. -lft -o $(EXEC)
+$(EXEC): $(NAME)
+	$(CC) $(CFLAGS) $(TEST) -L. -lft -o $(EXEC)
 
 
 # Build the static library from all compiled object files
@@ -36,7 +40,7 @@ $(NAME): $(OBJS)
 # `ar` creates an archive file (.a) containing the object files
 # `r` replaces existing members in the archive if needed
 # `c` creates the archive if it does not already exist
-	ar rc $(NAME) $(OBJS)
+	$(AR) $(NAME) $(OBJS)
 # Generate/update the archive index so the linker can find symbols quickly
 	ranlib $(NAME)
 
@@ -53,6 +57,7 @@ $(OBJS_DIR):
 
 
 # Rebuild everything, then run the executable
+# Command to run this makefile: make run PARAM='Name of test_file to run' inside test_func/
 run: re $(EXEC)
 	./$(EXEC)
 
@@ -60,7 +65,7 @@ clean:
 	$(RM) $(OBJS_DIR)
 
 fclean: clean
-	$(RM) $(NAME) $(EXEC)
+	$(RM) $(NAME) $(TEST_DIR)/$(EXEC) $(EXEC)
 
 # Full rebuild from scratch
 re: fclean all

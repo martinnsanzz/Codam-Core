@@ -6,8 +6,13 @@
 /*   By: masanz-s <masanz-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 09:40:26 by masanz-s          #+#    #+#             */
-/*   Updated: 2026/03/10 10:05:01 by masanz-s         ###   ########.fr       */
+/*   Updated: 2026/03/12 14:23:28 by masanz-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+
+size_t	ft_strlcpy(char *dst, const char *src, size_t size)
+{
+
+}
