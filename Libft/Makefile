@@ -15,7 +15,9 @@ SRC_DIR = attempt_1
 OBJS_DIR = $(SRC_DIR)/objs# Directory used to store generated object files
 TEST_DIR = test_func
 
-SRCS = $(wildcard $(SRC_DIR)/ft_*.c)
+SRC_FILE = $(PARAM:test_%=%) \
+			$(SRC_DIR)/ft_strlen.c
+SRCS = $(SRC_DIR)/$(SRC_FILE)
 OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJS_DIR)/%.o)# Map source paths to matching object paths
 
 TEST = $(TEST_DIR)/$(PARAM)
