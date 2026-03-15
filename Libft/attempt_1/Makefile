@@ -6,7 +6,7 @@
 ###
 
 NAME = libft.a
-OBJS_DIR = objs # Directory used to store generated object files
+OBJS_DIR = objs# Directory used to store generated object files
 
 SRCS = ft_isalpha.c \
 	ft_isdigit.c \
