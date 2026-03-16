@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include "../attempt_1/libft.h"
 
-//gcc -Wall -Wextra -Werror test_ft_bzero.c ../attempt_1/ft_bzero.c
-
 static void	print_buf(unsigned char *buf, int n)
 {
 	int	i = 0;

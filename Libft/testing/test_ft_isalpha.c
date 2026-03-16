@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include "../attempt_1/libft.h"
 
-//gcc -Wall -Wextra -Werror test_ft_isalpha.c ../attempt_1/ft_isalpha.c
-
 int	main(void)
 {
 	printf("A -> %d (expected 1)\n", ft_isalpha('A'));

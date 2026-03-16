@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include "../attempt_1/libft.h"
 
-//gcc -Wall -Wextra -Werror test_ft_isdigit.c ../attempt_1/ft_isdigit.c
-
 int	main(void)
 {
 	printf("0 -> %d (expected 1)\n", ft_isdigit('0'));

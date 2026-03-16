@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include "../attempt_1/libft.h"
 
-//gcc -Wall -Wextra -Werror test_ft_isprint.c ../attempt_1/ft_isprint.c
-
 int	main(void)
 {
 	printf("' ' -> %d (expected 1)\n", ft_isprint(' '));

@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include "../attempt_1/libft.h"
 
-//gcc -Wall -Wextra -Werror test_ft_strlen.c ../attempt_1/ft_strlen.c
-
 int	main(void)
 {
 	printf("Test 1: \"Hello\"\n");

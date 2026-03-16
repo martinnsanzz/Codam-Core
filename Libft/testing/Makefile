@@ -15,7 +15,7 @@ SRC_DIR = ../attempt_1
 OBJS_DIR = $(SRC_DIR)/objs# Directory used to store generated object files
 
 SRC_FILE = $(PARAM:test_%=%) \
-			$(SRC_DIR)/ft_strlen.c
+			$(SRC_DIR)/ft_strlen.c 
 SRCS = $(SRC_DIR)/$(SRC_FILE)
 OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJS_DIR)/%.o)# Map source paths to matching object paths
 
@@ -23,7 +23,8 @@ TEST = $(PARAM)
 
 # Standard build tools and flags
 CC = cc
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Wextra -Werror
+#CFLAGS = -Wall -Wextra -lbsd#Use this when working with bsd/string.h functions 
 AR = ar rcs
 RM = rm -rf
 
