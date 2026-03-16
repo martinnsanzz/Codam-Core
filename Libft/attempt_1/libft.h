@@ -6,7 +6,7 @@
 /*   By: masanz-s <masanz-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 09:18:34 by masanz-s          #+#    #+#             */
-/*   Updated: 2026/03/16 12:44:34 by masanz-s         ###   ########.fr       */
+/*   Updated: 2026/03/16 13:48:17 by masanz-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <stddef.h> //Includes size_t variable type (unsigned long)
-# include <stdint.h>
+# include <stdint.h> 
 
 /* --- Struct definition --- */
 typedef struct s_list
