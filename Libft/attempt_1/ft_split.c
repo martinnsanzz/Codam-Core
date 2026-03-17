@@ -6,7 +6,7 @@
 /*   By: masanz-s <masanz-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 09:39:58 by masanz-s          #+#    #+#             */
-/*   Updated: 2026/03/17 18:48:28 by masanz-s         ###   ########.fr       */
+/*   Updated: 2026/03/17 18:55:15 by masanz-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,6 @@ int	ft_word_len(char *s, char c)
 	}
 	return (word_len);
 }
-
 
 /*
 ** Frees a partially allocated array of strings.

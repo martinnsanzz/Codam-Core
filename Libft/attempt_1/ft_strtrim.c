@@ -6,7 +6,7 @@
 /*   By: masanz-s <masanz-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 09:40:43 by masanz-s          #+#    #+#             */
-/*   Updated: 2026/03/17 16:04:39 by masanz-s         ###   ########.fr       */
+/*   Updated: 2026/03/17 18:57:52 by masanz-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@
 char	*ft_strtrim(char const *s1, char const *set)
 {
 	char	*s1_trim;
-	size_t		start;
-	size_t		end;
-	size_t		size;
+	size_t	start;
+	size_t	end;
+	size_t	size;
 
 	start = 0;
 	end = ft_strlen(s1);

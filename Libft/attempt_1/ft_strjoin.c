@@ -6,7 +6,7 @@
 /*   By: masanz-s <masanz-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 09:40:19 by masanz-s          #+#    #+#             */
-/*   Updated: 2026/03/17 14:53:55 by masanz-s         ###   ########.fr       */
+/*   Updated: 2026/03/17 18:57:36 by masanz-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	if (str == NULL)
 		return (NULL);
 	i = 0;
-	while(*s1 != '\0')
+	while (*s1 != '\0')
 		str[i++] = *s1++;
-	while(*s2 != '\0')
+	while (*s2 != '\0')
 		str[i++] = *s2++;
 	ft_bzero(&str[i], 1);
 	return (str);
