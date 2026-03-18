@@ -22,8 +22,8 @@ TEST = $(PARAM)
 
 # Standard build tools and flags
 CC = cc
-#CFLAGS = -Wall -Wextra -Werror
-CFLAGS = -Wall -Wextra -g
+CFLAGS = -Wall -Wextra -Werror
+#CFLAGS = -Wall -Wextra -g
 #CFLAGS = -Wall -Wextra -lbsd#Use this when working with bsd/string.h functions 
 AR = ar rcs
 RM = rm -rf
