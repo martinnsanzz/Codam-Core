@@ -13,6 +13,7 @@ EXEC = a.out
 #Directories of files
 SRC_DIR = ../attempt_1
 OBJS_DIR = $(SRC_DIR)/objs# Directory used to store generated object files
+ROOT_DIR = ~/Desktop/Codam-Core
 
 SRC_FILE = $(wildcard $(SRC_DIR)/ft_*.c)
 SRCS = $(SRC_FILE)
@@ -67,7 +68,11 @@ clean:
 	$(RM) $(OBJS_DIR)
 
 fclean: clean
-	$(RM) $(NAME) $(TEST_DIR)/$(EXEC) $(EXEC)
+	$(RM) $(NAME) $(TEST_DIR)/$(EXEC) $(EXEC) *.dSYM
+
+#Cleans files created when debugging
+debugClean:
+	$(RM) $(ROOT_DIR)/*.dSYM $(ROOT_DIR)/a.out
 
 # Full rebuild from scratch
 re: fclean all
