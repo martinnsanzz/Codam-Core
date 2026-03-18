@@ -71,7 +71,7 @@ fclean: clean
 	$(RM) $(NAME) $(TEST_DIR)/$(EXEC) $(EXEC) *.dSYM
 
 #Cleans files created when debugging
-debugClean:
+debugclean: fclean
 	$(RM) $(ROOT_DIR)/*.dSYM $(ROOT_DIR)/a.out
 
 # Full rebuild from scratch
