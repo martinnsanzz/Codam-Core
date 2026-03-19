@@ -81,14 +81,14 @@ static void	run_test(const char *s, char c,
 
 int	main(void)
 {
-	const char *t1[] = {"hello", "world", NULL};
+	const char *t1[] = {"hello", "world", "this", "is", "martin", NULL};
 	const char *t2[] = {"42", "school", "libft", NULL};
 	const char *t3[] = {"single", NULL};
 	const char *t4[] = {"a", "b", "c", NULL};
 	const char *t5[] = {NULL};
 	const char *t6[] = {"no_delimiters", NULL};
 
-	run_test("hello world", ' ', t1, 2);
+	run_test("hello world this is martin", ' ', t1, 5);
 	run_test("42:school:libft", ':', t2, 3);
 	run_test("single", ' ', t3, 1);
 	run_test("a,b,c", ',', t4, 3);
@@ -98,7 +98,7 @@ int	main(void)
 
 	run_test("no_delimiters", ',', t6, 1);
 
-	run_test("  hello   world  ", ' ', t1, 2);
+	run_test("  hello   world  this   is   martin  ", ' ', t1, 5);
 	run_test(",,,a,,b,c,,", ',', t4, 3);
 
 	return (0);

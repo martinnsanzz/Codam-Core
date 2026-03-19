@@ -6,7 +6,7 @@
 /*   By: masanz-s <masanz-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 09:39:58 by masanz-s          #+#    #+#             */
-/*   Updated: 2026/03/17 18:55:15 by masanz-s         ###   ########.fr       */
+/*   Updated: 2026/03/19 12:28:06 by masanz-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,13 +65,19 @@ char	**ft_split(char const *s, char c)
 }
 
 /*
-** Counts the number of words in the string s separated by delimiter c.
+** Counts the number of words in a null-terminated string delimited by c.
+**
+** Parameters:
+** s : input null-terminated string
+** c : delimiter character
 **
 ** Returns:
-** Number of words found in the string.
+** Number of words found.
 **
-** Note:
-** A word is defined as a sequence of characters not equal to c.
+** Behavior:
+** - A word is a sequence of characters not equal to c.
+** - Detects word start on transition: previous char == c (or i == 0).
+** - Consecutive delimiters are skipped (not counted as empty words).
 */
 int	ft_word_count(char	*s, char c)
 {
@@ -84,11 +90,11 @@ int	ft_word_count(char	*s, char c)
 	i = 0;
 	while (i < len)
 	{
-		if (s[i] == c && s[i + 1] != c)
+		if (s[i] != c && (i == 0 || s[i - 1] == c))
 			word_count++;
 		i++;
 	}
-	return (word_count + 1);
+	return (word_count);
 }
 
 /*
