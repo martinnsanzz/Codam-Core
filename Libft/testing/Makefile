@@ -68,7 +68,7 @@ clean:
 	$(RM) $(OBJS_DIR)
 
 fclean: clean
-	$(RM) $(NAME) $(TEST_DIR)/$(EXEC) $(EXEC) *.dSYM
+	$(RM) $(NAME) $(TEST_DIR)/$(EXEC) $(EXEC)
 
 #Cleans files created when debugging
 debugclean: fclean

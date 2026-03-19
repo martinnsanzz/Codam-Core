@@ -6,7 +6,7 @@
 /*   By: masanz-s <masanz-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 09:41:14 by masanz-s          #+#    #+#             */
-/*   Updated: 2026/03/16 15:35:15 by masanz-s         ###   ########.fr       */
+/*   Updated: 2026/03/19 16:34:05 by masanz-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 */
 void	ft_lstadd_front(t_list **lst, t_list *new)
 {
-	if (new == NULL)
+	if (lst == NULL || new == NULL)
 		return ;
 	new->next = *lst;
 	*lst = new;

@@ -6,7 +6,7 @@
 /*   By: masanz-s <masanz-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 09:39:53 by masanz-s          #+#    #+#             */
-/*   Updated: 2026/03/19 12:13:38 by masanz-s         ###   ########.fr       */
+/*   Updated: 2026/03/19 16:20:44 by masanz-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 void	ft_putnbr_fd(int n, int fd)
 {
 	long	nb;
-	char c;
+	char	c;
 
 	nb = n;
 	if (nb < 0)

@@ -6,12 +6,27 @@
 /*   By: masanz-s <masanz-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 09:39:43 by masanz-s          #+#    #+#             */
-/*   Updated: 2026/03/12 13:52:57 by masanz-s         ###   ########.fr       */
+/*   Updated: 2026/03/19 16:51:27 by masanz-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+/*
+** Copies n bytes from src to dest, handling overlapping memory regions safely.
+**
+** Parameters:
+** dest : pointer to the destination memory area
+** src  : pointer to the source memory area
+** n    : number of bytes to copy
+**
+** Returns:
+** A pointer to dest.
+**
+** Note:
+** Unlike ft_memcpy, this function is safe for overlapping memory regions.
+** Passing NULL for dest or src with n > 0 is undefined behavior.
+*/
 void	*ft_memmove(void *dest, const void *src, size_t n)
 {
 	size_t			i;

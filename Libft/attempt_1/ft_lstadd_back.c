@@ -6,7 +6,7 @@
 /*   By: masanz-s <masanz-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 09:41:12 by masanz-s          #+#    #+#             */
-/*   Updated: 2026/03/17 11:41:44 by masanz-s         ###   ########.fr       */
+/*   Updated: 2026/03/19 16:35:03 by masanz-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,13 @@ void	ft_lstadd_back(t_list **lst, t_list *new)
 {
 	t_list	*last_node;
 
-	if (new == NULL || lst == NULL)
+	if (lst == NULL || new == NULL)
 		return ;
-	new->next = NULL;
-	last_node = ft_lstlast(*lst);
-	if (last_node == NULL)
+	if (*lst == NULL)
 	{
 		*lst = new;
 		return ;
 	}
+	last_node = ft_lstlast(*lst);
 	last_node->next = new;
 }

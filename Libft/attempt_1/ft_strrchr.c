@@ -3,15 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strrchr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: 2002mssm02 <2002mssm02@student.42.fr>      +#+  +:+       +#+        */
+/*   By: masanz-s <masanz-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 09:40:40 by masanz-s          #+#    #+#             */
-/*   Updated: 2026/03/15 19:15:58 by 2002mssm02       ###   ########.fr       */
+/*   Updated: 2026/03/19 16:52:14 by masanz-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+/*
+** Locates the last occurrence of character c in the null-terminated string s.
+**
+** Parameters:
+** s : pointer to the null-terminated string to search
+** c : character to locate, passed as int and cast to char
+**
+** Returns:
+** A pointer to the last occurrence of c in s.
+** A pointer to the null terminator if c is '\0'.
+** NULL if c is not found.
+**
+** Note:
+** Passing NULL for s is undefined behavior.
+** The returned pointer is non-const; modifying s through it is the
+** caller's responsibility.
+*/
 char	*ft_strrchr(const char *s, int c)
 {
 	int		len;
