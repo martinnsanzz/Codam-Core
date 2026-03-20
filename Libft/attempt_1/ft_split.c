@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: masanz-s <masanz-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: 2002mssm02 <2002mssm02@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 09:39:58 by masanz-s          #+#    #+#             */
-/*   Updated: 2026/03/19 12:28:06 by masanz-s         ###   ########.fr       */
+/*   Updated: 2026/03/20 10:08:13 by 2002mssm02       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_free(char **arr, int word);
-int		ft_word_count(char	*s, char c);
-int		ft_word_len(char *s, char c);
+static void	ft_free(char **arr, int word);
+static int		ft_word_count(char	*s, char c);
+static int		ft_word_len(char *s, char c);
 
 /*
 ** Splits the string s into an array of strings using the delimiter c.
@@ -79,7 +79,7 @@ char	**ft_split(char const *s, char c)
 ** - Detects word start on transition: previous char == c (or i == 0).
 ** - Consecutive delimiters are skipped (not counted as empty words).
 */
-int	ft_word_count(char	*s, char c)
+static int	ft_word_count(char	*s, char c)
 {
 	int	word_count;
 	int	len;
@@ -101,7 +101,7 @@ int	ft_word_count(char	*s, char c)
 ** Computes the length of a word starting at s,
 ** stopping at delimiter c or end of string.
 */
-int	ft_word_len(char *s, char c)
+static int	ft_word_len(char *s, char c)
 {
 	int	word_len;
 
@@ -125,7 +125,7 @@ int	ft_word_len(char *s, char c)
 ** Behavior:
 ** Frees all allocated strings and the array itself.
 */
-void	ft_free(char **arr, int word)
+static void	ft_free(char **arr, int word)
 {
 	while (word > 0)
 	{

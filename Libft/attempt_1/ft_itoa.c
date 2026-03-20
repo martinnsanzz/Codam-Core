@@ -6,13 +6,13 @@
 /*   By: 2002mssm02 <2002mssm02@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 09:39:34 by masanz-s          #+#    #+#             */
-/*   Updated: 2026/03/18 15:20:53 by 2002mssm02       ###   ########.fr       */
+/*   Updated: 2026/03/20 10:06:52 by 2002mssm02       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	num_len(int num);
+static size_t	num_len(int num);
 
 /*
 ** Converts an integer to its string representation.
@@ -65,7 +65,7 @@ char	*ft_itoa(int n)
 ** For negative numbers, the function converts to positive before counting,
 ** so the sign is not included in the returned length.
 */
-size_t	num_len(int num)
+static size_t	num_len(int num)
 {
 	size_t	len;
 	long	nbum;
