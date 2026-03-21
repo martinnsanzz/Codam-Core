@@ -14,7 +14,7 @@ Each test file targets one function, compares output against expected values, an
 
 ## Directory structure
 
-The `testing/` folder **must** sit inside the root of your `libft` project, alongside your `.c` source files and your `.h` header.
+The `testing/` folder **must** sit inside the root of your `libft` project, alongside your source files and header.
 
 ```
 libft/               ← root directory
@@ -55,6 +55,6 @@ This will:
 
 ## Cleanup
 
-- make clean		-> Remove object file (.o)
+- make clean		-> Remove object files (.o)
 - make fclean		-> Remove object files and libft.a
 ---
