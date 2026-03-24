@@ -4,6 +4,7 @@
 ###
 
 EXEC = a.out
+EXECDEBUG = a.out.debug
 
 OBJS_DIR = objs
 
@@ -11,16 +12,21 @@ SRCS = $(wildcard *.c)
 OBJS = $(SRCS:%.c=$(OBJS_DIR)/%.o)
 
 CC = cc
-CFLAGS = -Wall -Werror -Wextra -D
-CFLAGS = -Wall -Werror -Wextra -g#Debug
+CFLAGS = -Wall -Werror -Wextra
+DEFINEFLAG = -D
+DFLAG = -g
 RM = rm -rf
-PARAM = 4096
+PARAM = 1
 
 all: $(EXEC)
 
-$(EXEC):
-#$(CC) $(CFLAGS) BUFFER_SIZE=$(PARAM) $(SRCS) -o $(EXEC)
-	$(CC) $(CFLAGS) $(SRCS) -o $(EXEC)
+debug: $(EXECDEBUG)
+
+$(EXEC): $(OBJS)
+	$(CC) $(CFLAGS) $(DEFINEFLAG) BUFFER_SIZE=$(PARAM) $(SRCS) -o $(EXEC)
+
+$(EXECDEBUG): $(OBJS)
+	$(CC) $(DFLAG) $(SRCS) $(DEFINEFLAG) BUFFER_SIZE=$(PARAM) -o $(EXECDEBUG)
 
 $(OBJS_DIR)/%.o: %.c | $(OBJS_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -32,8 +38,9 @@ clean:
 	$(RM) $(OBJS_DIR)
 
 fclean: clean
-	$(RM) $(EXEC)
+	$(RM) $(EXEC) $(EXECDEBUG)
 
 re: fclean all
 
-.PHONY: all clean fclean re
+
+.PHONY: all debug clean fclean re 
