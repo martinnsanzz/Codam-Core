@@ -6,12 +6,12 @@
 /*   By: masanz-s <masanz-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/21 19:04:31 by 2002mssm02        #+#    #+#             */
-/*   Updated: 2026/03/26 16:21:58 by masanz-s         ###   ########.fr       */
+/*   Updated: 2026/03/26 16:26:02 by masanz-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#ifndef GET_NEXT_LINE_BONUS_H
+# define GET_NEXT_LINE_BONUS_H
 
 # include <unistd.h>
 # include <stdlib.h>
@@ -35,4 +35,5 @@ char	*ft_strncpy(char *dest, const char *src, size_t n);
 char	*ft_strchr(const char *s, int c);
 void	*ft_calloc(size_t nmemb, size_t size);
 void	ft_bzero(void *s, size_t n);
+
 #endif
