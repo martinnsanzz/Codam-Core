@@ -6,7 +6,7 @@
 /*   By: masanz-s <masanz-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/21 19:07:55 by 2002mssm02        #+#    #+#             */
-/*   Updated: 2026/03/26 16:51:22 by masanz-s         ###   ########.fr       */
+/*   Updated: 2026/03/26 16:52:16 by masanz-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,24 +211,24 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (str);
 }
 
-#include <fcntl.h>
-#include <stdio.h>
+// #include <fcntl.h>
+// #include <stdio.h>
 
-int	main(void)
-{
-	int		fd;
-	char	*line;
+// int	main(void)
+// {
+// 	int		fd;
+// 	char	*line;
 
-	fd = open("test.txt", O_RDONLY);
-	//fd = 0;
-	while (1)
-	{
-		line = get_next_line(fd);
-		if (line == NULL)
-			break ;
-		printf("%s", line);
-		free(line);
-	}
-	close(fd);
-	return (0);
-}
+// 	fd = open("test.txt", O_RDONLY);
+// 	//fd = 0;
+// 	while (1)
+// 	{
+// 		line = get_next_line(fd);
+// 		if (line == NULL)
+// 			break ;
+// 		printf("%s", line);
+// 		free(line);
+// 	}
+// 	close(fd);
+// 	return (0);
+// }
