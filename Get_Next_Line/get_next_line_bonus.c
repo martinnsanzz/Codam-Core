@@ -1,22 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: masanz-s <masanz-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/21 19:07:55 by 2002mssm02        #+#    #+#             */
-/*   Updated: 2026/03/26 16:18:40 by masanz-s         ###   ########.fr       */
+/*   Updated: 2026/03/26 16:21:53 by masanz-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 /*
 ** Reads and returns the next line from a file descriptor.
 **
 ** Parameters:
-** fd : file descriptor to read from
+** fd : file descriptor to read from (valid range: 0 to 1023)
 **
 ** Returns:
 ** A newly allocated null-terminated string containing the next line,
@@ -24,42 +24,45 @@
 ** NULL on allocation failure, read error, or EOF with no remaining data.
 **
 ** Behavior:
-** - Returns NULL if fd < 0
-** - Initializes the static buffer to an empty string on first call
+** - Returns NULL if fd < 0 or fd >= 1024
+** - Initializes buffer[fd] to an empty string on first call for that fd
 ** - Calls fill_buffer() to append data until '\n' is found or EOF
+** - On fill_buffer() failure: frees buffer[fd] and returns NULL
 ** - Calls extract_line() to isolate and allocate the next line
-** - Calls trim_buffer() to remove the extracted line from the buffer,
-**   preserving any leftover bytes for the next call
-** - Frees the old buffer pointer after trimming
+** - Calls trim_buffer() to remove the extracted line, preserving leftovers
+** - Frees the old buffer[fd] pointer after trimming
 **
 ** Note:
-** Uses a static buffer that persists across calls for the same fd.
-** Mixing multiple file descriptors with a single static buffer produces
-** undefined behavior — each fd stomps the shared state.
+** Uses a static array of 1024 buffers, one per fd, allowing correct
+** behavior across multiple file descriptors within the same process.
+** buffer[fd] is NOT reset to NULL after free on failure — next call will
+** re-initialize it via the NULL check, which is safe but silent.
+** If trim_buffer() returns NULL, buffer[fd] becomes NULL and leftover
+** data is lost. Caller owns the returned string and must free it.
 */
 char	*get_next_line(int fd)
 {
-	static char	*buffer;
+	static char	*buffer[1024];
 	char		*result;
 	char		*tmp;
 
 	result = NULL;
-	if (fd < 0)
+	if (fd < 0 || fd >= 1024)
 		return (NULL);
-	if (buffer == NULL)
+	if (buffer[fd] == NULL)
 	{
-		buffer = ft_calloc(1, sizeof(char));
-		if (buffer == NULL)
+		buffer[fd] = ft_calloc(1, sizeof(char));
+		if (buffer[fd] == NULL)
 			return (NULL);
 	}
-	if (!fill_buffer(&buffer, fd))
+	if (!fill_buffer(&buffer[fd], fd))
 	{
-		free(buffer);
+		free(buffer[fd]);
 		return (NULL);
 	}
-	result = extract_line(buffer);
-	tmp = buffer;
-	buffer = trim_buffer(tmp);
+	result = extract_line(buffer[fd]);
+	tmp = buffer[fd];
+	buffer[fd] = trim_buffer(tmp);
 	free(tmp);
 	return (result);
 }
