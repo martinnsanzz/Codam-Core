@@ -6,7 +6,7 @@
 /*   By: masanz-s <masanz-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/21 19:08:31 by 2002mssm02        #+#    #+#             */
-/*   Updated: 2026/03/26 15:54:40 by masanz-s         ###   ########.fr       */
+/*   Updated: 2026/03/26 16:51:48 by masanz-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,15 +140,3 @@ char	*ft_strchr(const char *s, int c)
 		return (&str[i]);
 	return (NULL);
 }
-
-// #include <stdio.h>
-
-// int main(void)
-// {
-// 	char	*src = "Hello \n";
-// 	char	*dest;
-
-// 	dest = extract_line(src);
-// 	printf("%s", dest);
-// 	return (0);
-// }

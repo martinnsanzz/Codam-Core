@@ -18,7 +18,7 @@ DFLAG = -g
 RM = rm -rf
 PARAM = 1
 
-all: re $(EXEC)
+all: $(EXEC)
 
 debug: $(EXECDEBUG)
 
