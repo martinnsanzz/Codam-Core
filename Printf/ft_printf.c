@@ -21,9 +21,9 @@ static int	ft_handle_spec(char c, void *arg);
 */
 int	ft_printf(const char *format, ...)
 {
-	int	len;
-	int	i;
 	va_list	args;
+	int		len;
+	int		i;
 
 	va_start(args, format);
 	len = 0;
