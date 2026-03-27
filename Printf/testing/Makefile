@@ -1,14 +1,12 @@
 .DEFAULT_GOAL:= run
 
 NAME = libftprintf.a# Name of the static library to build
-LIBFTLIB = libft.a# Name of the libft static library (dependency)
 EXEC = a.out
 EXECDEBUG = a.out.debug
 
 SRC_DIR = ../
 OBJS_DIR = $(SRC_DIR)/objs
 LIBFT_DIR = $(SRC_DIR)/libft# Path to the libft sub-project
-ROOT_DIR = ~/Desktop/Codam-Core
 
 SRCS = $(wildcard $(SRC_DIR)/ft_*.c)
 OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJS_DIR)/%.o)
@@ -24,13 +22,12 @@ RM = rm -rf
 LIBFTLINK = -L$(LIBFT_DIR) -lft
 PRINTFLINK = -L. -lftprintf
 
-
 # Link the test file against both libraries to produce the executable
 $(EXEC): $(NAME) $(TEST)
 	$(CC) $(CFLAGS) $(TEST) $(LIBFTLINK) $(PRINTFLINK) -o $(EXEC)
 
 $(EXECDEBUG) : $(NAME) $(TEST)
-	$(CC) $(CFLAGS) $(TEST) $(LIBFTLINK) $(PRINTFLINK) -o $(EXECDEBUG)
+	$(CC) $(CFLAGS) -g $(TEST) $(LIBFTLINK) $(PRINTFLINK) -o $(EXECDEBUG)
 
 $(NAME): $(OBJS)
 	$(AR) $(NAME) $(OBJS)
@@ -41,26 +38,23 @@ $(OBJS_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJS_DIR)
 $(OBJS_DIR):
 	mkdir -p $(OBJS_DIR)
 
-# Build libft by delegating to its own Makefile
-$(LIBFTLIB):
-	$(MAKE) -C $(LIBFT_DIR)
-
 run: libft $(EXEC)
 	./$(EXEC)
 
 debug: libft $(EXECDEBUG)
 	./$(EXECDEBUG)
 
-# Alias that triggers the libft build rule above
-libft: $(LIBFTLIB)
+# Build libft.a by delegating to its own Makefile
+libft:
+	$(MAKE) -C $(LIBFT_DIR)
 
 clean:
 	$(RM) $(OBJS_DIR)
 	$(MAKE) -C $(LIBFT_DIR) clean
 
 fclean: clean
-	$(RM) $(NAME) $(EXEC)
-	$(RM) $(ROOT_DIR)/*.dSYM $(ROOT_DIR)/$(EXECDEBUG)
+	$(RM) $(NAME) $(EXEC) $(EXECDEBUG)
+	$(RM) *.dSYM $(EXECDEBUG)
 	$(MAKE) -C $(LIBFT_DIR) fclean
 
 .PHONY: run clean fclean libft debug
