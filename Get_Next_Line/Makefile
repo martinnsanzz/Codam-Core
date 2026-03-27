@@ -1,8 +1,3 @@
-###
-### Build configuration for get_next_line
-### 
-###
-
 EXEC = a.out
 EXECDEBUG = a.out.debug
 
