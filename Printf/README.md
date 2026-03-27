@@ -17,6 +17,9 @@
 
 # RESOURCES
 
+For the creation of this project the following resources were used:
+- [GeeksforGeeks - Variadic Functions in c](https://www.geeksforgeeks.org/c/variadic-functions-in-c/)
+- [cppreference - Variadic Functions](https://cppreference.com/w/c/variadic.html)
 
 **AI usage:**
 

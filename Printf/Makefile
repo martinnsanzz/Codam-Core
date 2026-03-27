@@ -1,15 +1,23 @@
+.DEFAULT_GOAL := all
+
 NAME = libftprintf.a
 LIBFTLIB = libft.a
 
 LIBFT_DIR = libft
 OBJS_DIR = objs
 
-SRCS = ft_printf.c
+SRCS = ft_printf.c \
+		ft_printf_char.c \
+		ft_printf_hex.c \
+		ft_printf_int.c \
+		ft_printf_ptr.c \
+		ft_printf_str.c 
 OBJS = $(SRCS:%.c=$(OBJS_DIR)/%.o)
 
 CC = cc
 CFLAGS = -Wall -Werror -Wextra
 RM = rm -rf
+
 
 $(NAME): $(OBJS)
 	ar rcs $(NAME) $(OBJS)

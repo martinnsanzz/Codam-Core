@@ -6,7 +6,7 @@
 /*   By: 2002mssm02 <2002mssm02@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 09:18:34 by masanz-s          #+#    #+#             */
-/*   Updated: 2026/03/27 11:56:24 by 2002mssm02       ###   ########.fr       */
+/*   Updated: 2026/03/27 18:31:03 by 2002mssm02       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,5 @@ void			ft_lstdelone(t_list *lst, void (*del)(void*));
 void			ft_lstclear(t_list **lst, void (*del)(void*));
 void			ft_lstiter(t_list *lst, void (*f)(void *));
 t_list			*ft_lstmap(t_list *lst, void *(*f)(void *),
-					void (*del)(void *));
-					
+					void (*del)(void *));	
 #endif

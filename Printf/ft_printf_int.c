@@ -1,28 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.h                                        :+:      :+:    :+:   */
+/*   ft_printf_int.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: 2002mssm02 <2002mssm02@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/27 11:15:46 by 2002mssm02        #+#    #+#             */
-/*   Updated: 2026/03/27 17:52:26 by 2002mssm02       ###   ########.fr       */
+/*   Created: 2026/03/27 16:45:01 by 2002mssm02        #+#    #+#             */
+/*   Updated: 2026/03/27 18:21:18 by 2002mssm02       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_H
-# define FT_PRINTF_H
+#include "ft_printf.h"
 
-# include <unistd.h>
-# include <stdlib.h>
-# include <stdarg.h> //This defines the macros va_start, va_arg, va_end, va_copy
-# include "libft/libft.h"
-
-int	ft_printf(const char *, ...);
-int ft_printf_char(char c);
-int	ft_printf_hex(int num, char conv);
-int	ft_printf_int(int num, char conv);
-int ft_printf_ptr(void *p);
-int	ft_printf_str(char *s);
-
-#endif
+int	ft_printf_int(int num, char conv)
+{
+	(void)num;
+	(void)conv;
+	ft_putstr_fd("Inside print_int\n", 1);
+	return (0);
+}

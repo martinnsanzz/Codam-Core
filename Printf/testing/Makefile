@@ -1,4 +1,4 @@
-.DEFAULT_GOAL:= run
+.DEFAULT_GOAL := run
 
 NAME = libftprintf.a# Name of the static library to build
 EXEC = a.out
@@ -14,7 +14,7 @@ OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJS_DIR)/%.o)
 TEST = srcs/$(PARAM)
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = #-Wall -Wextra -Werror
 AR = ar rcs
 RM = rm -rf
 
@@ -27,13 +27,13 @@ $(EXEC): $(NAME) $(TEST)
 	$(CC) $(CFLAGS) $(TEST) $(LIBFTLINK) $(PRINTFLINK) -o $(EXEC)
 
 $(EXECDEBUG) : $(NAME) $(TEST)
-	$(CC) $(CFLAGS) -g $(TEST) $(LIBFTLINK) $(PRINTFLINK) -o $(EXECDEBUG)
+	$(CC) -g $(TEST) $(LIBFTLINK) $(PRINTFLINK) -o $(EXECDEBUG)
 
 $(NAME): $(OBJS)
 	$(AR) $(NAME) $(OBJS)
 
 $(OBJS_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJS_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -g -c $< -o $@
 
 $(OBJS_DIR):
 	mkdir -p $(OBJS_DIR)
