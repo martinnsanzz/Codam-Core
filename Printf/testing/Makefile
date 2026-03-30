@@ -24,10 +24,10 @@ PRINTFLINK = -L. -lftprintf
 
 # Link the test file against both libraries to produce the executable
 $(EXEC): $(NAME) $(TEST)
-	$(CC) $(CFLAGS) $(TEST) $(LIBFTLINK) $(PRINTFLINK) -o $(EXEC)
+	$(CC) $(CFLAGS) $(TEST) $(PRINTFLINK) $(LIBFTLINK) -o $(EXEC)
 
 $(EXECDEBUG) : $(NAME) $(TEST)
-	$(CC) -g $(TEST) $(LIBFTLINK) $(PRINTFLINK) -o $(EXECDEBUG)
+	$(CC) -g $(TEST) $(PRINTFLINK) $(LIBFTLINK) -o srcs/$(EXECDEBUG)
 
 $(NAME): $(OBJS)
 	$(AR) $(NAME) $(OBJS)
@@ -42,7 +42,7 @@ run: libft $(EXEC)
 	./$(EXEC)
 
 debug: libft $(EXECDEBUG)
-	./$(EXECDEBUG)
+	./srcs/$(EXECDEBUG)
 
 # Build libft.a by delegating to its own Makefile
 libft:
@@ -53,7 +53,7 @@ clean:
 	$(MAKE) -C $(LIBFT_DIR) clean
 
 fclean: clean
-	$(RM) $(NAME) $(EXEC) $(EXECDEBUG)
+	$(RM) $(NAME) $(EXEC) srcs/$(EXECDEBUG)
 	$(RM) *.dSYM $(EXECDEBUG)
 	$(MAKE) -C $(LIBFT_DIR) fclean
 

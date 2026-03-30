@@ -1,6 +1,7 @@
 #include "ft_printf.h"
 
-static int	ft_handle_spec(char c, void *arg);
+static int	ft_handle_spec(char c, va_list args);
+static int	check_format(const char	c);
 
 /*
 ** Parses a format string and writes formatted output to stdout.
@@ -23,24 +24,25 @@ int	ft_printf(const char *format, ...)
 {
 	va_list	args;
 	int		len;
-	int		i;
 
 	va_start(args, format);
 	len = 0;
-	i = 0;
-	while (format[i] != '\0')
+	while (*format != '\0')
 	{
-		if (format[i] == '%')
+		if (*format == '%')
 		{
-			len += ft_handle_spec(format[i + 1], va_arg(args, void *));
-			i++;
+			if (!check_format(*(format + 1)))
+				ft_putchar_fd(*format, 1);
+			else
+				len += ft_handle_spec(*(format + 1), args);
+			format++;
 		}
-		else
+		else 
 		{
-			ft_putchar_fd(format[i], 1);
+			ft_putchar_fd(*format, 1);
 			len++;
 		}
-		i++;
+		format++;
 	}
 	va_end(args);
 	return (len);
@@ -67,7 +69,7 @@ int	ft_printf(const char *format, ...)
 ** - 's'  : casts arg to char *, delegates to ft_printf_str
 **
 */
-static int	ft_handle_spec(char c, void *arg)
+static int	ft_handle_spec(char c, va_list args)
 {
 	int	len;
 
@@ -78,14 +80,44 @@ static int	ft_handle_spec(char c, void *arg)
 		len++;
 	}
 	else if (c == 'c')
-		len += ft_printf_char((char)arg);
+	{
+		ft_putchar_fd(va_arg(args, int), 1);
+		len++;
+	}
 	else if (c == 'x' || c == 'X')
-		len += ft_printf_hex((int)arg, c);
-	else if (c == 'd' || c == 'u' || c == 'i')
-		len += ft_printf_int((int)arg, c);
+		len += ft_printf_hex(va_arg(args, unsigned int), c);
+	else if (c == 'd' || c == 'i')
+		len += ft_printf_int(va_arg(args, int));
+	else if (c == 'u')
+		len += ft_printf_u_int(va_arg(args, unsigned int));
 	else if (c == 'p')
-		len += ft_printf_ptr(arg);
+		len += ft_printf_ptr(va_arg(args, void *));
 	else if (c == 's')
-		len += ft_printf_str((char *)arg);
+		len += ft_printf_str(va_arg(args, char *));
 	return (len);
+}
+
+/*
+** Checks if the format specifier is correct and within the list
+**
+** Parameters:
+** c	: Character to check
+**
+** Returns:
+** 1 if its correct
+** 0 if its not correct
+*/
+static int	check_format(const char	c)
+{
+	if (c == '%' 
+		|| c == 'c'
+		|| c == 'x'
+		|| c == 'X'
+		|| c == 'd'
+		|| c == 'u'
+		|| c == 'i'
+		|| c == 'p'
+		|| c == 's')
+		return (1);
+	return (0);
 }
