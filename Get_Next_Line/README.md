@@ -83,6 +83,12 @@ AI was NOT used to write or generate any code. All function bodies were written 
 
 # ALGORITHM
 
+Two common approaches exist for GNL: a **linked list** (storing chunks as nodes) or a
+**single dynamic string** (joining chunks into one buffer). This implementation uses the
+string approach because string manipulation with `ft_strjoin` is simpler to reason about
+than managing node allocation, traversal, and freeing. It also makes error handling more
+straightforward — a `NULL` return from any string operation is easy to catch and propagate.
+
 Each call to `get_next_line` follows these four steps:
 
 > On first call `buffer = NULL`, so it is allocated to an empty string.
