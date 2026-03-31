@@ -11,16 +11,18 @@ SRCS = ft_printf.c \
 		ft_printf_hex.c \
 		ft_printf_int.c \
 		ft_printf_ptr.c \
-		ft_printf_str.c 
+		ft_printf_str.c \
+		ft_printf_u_int.c \
+		ft_putnbr_base.c
 OBJS = $(SRCS:%.c=$(OBJS_DIR)/%.o)
 
 CC = cc
 CFLAGS = -Wall -Werror -Wextra
 RM = rm -rf
 
-
-$(NAME): $(OBJS)
-	ar rcs $(NAME) $(OBJS)
+$(NAME): $(OBJS) $(LIBFTLIB)
+	ar x --output $(OBJS_DIR) $(LIBFT_DIR)/$(LIBFTLIB)
+	ar rcs $(NAME) $(OBJS_DIR)/*.o
 
 $(OBJS_DIR)/%.o: %.c | $(OBJS_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -36,7 +38,7 @@ all: libft $(NAME)
 libft: $(LIBFTLIB)
 
 clean:
-	$(RM) $(OBJS_DIR) 
+	$(RM) $(OBJS_DIR)
 	$(MAKE) -C $(LIBFT_DIR) clean
 
 fclean: clean

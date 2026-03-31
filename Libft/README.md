@@ -1,5 +1,4 @@
-*This project has been created as part of the 42 curriculum by masanz-s*
-[My personal Github](https://github.com/martinnsanzz)
+*This project has been created as part of the 42 curriculum by Martin Sanz Sanchez*
 
 # // --- DESCRIPTION --- // 
 Libft is the first project from the 42 curriculum. The goal is to recreate the core behaviour of standard C library functions (libc) from 0, and to create a set of utility functions that we will be able to reuse throughout the entire curriculum.

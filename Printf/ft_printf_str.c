@@ -1,27 +1,21 @@
 #include "ft_printf.h"
 
-/*
-** Prints a null-terminated string to stdout and returns its length.
-**
-** Parameters:
-** s : null-terminated string to print
-**
-** Returns:
-** Number of characters written to stdout.
-**
-** Note:
-** - If s is NULL, writes the literal string "(null)" to stdout
-*/
-int	ft_printf_str(char *s)
+/**
+ * @brief  Writes a string to stdout and adds its length to the output length counter.
+ *
+ * @details  If `s` is NULL, prints the literal "(null)" to fd 1 and increments `len`
+ *           by 6, then returns early. For valid strings, computes the length via
+ *           `ft_strlen` before printing so that `len` is updated even if the string
+ *           is empty. Output is performed by `ft_putstr_fd` on fd 1.
+ */
+void	ft_printf_str(char *s, int *len)
 {
-	int	len;
-
 	if (s == NULL)
 	{
 		ft_putstr_fd("(null)", 1);
-		return (ft_strlen("(null)"));
+		*len += ft_strlen("(null)");
+		return ;
 	}
-	len = ft_strlen(s);
+	*len += ft_strlen(s);
 	ft_putstr_fd(s, 1);
-	return (len);
 }
