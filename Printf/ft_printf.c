@@ -1,7 +1,7 @@
 #include "ft_printf.h"
 
 static void	ft_handle_spec(char c, va_list args, int *len);
-static int	check_format(char	c);
+static int	check_format(char c);
 
 /**
  * @brief  Produces formatted output to stdout according to a format string.
@@ -99,10 +99,10 @@ static void	ft_handle_spec(char c, va_list args, int *len)
  *
  * @return int — 1 if `c` is a supported format specifier, 0 otherwise.
  */
-static int	check_format(char	c)
+static int	check_format(char c)
 {
 	c = (unsigned char)c;
-	if (c == '%' 
+	if (c == '%'
 		|| c == 'c'
 		|| c == 'x'
 		|| c == 'X'

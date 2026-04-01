@@ -1,7 +1,8 @@
 #include "ft_printf.h"
 
 static int	check_base_error(const char *base);
-static void	convert_base(unsigned long num, const char *base, unsigned long base_size, int *len);
+static void	convert_base(unsigned long num, const char *base,
+				unsigned long base_size, int *len);
 
 /**
  * @brief  Writes an unsigned long integer to stdout in the given base and updates the length counter.
@@ -25,11 +26,11 @@ static void	convert_base(unsigned long num, const char *base, unsigned long base
  */
 void	ft_putnbr_base(unsigned long num, const char *base, int *len)
 {
-	unsigned long base_size;
+	unsigned long	base_size;
 
 	if (!len || !base || check_base_error(&base[0]))
 		return ;
-	base_size = 0; 
+	base_size = 0;
 	while (base[base_size] != '\0')
 		base_size++;
 	convert_base(num, &base[0], base_size, len);
@@ -44,7 +45,8 @@ void	ft_putnbr_base(unsigned long num, const char *base, int *len)
  *           unconditionally on every stack frame during unwinding, correctly counting
  *           every digit written.
  */
-static void	convert_base(unsigned long num, const char *base, unsigned long base_size, int *len)
+static void	convert_base(unsigned long num, const char *base,
+	unsigned long base_size, int *len)
 {
 	if (num >= (unsigned long)base_size)
 	{

@@ -22,4 +22,3 @@ void	ft_printf_u_int(unsigned int num, int *len)
 	write (1, &c, 1);
 	*len += 1;
 }
- 
