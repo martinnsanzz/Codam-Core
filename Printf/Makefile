@@ -19,10 +19,11 @@ OBJS = $(SRCS:%.c=$(OBJS_DIR)/%.o)
 CC = cc
 CFLAGS = -Wall -Werror -Wextra
 RM = rm -rf
+AR = ar -rcs
 
 $(NAME): $(OBJS) $(LIBFTLIB)
-	ar x --output $(OBJS_DIR) $(LIBFT_DIR)/$(LIBFTLIB)
-	ar rcs $(NAME) $(OBJS_DIR)/*.o
+	cp $(LIBFT_DIR)/$(LIBFTLIB) $(NAME)
+	$(AR) $(NAME) $(OBJS_DIR)/*.o
 
 $(OBJS_DIR)/%.o: %.c | $(OBJS_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
