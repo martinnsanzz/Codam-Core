@@ -16,6 +16,8 @@ void	ft_printf_ptr(void *p, int *len)
 	uintptr_t	ptr;
 	const char	*lower_base;
 
+	if (!len)
+		return ;
 	lower_base = "0123456789abcdef";
 	if (p == NULL)
 	{

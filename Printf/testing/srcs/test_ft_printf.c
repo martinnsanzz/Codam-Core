@@ -21,16 +21,9 @@ int	main(void)
 	//test_ft_printf_hex();
 	//test_ft_printf_p();
 	// printf("%p\n", &a);
-	//int a = ft_printf("%c", '\0');
-	int a = printf("%p\n", 0);
-	int a2 = ft_printf("%p\n", 0);
-	// int b = printf(" %c %c %c \n", '2', '1', 0);
-	// int b2 = ft_printf(" %c %c %c \n", '2', '1', 0);
-	// int c = printf(" %c %c %c \n", 0, '1', '2');
-	// int c2 = ft_printf(" %c %c %c \n", 0, '1', '2');
-	//int a = printf("%c", '\0');
-	printf("%d, %d\n", a, a2);
-	// printf("%d, %d, %d\n", a2, b2, c2);
+	//int a = printf("%u\n", -1);
+	//int a2 = ft_printf("%u\n", -1);
+	//printf("\n%d, %d\n", a, a2);
 	return (0);
 }
 

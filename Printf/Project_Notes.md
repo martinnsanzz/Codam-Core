@@ -1,101 +1,114 @@
-The main mechanic of *ft_printf* project is the use of `Variadic Functions`.
-They allow functions to accept an arbitrary number of arguments with
-the use of ellipsis `(...)` as one of the arguements
+# ft_printf
 
+The main mechanic of *ft_printf* is the use of `Variadic Functions`.
+They allow functions to accept an arbitrary number of arguments via
+the ellipsis `(...)` parameter.
 ```c
 int	ft_printf(const char *format, ...);
 ```
->The arguments passed to the function using `ellipsis` are called variable
->arguement (va)
 
-# Allowed Functions
-1. `va_list` is a way for C functions to accept a variable number of arguments. 
-It's like a special kind of list that holds all the extra arguments you pass 
-to a function.
-2. `va_start`: Think of this as "starting the list". It initialises the list to 
-point to the first variable argument.
-3. `va_arg`: This is how you get the next argument from the list.
-4. `va_end`: This "ends the list" and cleans things up.
-5. `va_copy`: This is for copying the list.
+> Arguments passed via `...` are accessed through the `va_list` API from `<stdarg.h>`.
 
->All these functions are found in the `stdarg.h` library.
+---
 
+# Variadic API
+
+| Macro | Purpose |
+|---|---|
+| `va_list` | Declares the argument list object |
+| `va_start(ap, last)` | Initializes `ap` to the first variadic argument after `last` |
+| `va_arg(ap, type)` | Extracts the next argument as `type` |
+| `va_end(ap)` | Cleans up the `va_list` — must always be called |
+| `va_copy` | Copies a `va_list` (unused in this project) |
+
+> `va_list` is not a pointer on all platforms — never NULL-check it directly.
+> Validity depends entirely on correct `va_start`/`va_end` discipline.
+
+---
+
+# ft_printf Behaviour
+
+1. NULL-check `format` before `va_start` — return `-1` if NULL.
+2. Call `va_start` to initialize the argument list.
+3. Iterate over `format` character by character:
+   - Plain characters → `ft_printf_char`
+   - `%` → validate the next character via `check_format`:
+     - Valid → dispatch to `ft_handle_spec`, advance pointer by 1
+     - Invalid → print ANSI error to stderr, break loop
+4. Call `va_end` before returning.
+5. Return total characters written (`len`).
+
+**Supported specifiers:**
+
+| Specifier | Output |
+|---|---|
+| `%c` | Single character |
+| `%s` | String (`"(null)"` if NULL) |
+| `%p` | Pointer address in hex (`"(nil)"` if NULL) |
+| `%d` / `%i` | Signed decimal integer |
+| `%u` | Unsigned decimal integer |
+| `%x` / `%X` | Unsigned hex, lower / uppercase |
+| `%%` | Literal `%` |
+
+**Return:**
+- Success → total characters written (`len`)
+- Failure (NULL format) → `-1`
+- Invalid specifier → partial `len` (loop breaks early, no error signal to caller)
+
+---
+
+# Length Tracking
+
+All handler functions receive `int *len` and increment it directly.
+No handler returns a value — `len` is the single source of truth,
+passed by pointer through the entire call chain.
 ```c
-va_list ap;
-va_start(ap, last_named_param);
-// call va_arg as many times as needed
-va_end(ap);
+// Pattern used across all handlers:
+*len += ft_strlen(s);   // or += 1, += 2, etc.
 ```
 
-# ft_printf behaviour
-1. Set up va_list and initialize the list to the first arguement past `str``
-2. Loop throught the string in a while loop and look for `%`char
-3. If found check the next character and act accordingly:
-	- %c Prints a single character.
-	- %s Prints a string (as defined by the common C convention).
-	- %p The void * pointer argument has to be printed in hexadecimal format.
-	- %d Prints a decimal (base 10) number.
-	- %i Prints an integer in base 10.
-	- %u Prints an unsigned decimal (base 10) number.
-	- %x Prints a number in hexadecimal (base 16) lowercase format.
-	- %X Prints a number in hexadecimal (base 16) uppercase format.
-	- %% Prints a percent sign.
->Depending on the format specifier called the required function (e.g., if %s; 
->call ft_putstr_fd from libft)
-4. After reaching the end of the string clean the memory of va_list
+---
 
-*RETURN*
-On success - The number of characters printed
-On failure - A negative number (-1)
-
-To keep track of the amount of character printed all functions created for 
-printing each format specifier will return `int` which will be the amount of 
-characters printed and this value will keep adding until the end of ft_printf
-
-*Files for the format specifiers*
-
-
-- **ft_prinf_char.c** - This file will contain a function that will:
-1. Check the format specifier (%c or %%)
-2. Print the character passed (`%`if its %%)
-3. Return (1);
-
-```c
-int ft_printf_char(char c);
+# Architecture
+```
+ft_printf
+├── check_format        — validates the specifier character
+├── ft_handle_spec      — dispatches to the correct handler
+│   ├── ft_printf_char  — handles %c and %%
+│   ├── ft_printf_str   — handles %s
+│   ├── ft_printf_int   — handles %d and %i
+│   ├── ft_printf_u_int — handles %u
+│   ├── ft_printf_hex   — handles %x and %X
+│   └── ft_printf_ptr   — handles %p
+└── ft_putnbr_base      — base conversion used by hex and ptr
+    ├── check_base_error — validates the base string
+    └── convert_base    — recursive digit writer
 ```
 
-- **ft_printf_hex.c** - This file will contain a fucntion that will: 
-1. Check the format specifier (%x or %X)
-2. Convert the integer in decimal base to hexadecimal base
-3. Print each character
-4. Return the length of the number in hex
+---
 
+# Handler Signatures
+
+All handlers follow the same pattern — void return, `int *len` for tracking:
 ```c
-int	ft_printf_hex(int num, char conv);
+void	ft_printf_char(int c, int *len);
+void	ft_printf_str(char *s, int *len);
+void	ft_printf_int(int num, int *len);
+void	ft_printf_u_int(unsigned int num, int *len);
+void	ft_printf_hex(unsigned long num, char conv, int *len);
+void	ft_printf_ptr(void *p, int *len);
 ```
 
-- **ft_printf_int.c** - This file will contain a function that will:
-1. Check the format specifier (%d, %i or %u)
-2. Print the number passed adhering to the format specifier
-   (e.g., if %u and number passed is - value, it will make it positive)
-3. Return the length of the number printed
+---
 
-```c
-int	ft_printf_int(int num, char conv);
-```
+# Key Implementation Notes
 
-- **ft_printf_ptr.c** - This file will contain a function that will:
-2. Print the memory address of that pointer (Need to figure out how)
-3. Return the length of the memory address
-
-```c
-int ft_printf_ptr(void *p);
-```
-
-- **ft_printf_str.c** - This file will contain a function that will:
-1. Print the string (%s)
-2. Return the length of the string
-
-```c
-int	ft_printf_str(char *s);
-```
+- `ft_printf_char` casts `int` to `unsigned char` to avoid sign-extension UB.
+- `ft_printf_char` handles `'\0'` explicitly via `write` since string functions stop at null.
+- `ft_printf_int` uses `ft_itoa` only to measure length — `ft_putnbr_fd` does the actual output.
+- `ft_printf_ptr` prints `"(nil)"` for NULL pointers — requires a `return` after that branch.
+- `ft_printf_hex` uses `else if` logic internally — `conv` is either `'x'` or `'X'`, never both.
+- `ft_putnbr_base` recomputes base size on every call via manual iteration.
+- `convert_base` is recursive — stack depth is `floor(log_base(num)) + 1`.
+- `check_base_error` does **not** reject ASCII 32 (space) — only controls 9–13 are caught.
+- `check_format` writes an error to stderr for invalid specifiers.

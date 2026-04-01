@@ -11,6 +11,8 @@
  */
 void	ft_printf_char(int c, int *len)
 {
+	if (!len)
+		return ;
 	c = (unsigned char)c;
 	if (c == '\0')
 		write(1, "\0", 1);
