@@ -1,5 +1,4 @@
-*This project has been created as part of the 42 curriculum by masanz-s*  
-[My personal Github](https://github.com/martinnsanzz)
+*This project has been created as part of the 42 curriculum by Martin Sanz Sanchez*  
 
 ---
 
