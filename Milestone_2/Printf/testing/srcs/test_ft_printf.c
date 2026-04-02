@@ -12,7 +12,6 @@ void	test_ft_printf_p(void);
 
 int	main(void)
 {
-	// int a = 5;
 	//test_ft_printf_d_i();
 	//test_ft_printf_s();
 	//test_ft_printf_c();
@@ -20,7 +19,7 @@ int	main(void)
 	//test_ft_printf_u();
 	//test_ft_printf_hex();
 	//test_ft_printf_p();
-	// printf("%p\n", &a);
+	//printf("%p\n", &a);
 	//int a = printf("%u\n", -1);
 	//int a2 = ft_printf("%u\n", -1);
 	//printf("\n%d, %d\n", a, a2);

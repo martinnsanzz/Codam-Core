@@ -1,0 +1,8 @@
+x
+hello
+this line is medium length yes
+a
+abcdefghijklmnopqrstuvwxyz
+hi
+this is another medium line for testing purposes only
+z

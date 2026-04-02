@@ -20,6 +20,7 @@
 For the creation of this project the following resources were used:
 - [GeeksforGeeks - Variadic Functions in c](https://www.geeksforgeeks.org/c/variadic-functions-in-c/)
 - [cppreference - Variadic Functions](https://cppreference.com/w/c/variadic.html)
+- [GeeksforGeeks - 32-bit and 64-bit operating systems](https://www.geeksforgeeks.org/operating-systems/32-bit-vs-64-bit-operating-systems/)
 
 **AI usage:**
 
