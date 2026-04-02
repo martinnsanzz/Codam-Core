@@ -11,7 +11,7 @@ int	ft_printf(const char *format, ...);
 
 ---
 
-# Variadic API
+## Variadic library functions
 
 | Macro | Purpose |
 |---|---|
@@ -26,7 +26,7 @@ int	ft_printf(const char *format, ...);
 
 ---
 
-# ft_printf Behaviour
+## ft_printf Behaviour
 
 1. NULL-check `format` before `va_start` — return `-1` if NULL.
 2. Call `va_start` to initialize the argument list.
@@ -57,7 +57,7 @@ int	ft_printf(const char *format, ...);
 
 ---
 
-# Length Tracking
+## Length Tracking
 
 All handler functions receive `int *len` and increment it directly.
 No handler returns a value — `len` is the single source of truth,
@@ -69,7 +69,7 @@ passed by pointer through the entire call chain.
 
 ---
 
-# Architecture
+## Architecture
 ```
 ft_printf
 ├── check_format        — validates the specifier character
@@ -87,7 +87,7 @@ ft_printf
 
 ---
 
-# Handler Signatures
+## Handler Signatures
 
 All handlers follow the same pattern — void return, `int *len` for tracking:
 ```c
@@ -101,7 +101,7 @@ void	ft_printf_ptr(void *p, int *len);
 
 ---
 
-# Key Implementation Notes
+## Key Implementation Notes
 
 - `ft_printf_char` casts `int` to `unsigned char` to avoid sign-extension UB.
 - `ft_printf_char` handles `'\0'` explicitly via `write` since string functions stop at null.

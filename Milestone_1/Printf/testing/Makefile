@@ -11,12 +11,13 @@ LIBFT_DIR = $(SRC_DIR)/libft# Path to the libft sub-project
 SRCS = $(wildcard $(SRC_DIR)/ft_*.c)
 OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJS_DIR)/%.o)
 
-TEST = srcs/$(PARAM)
-
 CC = cc
-CFLAGS = #-Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror
 AR = ar rcs
 RM = rm -rf
+
+TEST = srcs/$(PARAM)
+
 
 # Linker flags for libft and libftprintf respectively
 LIBFTLINK = -L$(LIBFT_DIR) -lft
@@ -53,8 +54,8 @@ clean:
 	$(MAKE) -C $(LIBFT_DIR) clean
 
 fclean: clean
-	$(RM) $(NAME) $(EXEC) srcs/$(EXECDEBUG)
-	$(RM) *.dSYM $(EXECDEBUG)
+	$(RM) $(NAME) $(EXEC)
+	$(RM) *.dSYM
 	$(MAKE) -C $(LIBFT_DIR) fclean
 
 .PHONY: run clean fclean libft debug
