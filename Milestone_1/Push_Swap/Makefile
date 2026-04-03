@@ -15,8 +15,8 @@ RM = rm -rf
 AR = ar -rcs
 LIBFTLINK = -L$(LIBFT_DIR) -lft
 
-$(NAME): $(LIBFTLIB)
-	$(CC) $(CFLAGS) $(SRCS) $(LIBFTLINK) -o $(NAME)
+$(NAME): $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFTLINK) -o $(NAME)
 
 $(OBJS_DIR)/%.o: %.c | $(OBJS_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
