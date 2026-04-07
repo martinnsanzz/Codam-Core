@@ -62,39 +62,46 @@ exactly what you need.
 - Less natural fit for stack operations conceptually
 
 
-### Doubly Linked List
+### Singly Linked List
 
-Each node holds a value and two pointers: `prev` and `next`.
-You maintain a `top` pointer (and optionally a `tail` pointer)
-to access both ends of the stack in O(1).
+Each node holds a value and one pointer: `next`.
+You maintain a `top` pointer to the head of the stack.
+A `tail` pointer is optional but recommended for reverse rotate
+operations, otherwise `rra` and `rrb` require a full traversal.
 ```c
 typedef struct s_node
 {
     int             value;
-    struct s_node   *prev;
     struct s_node   *next;
 }   t_node;
 ```
 
 **Advantages:**
-- Push/pop from top or bottom — O(1)
-- Rotate and reverse rotate — O(1) with a tail pointer
+- Simpler to implement than a doubly linked list — no `prev` pointer
+- Push/pop from top — O(1)
 - No element shifting required
-- Maps cleanly onto stack operation semantics
+- One less pointer per node to manage and free
 
 **Disadvantages:**
-- More complex to implement and debug
+- Reverse rotate (`rra`, `rrb`) requires traversing the full list
+  to find the second-to-last node — O(n) unless you maintain a
+  `tail` pointer
+- Without a `tail` pointer, bottom access is always O(n)
 - One `malloc` per node — all must be freed individually
 - Worse cache locality — nodes are scattered across heap memory
-- Must manage `prev`, `next`, and `top` pointers carefully
+
+> `rra` and `rrb` are used heavily in most sorting strategies.
+> A `tail` pointer is strongly recommended to avoid O(n) traversal
+> on every reverse rotate.
 
 ### Summary
 
-| Property | Array | Doubly Linked List |
+| Property | Array | Singly Linked List |
 |---|---|---|
 | Index access | O(1) | O(n) |
 | Push / Pop (top) | O(1) | O(1) |
-| Rotate / Reverse rotate | O(n) | O(1) with tail pointer |
+| Rotate | O(n) | O(1) with tail pointer |
+| Reverse rotate | O(n) | O(n) without tail / O(1) with tail |
 | Memory layout | Contiguous | Scattered |
 | Implementation complexity | Low | Medium |
 | Free complexity | One `free` | One `free` per node |
@@ -504,3 +511,76 @@ cat bench.txt
 [bench] sa: 0  sb: 0  ss: 0  pa: 500  pb: 500
 [bench] ra: 4840  rb: 1098  rr: 0  rra: 0  rrb: 1059  rrr: 0
 ```
+---
+
+## Task Assignment
+
+| Task | Assigned To
+|---|---|
+| Input validation & error handling | Martin |
+| Stack data structure & operation helpers | Daniel|
+| Index normalization | Martin |
+| Disorder metric | Daniel |
+| Simple strategy — O(n²) | Daniel |
+| Medium strategy — O(n√n) | Martin |
+| Complex strategy — O(n log n) | Daniel & Martin |
+| Adaptive strategy | Daniel |
+| Makefile | Martin |
+| README.md | Daniel & Martin |
+
+> Assigned To: **Martin** or **Daniel**
+
+---
+
+## Decisions
+
+| Decision | Choice |
+|---|---|
+| Data structure | Singly linked list with `tail` pointer |
+| Simple strategy — O(n²) | Selection sort |
+| Medium strategy — O(n√n) | Chunk sort |
+| Complex strategy — O(n log n) | TBD |
+| Adaptive strategy | TBD — depends on complex choice |
+
+> Update this section as decisions are made.
+
+---
+
+## Project Structure
+
+### Struct Definition
+```c
+typedef struct s_stack
+{
+	int				content;
+	struct s_stack	*next;
+}	t_stack;
+```
+
+> The stack is represented as a singly linked list. Each node holds
+> an integer `content` and a pointer to the `next` node.
+> Both stacks `a` and `b` are of type `t_stack *`.
+
+---
+
+### File Structure
+
+| File | Responsibility |
+|---|---|
+| `main.c` | Entry point, argument parsing, stack initialization |
+| `push_swap_utils.c` | Extra utils functions |
+| `push_swap.h` | All headers, structs, and function prototypes |
+| `validate.c` | Input validation and error handling |
+| `arg_norm.c` | Index normalization — maps values to ranked indices |
+| `simple_strat.c` | Simple sorting strategy — O(n²) — selection sort |
+| `medium_strat.c` | Medium sorting strategy — O(n√n) — chunk sort |
+| `complex_strat.c` | Complex sorting strategy — O(n log n) — TBD |
+| `adaptive_strat.c` | Disorder metric + strategy selector |
+| `swap_op.c` | `sa`, `sb`, `ss` |
+| `push_op.c` | `pa`, `pb` |
+| `rotate_op.c` | `ra`, `rb`, `rr` |
+| `rev_rotate_op.c` | `rra`, `rrb`, `rrr` |
+
+> `adaptive_strat.c` computes the disorder metric and calls the
+> appropriate strategy based on the result. It does not implement
+> any sorting logic itself.
