@@ -2,16 +2,16 @@
 
 static void	check_flag(int argc, char *argv[], t_flags *flags);
 static void	check_int(int argc, char *argv[]);
-static void	check_duplicate_argv(int argc, char *argv[]);
-static int	*int_array(int argc, char *argv[]);
+static void	check_duplicate_argv(int argc, char *argv[], int **unsorted_lst);
+static void	int_array(int argc, char *argv[], int **unsorted_lst);
 
-void	check_argv(int argc, char *argv[], t_flags *flags)
+void	check_argv(int argc, char *argv[], int **unsorted_lst, t_flags *flags)
 {
 	check_flag(argc, argv, flags);
 	if (flags->n_flags > 2)
 		print_error();
 	check_int(argc, argv);
-	check_duplicate_argv(argc, argv);
+	check_duplicate_argv(argc, argv, unsorted_lst);
 }
 
 static void	check_flag(int argc, char *argv[], t_flags *flags)
@@ -59,14 +59,13 @@ static void	check_int(int argc, char *argv[])
 	}
 }
 
-static void	check_duplicate_argv(int argc, char *argv[])
+static void	check_duplicate_argv(int argc, char *argv[], int **unsorted_lst)
 {
-	int		*arr;
 	size_t	i;
 	size_t	j;
 
 	i = 1;
-	arr = int_array(argc, argv);
+	int_array(argc, argv, unsorted_lst);
 	while (i < (unsigned long)argc)
 	{
 		j = i + 1;
@@ -74,7 +73,7 @@ static void	check_duplicate_argv(int argc, char *argv[])
 		{
 			if (argv[i][0] != '-' || argv[i][1] != '-')
 			{
-				if (arr[i - 1] == arr[j - 1])
+				if ((*unsorted_lst)[i - 1] == (*unsorted_lst)[j - 1])
 					print_error();
 			}
 			else
@@ -84,14 +83,13 @@ static void	check_duplicate_argv(int argc, char *argv[])
 		}
 		i++;
 	}
-	free(arr);
 }
 
-static int	*int_array(int argc, char *argv[])
+static void	int_array(int argc, char *argv[], int **unsorted_lst)
 {
-	int		*tmp;
 	int		n_elements;
 	size_t	i;
+	size_t	j;
 
 	i = 1;
 	n_elements = 0;
@@ -101,15 +99,15 @@ static int	*int_array(int argc, char *argv[])
 			n_elements++;
 		i++;
 	}
-	tmp = ft_calloc(n_elements, sizeof(int));
-	if (!tmp)
+	*unsorted_lst = ft_calloc(n_elements, sizeof(int));
+	if (!*unsorted_lst)
 		exit(1);
 	i = 1;
+	j = 0;
 	while (i < (unsigned long)argc)
 	{
 		if (argv[i][0] != '-' || argv[i][1] != '-')
-			tmp[i - 1] = ft_atoi(argv[i]);
+			(*unsorted_lst)[j++] = ft_atoi(argv[i]);
 		i++;
 	}
-	return (tmp);
 }

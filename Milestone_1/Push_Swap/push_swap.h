@@ -19,7 +19,7 @@ typedef struct s_flags
 }	t_flags;
 
 //Argument validation functions
-void	check_argv(int argc, char *argv[], t_flags *flags);
+void	check_argv(int argc, char *argv[], int **unsorted_lst, t_flags *flags);
 
 //Utils functions
 void	print_error(void);
