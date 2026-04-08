@@ -2,13 +2,13 @@
 
 int	main(int argc, char *argv[])
 {
-	int	is_flag;
+	t_flags flags;
 
-	if (argc < 2)
+	flags.n_flags = 0;
+	flags.bench = 0;
+	flags.strategy = ADAPTIVE;
+	check_argv(argc, argv, &flags);
+	if (argc < (3 + flags.n_flags))
 		return (0);
-	is_flag = 0;
-	check_argv(argc, argv, &is_flag);
-	ft_printf("Is flag value: %d\n", is_flag);
-	ft_putstr_fd("In main\n", 1);
 	return (0);
 }
