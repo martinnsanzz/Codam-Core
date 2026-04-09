@@ -13,6 +13,9 @@ int	main(int argc, char *argv[])
 	check_argv(argc, argv, &unsorted_lst, &flags);
 	if (!unsorted_lst || argc < (3 + flags.n_flags))
 		return (0);
+	ft_printf("Number of flags: %d\n", flags.n_flags);
+	ft_printf("Strategy: %d\n", flags.strategy);
+	ft_printf("Bench mode: %d\n", flags.bench);
     for (int i = 0; i < (argc -1 - flags.n_flags); i++) {
         printf("%d ", unsorted_lst[i]);
     }
