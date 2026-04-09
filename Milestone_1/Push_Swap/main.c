@@ -1,24 +1,25 @@
 #include "push_swap.h"
-#include <stdio.h>
+
+static void	init_flags(t_flags *flags);
 
 int	main(int argc, char *argv[])
 {
-	t_flags flags;
-	int		*unsorted_lst;
+	t_flags	flags;
+	int		*lst;
+	int		n_elements;
 
-	flags.n_flags = 0;
-	flags.bench = 0;
-	flags.strategy = ADAPTIVE;
-	unsorted_lst = NULL;
-	check_argv(argc, argv, &unsorted_lst, &flags);
-	if (!unsorted_lst || argc < (3 + flags.n_flags))
+	init_flags(&flags);
+	n_elements = check_argv(argc, argv, &lst, &flags);
+	if (!lst || argc < (3 + flags.n_flags))
 		return (0);
-	ft_printf("Number of flags: %d\n", flags.n_flags);
-	ft_printf("Strategy: %d\n", flags.strategy);
-	ft_printf("Bench mode: %d\n", flags.bench);
-    for (int i = 0; i < (argc -1 - flags.n_flags); i++) {
-        printf("%d ", unsorted_lst[i]);
-    }
-	free(unsorted_lst);
+	normalize(&lst, n_elements);
+	free(lst);
 	return (0);
+}
+
+static void	init_flags(t_flags *flags)
+{
+	flags->n_flags = 0;
+	flags->bench = 0;
+	flags->strategy = ADAPTIVE;
 }

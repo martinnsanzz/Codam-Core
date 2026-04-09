@@ -2,16 +2,19 @@
 
 static void	check_flag(int argc, char *argv[], t_flags *flags);
 static void	check_int(int argc, char *argv[]);
-static void	check_duplicate_argv(int argc, char *argv[], int **unsorted_lst);
+static int	check_duplicate_argv(int argc, char *argv[], int **unsorted_lst);
 static int	int_array(int argc, char *argv[], int **unsorted_lst);
 
-void	check_argv(int argc, char *argv[], int **unsorted_lst, t_flags *flags)
+int	check_argv(int argc, char *argv[], int **unsorted_lst, t_flags *flags)
 {
+	int	n_elements;
+
 	check_flag(argc, argv, flags);
 	if (flags->n_flags > 2 || (flags->n_flags == 2 && flags->bench == 0))
 		print_error();
 	check_int(argc, argv);
-	check_duplicate_argv(argc, argv, unsorted_lst);
+	n_elements = check_duplicate_argv(argc, argv, unsorted_lst);
+	return (n_elements);
 }
 
 static void	check_flag(int argc, char *argv[], t_flags *flags)
@@ -59,7 +62,7 @@ static void	check_int(int argc, char *argv[])
 	}
 }
 
-static void	check_duplicate_argv(int argc, char *argv[], int **unsorted_lst)
+static int	check_duplicate_argv(int argc, char *argv[], int **unsorted_lst)
 {
 	size_t	i;
 	size_t	j;
@@ -78,6 +81,7 @@ static void	check_duplicate_argv(int argc, char *argv[], int **unsorted_lst)
 		}
 		i++;
 	}
+	return (n_elements);
 }
 
 static int	int_array(int argc, char *argv[], int **unsorted_lst)

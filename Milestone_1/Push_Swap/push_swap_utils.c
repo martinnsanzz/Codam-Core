@@ -1,5 +1,34 @@
 #include "push_swap.h"
 
+void	normalize(int **lst, int n_elements)
+{
+	int		*normalized_lst;
+	int		total_min_val;
+	size_t	i;
+	size_t	j;
+
+	if (!lst)
+		return ;
+	normalized_lst = ft_calloc(n_elements, sizeof(int));
+	if (!normalized_lst)
+		return ;
+	i = 0;
+	while (i < (size_t)n_elements)
+	{
+		j = 0;
+		total_min_val = 0;
+		while (j < (size_t)n_elements)
+		{
+			if ((*lst)[j] < (*lst)[i])
+				total_min_val++;
+			j++;
+		}
+		normalized_lst[i++] = total_min_val;
+	}
+	free(*lst);
+	*lst = normalized_lst;
+}
+
 long	ft_atoi_strict(const char *nptr)
 {
 	int		sign;
