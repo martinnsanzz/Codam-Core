@@ -1,6 +1,6 @@
 #include "ft_printf.h"
 
-static void	ft_handle_spec(char c, va_list args, int *len);
+static void	ft_handle_spec(char c, va_list *args, int *len);
 static int	check_format(char c);
 
 /**
@@ -40,7 +40,7 @@ int	ft_printf(const char *format, ...)
 			if (!check_format(*(format + 1)))
 				break ;
 			else
-				ft_handle_spec(*(format + 1), args, &len);
+				ft_handle_spec(*(format + 1), &args, &len);
 			format++;
 		}
 		else
@@ -69,24 +69,24 @@ int	ft_printf(const char *format, ...)
  * @param  len   int*      — Pointer to the running output length counter. Passed
  *                           through to each handler for direct update. Must not be NULL.
  */
-static void	ft_handle_spec(char c, va_list args, int *len)
+static void	ft_handle_spec(char c, va_list *args, int *len)
 {
 	if (!len)
 		return ;
 	if (c == '%')
 		ft_printf_char('%', len);
 	else if (c == 'c')
-		ft_printf_char(va_arg(args, int), len);
+		ft_printf_char(va_arg(*args, int), len);
 	else if (c == 'x' || c == 'X')
-		ft_printf_hex(va_arg(args, unsigned int), c, len);
+		ft_printf_hex(va_arg(*args, unsigned int), c, len);
 	else if (c == 'd' || c == 'i')
-		ft_printf_int(va_arg(args, int), len);
+		ft_printf_int(va_arg(*args, int), len);
 	else if (c == 'u')
-		ft_printf_u_int(va_arg(args, unsigned int), len);
+		ft_printf_u_int(va_arg(*args, unsigned int), len);
 	else if (c == 'p')
-		ft_printf_ptr(va_arg(args, void *), len);
+		ft_printf_ptr(va_arg(*args, void *), len);
 	else if (c == 's')
-		ft_printf_str(va_arg(args, char *), len);
+		ft_printf_str(va_arg(*args, char *), len);
 }
 
 /**
