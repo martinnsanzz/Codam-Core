@@ -5,7 +5,7 @@ static void	init_flags(t_flags *flags);
 int	main(int argc, char *argv[])
 {
 	t_flags	flags;
-	t_list	*link_lst;
+	t_list	*stack;
 	int		*tmp_lst;
 	int		n_elements;
 
@@ -17,9 +17,9 @@ int	main(int argc, char *argv[])
 		return (0);
 	normalize(&tmp_lst, n_elements);
 	// print_lst(tmp_lst, n_elements, "Normalized list:");
-	linked_lst_creation(&link_lst, tmp_lst, n_elements);
-	print_link_lst(link_lst);
-	ft_lstclear(&link_lst, (*free));
+	linked_lst_creation(&stack, tmp_lst, n_elements);
+	print_stack(stack);
+	ft_lstclear(&stack, (*free));
 	free(tmp_lst);
 	return (0);
 }

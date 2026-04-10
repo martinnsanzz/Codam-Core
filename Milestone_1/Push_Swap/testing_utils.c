@@ -1,15 +1,15 @@
 #include "push_swap.h"
 #include <stdio.h>
 
-void	print_link_lst(t_list *lst)
+void	print_stack(t_list *stack)
 {
 	int		i;
 
 	i = 0;
-	while (lst != NULL)
+	while (stack != NULL)
 	{
-		printf("Node: %d -> Content [%d]\n", i, *(int *)lst->content);
-		lst = lst->next;
+		printf("Node: %d -> Content [%d]\n", i, *(int *)stack->content);
+		stack = stack->next;
 		i++;
 	}
 }
