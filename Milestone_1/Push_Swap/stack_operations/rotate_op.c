@@ -1,4 +1,4 @@
-#include "push_swap.h"
+#include "../push_swap.h"
 
 static void	rotate_cmd(t_list **stack)
 {

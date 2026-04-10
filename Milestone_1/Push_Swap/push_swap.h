@@ -33,7 +33,7 @@ void	linked_lst_creation(t_list **stack, int *normalize_lst, int n_elements);
 
 //TO BE DELETED
 //Printing functions to test
-void	print_link_lst(t_list *lst);
+void	print_stack(t_list *stack);
 void	print_flags(t_flags flags);
 void	print_lst(int *lst, int n_elements, char *msg);
 
@@ -54,6 +54,9 @@ void	rrb(t_list **b);
 void	rrr(t_list **a, t_list **b);
 
 //Alghoritm functions
-void	select_strategy(t_list **stack, t_flags flags, int n_elements);
+void	select_strategy(t_list **stack_a, t_list **stack_b, t_flags flags);
+void	simple_strat(t_list **a, t_list **b, int bench);
+void	medium_strat(t_list **a, t_list **b, int bench);
+void	complex_strat(t_list **a, t_list **b, int bench);
 
 #endif

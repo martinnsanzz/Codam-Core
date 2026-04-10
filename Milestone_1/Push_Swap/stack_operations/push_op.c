@@ -1,4 +1,4 @@
-#include "push_swap.h"
+#include "../push_swap.h"
 
 static void	push_cmd(t_list **src, t_list **dst)
 {

@@ -5,11 +5,13 @@ static void	init_flags(t_flags *flags);
 int	main(int argc, char *argv[])
 {
 	t_flags	flags;
-	t_list	*stack;
+	t_list	*stack_a;
+	t_list	*stack_b;
 	int		*tmp_lst;
 	int		n_elements;
 
 	init_flags(&flags);
+	stack_b = NULL;
 	n_elements = check_argv(argc, argv, &tmp_lst, &flags);
 	// print_flags(flags);
 	// print_lst(tmp_lst, n_elements, "Unsorted list:");
@@ -17,9 +19,11 @@ int	main(int argc, char *argv[])
 		return (0);
 	normalize(&tmp_lst, n_elements);
 	// print_lst(tmp_lst, n_elements, "Normalized list:");
-	linked_lst_creation(&stack, tmp_lst, n_elements);
-	print_stack(stack);
-	ft_lstclear(&stack, (*free));
+	linked_lst_creation(&stack_a, tmp_lst, n_elements);
+	//print_stack(stack_a);
+	select_strategy(&stack_a, &stack_b, flags);
+	ft_lstclear(&stack_a, (*free));
+	ft_lstclear(&stack_b, (*free));
 	free(tmp_lst);
 	return (0);
 }
