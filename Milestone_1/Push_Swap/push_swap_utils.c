@@ -73,3 +73,17 @@ void	print_error(void)
 	ft_putstr_fd("Error\n", 2);
 	exit (1);
 }
+
+void sum_operations(t_operations op, int *total)
+{
+	int	swap;
+	int	push;
+	int rotate;
+	int	rev_rotate;
+
+	swap = op.sa + op.sb + op.ss;
+	push = op.pa + op.pb;
+	rotate = op.ra + op.rb + op.rr;
+	rev_rotate = op.rra + op.rrb + op.rrr;
+	*total = swap + push + rotate + rev_rotate;
+}

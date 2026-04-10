@@ -10,12 +10,13 @@ static int	int_array(int argc, char *argv[], int **unsorted_lst);
  *
  * @param  argc          int      — Argument count from main. 
  * @param  argv          char*[]  — Argument vector from main.
- * @param  unsorted_lst  int**    — Output parameter. Populated by `check_duplicate_argv`
- *                                  with a heap-allocated array of parsed integers.
- * @param  flags         t_flags* — Pointer to a flags struct populated by `check_flag`.
+ * @param  unsorted_lst  int**    — Output parameter with a heap-allocated
+ * 									array of parsed integers.
+ * @param  flags         t_flags* — Pointer to a flags struct populated by 
+ * 									`check_flag`.
  *
- * @return int — The number of valid integer elements parsed from argv, as returned
- *               by `check_duplicate_argv`.
+ * @return int — The number of valid integer elements parsed from argv, 
+ * 				 as returned by `check_duplicate_argv`.
  *
  * @note  More than 2 flags is always rejected; exactly 2 flags
  *        is only accepted if `flags->bench` is set.
@@ -36,12 +37,8 @@ int	check_argv(int argc, char *argv[], int **unsorted_lst, t_flags *flags)
  * @brief  Parses and records recognized double-dash flags 
  * 		   from argv into a flags struct.
  *
- * @details  Iterates over argv starting at index 1, processing only entries that
- *           begin with "--". Recognized strategy flags ("--simple", "--medium",
- *           "--complex", "--adaptive") set `flags->strategy` to the corresponding
- *           enum value. "--bench" increments `flags->bench`. Any unrecognized
- *           "--" entry triggers `print_error`. Every recognized flag increments
- *           `flags->n_flags` for downstream combination validation.
+ * @details  Iterates over argv starting at index 1, processing only 
+ * 			 entries that begin with "--".
  */
 static void	check_flag(int argc, char *argv[], t_flags *flags)
 {
@@ -71,12 +68,13 @@ static void	check_flag(int argc, char *argv[], t_flags *flags)
 }
 
 /**
- * @brief  Validates that all non-flag argv entries are integers within int range.
+ * @brief  Validates that all non-flag argv entries are integers 
+ * 		   within int range.
  *
  * @details  Iterates over argv starting at index 1, skipping entries that begin
- *           with "--" (double-dash flags). For all other entries, parses the value
- *           via `ft_atoi_strict` and calls `print_error` if the result falls outside
- *           the range [INT_MIN, INT_MAX].
+ *           with "--" (double-dash flags). For all other entries, parses the 
+ * 			 value via `ft_atoi_strict` and calls `print_error` if the result
+ * 			 falls outside the range [INT_MIN, INT_MAX].
  *
  * @return void — no return value.
  */
@@ -126,17 +124,18 @@ static int	check_duplicate_argv(int argc, char *argv[], int **unsorted_lst)
 }
 
 /**
- * @brief  Counts non-flag argv entries, allocates an integer array, and fills it.
+ * @brief  Counts non-flag argv entries, allocates an integer array,
+ * 		   and fills it.
  *
- * @details  Makes two passes over argv. The first pass counts all entries that do
- *           not begin with "--", which determines the allocation size. After
- *           allocating via `ft_calloc`, the second pass fills the array by parsing
- *           each non-flag entry with `ft_atoi`. Returns the number of elements
- *           stored in `*unsorted_lst`.
+ * @details  Makes two passes over argv. The first pass counts all entries 
+ * 		     that do not begin with "--", which determines the allocation 
+ * 			 size. After allocating via `ft_calloc`, the second pass fills
+ * 			 the array by parsing each non-flag entry with `ft_atoi`. 
+ * 			 Returns the number of elements stored in `*unsorted_lst`.
  *
- * @return int — The number of integer elements parsed and stored in `*unsorted_lst`.
- *               Never returns on allocation failure — `print_error` is called instead.
- *               [INFERRED]
+ * @return int — The number of integer elements parsed and stored in 
+ * 				 `*unsorted_lst`. Never returns on allocation 
+ * 				 failure — `print_error` is called instead. [INFERRED]
  */
 static int	int_array(int argc, char *argv[], int **unsorted_lst)
 {

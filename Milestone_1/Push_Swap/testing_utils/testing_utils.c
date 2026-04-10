@@ -1,17 +1,19 @@
 #include "../push_swap.h"
 #include <stdio.h>
 
-void	print_stack(t_list *stack)
+void	print_stack(t_list *stack, char *var_name)
 {
 	int		i;
 
 	i = 0;
+	ft_printf("Stack '%s': ", var_name);
 	while (stack != NULL)
 	{
-		printf("Node: %d -> Content [%d]\n", i, *(int *)stack->content);
+		printf("[%d] ", *(int *)stack->content);
 		stack = stack->next;
 		i++;
 	}
+	printf("\n");
 }
 
 void	print_lst(int *lst, int n_elements, char *msg)

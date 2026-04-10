@@ -12,14 +12,24 @@ static void	push_cmd(t_list **src, t_list **dst)
 	*dst = temp;
 }
 
-void	pa(t_list **a, t_list **b)
+/**
+ * @brief Take the first element at the top of b and put it at the top of a.
+ * 		  Do nothing if b is empty.
+ */
+void	pa(t_list **stack_a, t_list **stack_b, t_operations *op)
 {
-	push_cmd(b, a);
+	push_cmd(stack_b, stack_a);
+	op->pa += 1;
 	ft_printf("pa\n");
 }
 
-void	pb(t_list **b, t_list **a)
+/**
+ * @brief Take the first element at the top of a and put it at the top of b.
+ * 		  Do nothing if a is empty.
+ */
+void	pb(t_list **stack_b, t_list **stack_a, t_operations *op)
 {
-	push_cmd(a, b);
+	push_cmd(stack_a, stack_b);
+	op->pb += 1;
 	ft_printf("pb\n");
 }

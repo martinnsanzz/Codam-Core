@@ -16,21 +16,35 @@ static void	rev_rotate_cmd(t_list **stack)
 	*stack = last;
 }
 
-void	rra(t_list **a)
+/**
+ * @brief Shift down all elements of stack a by one.
+ * 		  The last element becomes the first one.
+ */
+void	rra(t_list **stack_a, t_operations *op)
 {
-	rev_rotate_cmd(a);
+	rev_rotate_cmd(stack_a);
+	op->rra += 1;
 	ft_printf("rra\n");
 }
 
-void	rrb(t_list **b)
+/**
+ * @brief Shift down all elements of stack b by one.
+ * 		  The last element becomes the first one.
+ */
+void	rrb(t_list **stack_b, t_operations *op)
 {
-	rev_rotate_cmd(b);
+	rev_rotate_cmd(stack_b);
+	op->rrb += 1;
 	ft_printf("rrb\n");
 }
 
-void	rrr(t_list **a, t_list **b)
+/**
+ * @brief rra and rrb at the same time.
+ */
+void	rrr(t_list **stack_a, t_list **stack_b, t_operations *op)
 {
-	rev_rotate_cmd(a);
-	rev_rotate_cmd(b);
+	rev_rotate_cmd(stack_a);
+	rev_rotate_cmd(stack_b);
+	op->rrr += 1;
 	ft_printf("rrr\n");
 }
