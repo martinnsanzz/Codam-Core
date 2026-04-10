@@ -20,6 +20,12 @@ int	main(int argc, char *argv[])
 	return (0);
 }
 
+/**
+ * @brief Initializes flags to default states:
+ * 			- Number of flags = 0
+ * 			- Bench mode = 0 (False / Off)
+ * 			- Strategy = Adaptive / 0
+ */
 static void	init_flags(t_flags *flags)
 {
 	flags->n_flags = 0;
