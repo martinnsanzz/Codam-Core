@@ -88,7 +88,7 @@ static void	check_int(int argc, char *argv[])
 	i = 1;
 	while (i < (unsigned long)argc)
 	{
-		if (argv[i][0] != '-' && argv[i][1] != '-')
+		if (argv[i][0] != '-' || argv[i][1] != '-')
 		{
 			n = ft_atoi_strict(argv[i]);
 			if (n < INT_MIN || n > INT_MAX)
@@ -148,7 +148,7 @@ static int	int_array(int argc, char *argv[], int **unsorted_lst)
 	n_elements = 0;
 	while (i < (unsigned long)argc)
 	{
-		if (argv[i][0] != '-' && argv[i][1] != '-')
+		if (argv[i][0] != '-' || argv[i][1] != '-')
 			n_elements++;
 		i++;
 	}
@@ -159,7 +159,7 @@ static int	int_array(int argc, char *argv[], int **unsorted_lst)
 	j = 0;
 	while (i < (unsigned long)argc)
 	{
-		if (argv[i][0] != '-' && argv[i][1] != '-')
+		if (argv[i][0] != '-' || argv[i][1] != '-')
 			(*unsorted_lst)[j++] = ft_atoi(argv[i]);
 		i++;
 	}

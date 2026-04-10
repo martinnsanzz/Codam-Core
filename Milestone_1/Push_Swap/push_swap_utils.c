@@ -1,47 +1,6 @@
 #include "push_swap.h"
 
 /**
- * @brief  Replaces an integer array with its normalized-rank equivalent.
- *
- * @details  For each element at index `i`, counts how many other elements in the
- *           array are smaller than it — this count becomes its normalized rank.
- *           The result is stored in a newly allocated array. Once all ranks are
- *           computed, the original array is freed and `*lst` is updated to point
- *           to the normalized array.
- *
- * @param  lst        int** — Pointer to the integer array to normalize.
- * @param  n_elements int   — The number of elements in `*lst`.
- */
-void	normalize(int **lst, int n_elements)
-{
-	int		*normalized_lst;
-	int		total_min_val;
-	size_t	i;
-	size_t	j;
-
-	if (!*lst || n_elements < 0)
-		return ;
-	normalized_lst = ft_calloc(n_elements, sizeof(int));
-	if (!normalized_lst)
-		return ;
-	i = 0;
-	while (i < (size_t)n_elements)
-	{
-		j = 0;
-		total_min_val = 0;
-		while (j < (size_t)n_elements)
-		{
-			if ((*lst)[j] < (*lst)[i])
-				total_min_val++;
-			j++;
-		}
-		normalized_lst[i++] = total_min_val;
-	}
-	free(*lst);
-	*lst = normalized_lst;
-}
-
-/**
  * @brief  Converts a string to a long integer with strict format validation.
  *
  * @details  Skips leading whitespace (spaces and ASCII 9–13), then parses an
