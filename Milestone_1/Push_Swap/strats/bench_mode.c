@@ -1,9 +1,8 @@
-
 #include "../push_swap.h"
 #include <stdio.h>
 
 static void	print_disorder(float disorder);
-static void print_strat(char *strat, char *bigO);
+static void	print_strat(char *strat, char *big_o);
 static void	print_operations(char *text, int num, int new_line);
 
 /**
@@ -12,18 +11,18 @@ static void	print_operations(char *text, int num, int new_line);
 void	bench(t_flags flags, t_operations op, float disorder)
 {
 	char	*strats[4];
-	char	*bigO[3];
+	char	*big_o[3];
 
 	strats[0] = "Adaptive";
 	strats[1] = "Simple";
 	strats[2] = "Medium";
 	strats[3] = "Complex";
-	bigO[0] =  "O(n^2)";
-	bigO[1] =  "O(n√n)";
-	bigO[2] =  "O(nlogn)";
+	big_o[0] = "O(n^2)";
+	big_o[1] = "O(n√n)";
+	big_o[2] = "O(nlogn)";
 	printf("%f\n", disorder);
 	print_disorder(disorder);
-	print_strat(strats[flags.strategy], bigO[flags.strategy - 1]);
+	print_strat(strats[flags.strategy], bbig_o[flags.strategy - 1]);
 	print_operations("[bench] total_ops: ", sum_operations(op), 1);
 	print_operations("[bench] sa: ", op.sa, 0);
 	print_operations(" sb: ", op.sb, 0);
@@ -58,7 +57,7 @@ static void	print_disorder(float disorder)
 		ft_putendl_fd("0%", 2);
 		return ;
 	}
-	percentage = (int)(disorder * 100 + 0.5); // 0.5 rounds the number
+	percentage = (int)(disorder * 100 + 0.5);
 	if (percentage >= 10)
 	{
 		c = '0' + percentage / 10;
@@ -69,12 +68,12 @@ static void	print_disorder(float disorder)
 	ft_putendl_fd(".00%", 2);
 }
 
-static void	print_strat(char *strat, char *bigO)
+static void	print_strat(char *strat, char *big_o)
 {
 	ft_putstr_fd("[bench] strategy: ", 2);
 	ft_putstr_fd(strat, 2);
 	ft_putstr_fd(" / ", 2);
-	ft_putendl_fd(bigO, 2);
+	ft_putendl_fd(big_o, 2);
 }
 
 static void	print_operations(char *text, int num, int new_line)

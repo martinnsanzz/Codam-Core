@@ -41,7 +41,7 @@ void	print_error(void);
 long	ft_atoi_strict(const char *nptr);
 int		ft_strcmp(const char *s1, const char *s2);
 void	delete_content(void *content);
-int	sum_operations(t_operations op);
+int		sum_operations(t_operations op);
 
 //TO BE DELETED
 //Printing functions to test
@@ -68,8 +68,11 @@ void	rrr(t_list **stack_a, t_list **stack_b, t_operations *op, int bench);
 //Alghoritm functions
 void	bench(t_flags flags, t_operations op, float disorder);
 void	select_strategy(t_list **stack_a, t_list **stack_b, t_flags *flags);
-void	simple_strat(t_list **stack_a, t_list **stack_b, t_operations *op, t_flags *flags);
-void	medium_strat(t_list **stack_a, t_list **stack_b, t_operations *op, t_flags *flags);
-void	complex_strat(t_list **stack_a, t_list **stack_b, t_operations *op, t_flags *flags);
+void	simple_strat(t_list **stack_a, t_list **stack_b,
+			t_operations *op, t_flags *flags);
+void	medium_strat(t_list **stack_a, t_list **stack_b,
+			t_operations *op, t_flags *flags);
+void	complex_strat(t_list **stack_a, t_list **stack_b,
+			t_operations *op, t_flags *flags);
 
 #endif

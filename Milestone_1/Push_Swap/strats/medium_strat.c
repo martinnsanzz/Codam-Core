@@ -1,6 +1,7 @@
 #include "../push_swap.h"
 
-void	medium_strat(t_list **stack_a, t_list **stack_b, t_operations *op, t_flags *flags)
+void	medium_strat(t_list **stack_a, t_list **stack_b,
+				t_operations *op, t_flags *flags)
 {
 	(void)stack_b;
 	(void)op;

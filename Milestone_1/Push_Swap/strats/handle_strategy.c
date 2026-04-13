@@ -38,7 +38,7 @@ void	select_strategy(t_list **stack_a, t_list **stack_b, t_flags *flags)
 		else if (flags->strategy == COMPLEX)
 			complex_strat(stack_a, stack_b, &operations, flags);
 	}
-	if (flags->strategy == 1)
+	if (flags->bench == 1)
 		bench(*flags, operations, disorder);
 }
 

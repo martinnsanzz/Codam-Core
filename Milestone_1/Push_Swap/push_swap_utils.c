@@ -79,12 +79,12 @@ void	print_error(void)
  * 
  * @return The total sum of the actions
  */
-int sum_operations(t_operations op)
+int	sum_operations(t_operations op)
 {
 	int	total_operations;
 	int	swap;
 	int	push;
-	int rotate;
+	int	rotate;
 	int	rev_rotate;
 
 	swap = op.sa + op.sb + op.ss;
