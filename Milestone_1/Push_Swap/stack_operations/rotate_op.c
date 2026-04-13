@@ -18,11 +18,11 @@ static void	rotate_cmd(t_list **stack)
  * @brief Shift up all elements of stack a by one.
  * 		  The first element becomes the last one.
  */
-void	ra(t_list **stack_a, t_operations *op, int bench)
+void	ra(t_list **stack_a, t_operations *op, bool bench)
 {
 	rotate_cmd(stack_a);
 	op->ra += 1;
-	if (bench == 0)
+	if (bench == false)
 		ft_printf("ra\n");
 }
 
@@ -30,22 +30,22 @@ void	ra(t_list **stack_a, t_operations *op, int bench)
  * @brief Shift up all elements of stack b by one.
  * 		  The first element becomes the last one.
  */
-void	rb(t_list **stack_b, t_operations *op, int bench)
+void	rb(t_list **stack_b, t_operations *op, bool bench)
 {
 	rotate_cmd(stack_b);
 	op->rb += 1;
-	if (bench == 0)
+	if (bench == false)
 		ft_printf("rb\n");
 }
 
 /**
  * @brief ra and rb at the same time.
  */
-void	rr(t_list **stack_a, t_list **stack_b, t_operations *op, int bench)
+void	rr(t_list **stack_a, t_list **stack_b, t_operations *op, bool bench)
 {
 	rotate_cmd(stack_a);
 	rotate_cmd(stack_b);
 	op->rr += 1;
-	if (bench == 0)
+	if (bench == false)
 		ft_printf("rr\n");
 }

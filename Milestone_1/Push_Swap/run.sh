@@ -1,7 +1,7 @@
 #!/usr/bin/env fish
 
 set COUNT 10
-set FLAGS "--adaptive"
+set FLAGS
 set BENCH
 
 for arg in $argv

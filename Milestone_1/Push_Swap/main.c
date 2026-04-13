@@ -35,7 +35,7 @@ int	main(int argc, char *argv[])
 static void	init_flags(t_flags *flags)
 {
 	flags->n_flags = 0;
-	flags->bench = 0;
+	flags->bench = false;
 	flags->strategy = ADAPTIVE;
 }
 

@@ -2,6 +2,7 @@
 # define PUSH_SWAP_H
 
 # include "libft/libft.h"
+# include <stdbool.h>
 
 typedef enum e_strategy
 {
@@ -14,7 +15,7 @@ typedef enum e_strategy
 typedef struct s_flags
 {
 	t_strategy	strategy;
-	int			bench;
+	bool		bench;
 	int			n_flags;
 }	t_flags;
 
@@ -50,20 +51,20 @@ void	print_flags(t_flags flags);
 void	print_lst(int *lst, int n_elements, char *msg);
 
 //Actions functions
-void	sa(t_list **stack_a, t_operations *op, int bench);
-void	sb(t_list **stack_b, t_operations *op, int bench);
-void	ss(t_list **stack_a, t_list **stack_b, t_operations *op, int bench);
+void	sa(t_list **stack_a, t_operations *op, bool bench);
+void	sb(t_list **stack_b, t_operations *op, bool bench);
+void	ss(t_list **stack_a, t_list **stack_b, t_operations *op, bool bench);
 
-void	pa(t_list **stack_a, t_list **stack_b, t_operations *op, int bench);
-void	pb(t_list **stack_b, t_list **stack_a, t_operations *op, int bench);
+void	pa(t_list **stack_a, t_list **stack_b, t_operations *op, bool bench);
+void	pb(t_list **stack_b, t_list **stack_a, t_operations *op, bool bench);
 
-void	ra(t_list **stack_a, t_operations *op, int bench);
-void	rb(t_list **stack_b, t_operations *op, int bench);
-void	rr(t_list **stack_a, t_list **stack_b, t_operations *op, int bench);
+void	ra(t_list **stack_a, t_operations *op, bool bench);
+void	rb(t_list **stack_b, t_operations *op, bool bench);
+void	rr(t_list **stack_a, t_list **stack_b, t_operations *op, bool bench);
 
-void	rra(t_list **stack_a, t_operations *op, int bench);
-void	rrb(t_list **stack_b, t_operations *op, int bench);
-void	rrr(t_list **stack_a, t_list **stack_b, t_operations *op, int bench);
+void	rra(t_list **stack_a, t_operations *op, bool bench);
+void	rrb(t_list **stack_b, t_operations *op, bool bench);
+void	rrr(t_list **stack_a, t_list **stack_b, t_operations *op, bool bench);
 
 //Alghoritm functions
 void	bench(t_flags flags, t_operations op, float disorder);

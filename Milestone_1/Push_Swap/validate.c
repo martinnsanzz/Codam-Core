@@ -26,7 +26,7 @@ int	check_argv(int argc, char *argv[], int **unsorted_lst, t_flags *flags)
 	int	n_elements;
 
 	check_flag(argc, argv, flags);
-	if (flags->n_flags > 2 || (flags->n_flags == 2 && flags->bench == 0))
+	if (flags->n_flags > 2 || (flags->n_flags == 2 && flags->bench == false))
 		print_error();
 	check_int(argc, argv);
 	n_elements = check_duplicate_argv(argc, argv, unsorted_lst);
@@ -57,8 +57,8 @@ static void	check_flag(int argc, char *argv[], t_flags *flags)
 				flags->strategy = COMPLEX;
 			else if (!ft_strcmp(argv[i], "--adaptive"))
 				flags->strategy = ADAPTIVE;
-			else if (flags->bench == 0 && !ft_strcmp(argv[i], "--bench"))
-				flags->bench += 1;
+			else if (flags->bench == false && !ft_strcmp(argv[i], "--bench"))
+				flags->bench = true;
 			else
 				print_error();
 			flags->n_flags += 1;
