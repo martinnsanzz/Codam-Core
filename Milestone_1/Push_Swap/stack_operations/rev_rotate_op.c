@@ -20,31 +20,34 @@ static void	rev_rotate_cmd(t_list **stack)
  * @brief Shift down all elements of stack a by one.
  * 		  The last element becomes the first one.
  */
-void	rra(t_list **stack_a, t_operations *op)
+void	rra(t_list **stack_a, t_operations *op, int bench)
 {
 	rev_rotate_cmd(stack_a);
 	op->rra += 1;
-	ft_printf("rra\n");
+	if (bench == 0)
+		ft_printf("rra\n");
 }
 
 /**
  * @brief Shift down all elements of stack b by one.
  * 		  The last element becomes the first one.
  */
-void	rrb(t_list **stack_b, t_operations *op)
+void	rrb(t_list **stack_b, t_operations *op, int bench)
 {
 	rev_rotate_cmd(stack_b);
 	op->rrb += 1;
-	ft_printf("rrb\n");
+	if (bench == 0)
+		ft_printf("rrb\n");
 }
 
 /**
  * @brief rra and rrb at the same time.
  */
-void	rrr(t_list **stack_a, t_list **stack_b, t_operations *op)
+void	rrr(t_list **stack_a, t_list **stack_b, t_operations *op, int bench)
 {
 	rev_rotate_cmd(stack_a);
 	rev_rotate_cmd(stack_b);
 	op->rrr += 1;
-	ft_printf("rrr\n");
+	if (bench == 0)
+		ft_printf("rrr\n");
 }

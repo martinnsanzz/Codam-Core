@@ -41,7 +41,7 @@ void	print_error(void);
 long	ft_atoi_strict(const char *nptr);
 int		ft_strcmp(const char *s1, const char *s2);
 void	delete_content(void *content);
-void	sum_operations(t_operations op, int *total);
+int	sum_operations(t_operations op);
 
 //TO BE DELETED
 //Printing functions to test
@@ -50,22 +50,23 @@ void	print_flags(t_flags flags);
 void	print_lst(int *lst, int n_elements, char *msg);
 
 //Actions functions
-void	sa(t_list **stack_a, t_operations *op);
-void	sb(t_list **stack_b, t_operations *op);
-void	ss(t_list **stack_a, t_list **stack_b, t_operations *op);
+void	sa(t_list **stack_a, t_operations *op, int bench);
+void	sb(t_list **stack_b, t_operations *op, int bench);
+void	ss(t_list **stack_a, t_list **stack_b, t_operations *op, int bench);
 
-void	pa(t_list **stack_a, t_list **stack_b, t_operations *op);
-void	pb(t_list **stack_b, t_list **stack_a, t_operations *op);
+void	pa(t_list **stack_a, t_list **stack_b, t_operations *op, int bench);
+void	pb(t_list **stack_b, t_list **stack_a, t_operations *op, int bench);
 
-void	ra(t_list **stack_a, t_operations *op);
-void	rb(t_list **stack_b, t_operations *op);
-void	rr(t_list **stack_a, t_list **stack_b, t_operations *op);
+void	ra(t_list **stack_a, t_operations *op, int bench);
+void	rb(t_list **stack_b, t_operations *op, int bench);
+void	rr(t_list **stack_a, t_list **stack_b, t_operations *op, int bench);
 
-void	rra(t_list **stack_a, t_operations *op);
-void	rrb(t_list **stack_b, t_operations *op);
-void	rrr(t_list **stack_a, t_list **stack_b, t_operations *op);
+void	rra(t_list **stack_a, t_operations *op, int bench);
+void	rrb(t_list **stack_b, t_operations *op, int bench);
+void	rrr(t_list **stack_a, t_list **stack_b, t_operations *op, int bench);
 
 //Alghoritm functions
+void	bench(t_flags flags, t_operations op, float disorder);
 void	select_strategy(t_list **stack_a, t_list **stack_b, t_flags *flags);
 void	simple_strat(t_list **stack_a, t_list **stack_b, t_operations *op, t_flags *flags);
 void	medium_strat(t_list **stack_a, t_list **stack_b, t_operations *op, t_flags *flags);

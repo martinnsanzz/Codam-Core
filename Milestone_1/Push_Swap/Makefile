@@ -1,5 +1,11 @@
 .DEFAULT_GOAL := all
 
+#COLORS
+GREEN = \033[1;92m
+RED = \033[1;91m
+YELLOW = \033[1;93m
+RESET = \033[0m
+
 NAME = push_swap
 DEBUGEXEC = a.out.debug
 LIBFTLIB = libft.a
@@ -24,20 +30,24 @@ AR = ar -rcs
 LIBFTLINK = -L$(LIBFT_DIR) -lft
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFTLINK) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJS) $(LIBFTLINK) -o $(NAME)
+	@echo "${GREEN}program compiled.${RESET}"
 
 $(DEBUGEXEC): $(OBJS)
-	$(CC) $(GDBFLAG) $(OBJS) $(LIBFTLINK) -o $(DEBUGEXEC)
+	@$(CC) $(GDBFLAG) $(OBJS) $(LIBFTLINK) -o $(DEBUGEXEC)
+	@echo "${YELLOW}program compiled with debugger.${RESET}"
 
 $(OBJS_DIR)/%.o: %.c
-	mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) $(GDBFLAG) -c $< -o $@
+	@mkdir -p $(dir $@)
+	@$(CC) $(CFLAGS) $(GDBFLAG) -c $< -o $@
+	@echo "$@ -> ${GREEN}compiled.${RESET}"
 
 $(OBJS_DIR):
-	mkdir -p $(OBJS_DIR)
+	@mkdir -p $(OBJS_DIR)
 
 $(LIBFTLIB):
-	$(MAKE) -C $(LIBFT_DIR) CFLAGS="$(CFLAGS) $(GDBFLAG)"
+	@$(MAKE) --no-print-directory -C $(LIBFT_DIR) CFLAGS="$(CFLAGS) $(GDBFLAG)"
+	@echo "$@ -> ${GREEN}compiled.${RESET}"
 
 all: libft $(NAME)
 
@@ -46,12 +56,14 @@ debug: libft $(DEBUGEXEC)
 libft: $(LIBFTLIB)
 
 clean:
-	$(RM) $(OBJS_DIR)
-	$(MAKE) -C $(LIBFT_DIR) clean
+	@$(RM) $(OBJS_DIR)
+	@$(MAKE) --no-print-directory -C $(LIBFT_DIR) clean
+	@echo "${RED}objects removed.${RESET}"
 
 fclean: clean
-	$(RM) $(NAME) $(DEBUGEXEC)
-	$(MAKE) -C $(LIBFT_DIR) fclean
+	@$(RM) $(NAME) $(DEBUGEXEC)
+	@$(MAKE) --no-print-directory -C $(LIBFT_DIR) fclean
+	@echo "${RED}program and debugger removed.${RESET}"
 
 re: fclean all
 

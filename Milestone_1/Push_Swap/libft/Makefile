@@ -5,6 +5,12 @@
 ### - Updates the library index so the linker can resolve symbols correctly
 ###
 
+# COLORS
+GREEN = \033[1;92m
+RED = \033[1;91m
+YELLOW = \033[1;93m
+RESET = \033[0m
+
 NAME = libft.a
 OBJS_DIR = objs# Directory used to store generated object files
 
@@ -75,24 +81,27 @@ $(NAME): $(OBJS)
 # `ar` creates an archive file (.a) containing the object files
 # `r` replaces existing members in the archive if needed
 # `c` creates the archive if it does not already exist
-	ar rc $(NAME) $(OBJS)
+	@ar rc $(NAME) $(OBJS)
 # Generate/update the archive index so the linker can find symbols quickly
-	ranlib $(NAME)
+	@ranlib $(NAME)
 
 # Compile each .c file into a .o file inside $(OBJS_DIR)
 # The order-only prerequisite ensures the directory exists before compilation
 $(OBJS_DIR)/%.o: %.c | $(OBJS_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
+	@echo "$@ -> ${GREEN}compiled.${RESET}"
 
 # Create the object directory only if it does not already exist
 $(OBJS_DIR):
-	mkdir -p $(OBJS_DIR)
+	@mkdir -p $(OBJS_DIR)
 
 clean:
-	$(RM) $(OBJS_DIR)
+	@$(RM) $(OBJS_DIR)
+	@echo "${RED}objects removed${RESET}"
 
 fclean: clean
-	$(RM) $(NAME)
+	@$(RM) $(NAME)
+	@echo "${RED}libft removed.${RESET}"
 
 # Full rebuild from scratch
 re: fclean all

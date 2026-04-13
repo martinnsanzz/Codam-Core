@@ -15,31 +15,34 @@ static void	swap_cmd(t_list **stack)
  * @brief Swap the first two elements at the top of stack a. 
  * 		  Do nothing if there is only one or no elements.
  */
-void	sa(t_list **stack_a, t_operations *op)
+void	sa(t_list **stack_a, t_operations *op, int bench)
 {
 	swap_cmd(stack_a);
 	op->sa += 1;
-	ft_printf("sa\n");
+	if (bench == 0)
+		ft_printf("sa\n");
 }
 
 /**
  * @brief Swap the first two elements at the top of stack b.
  * 		  Do nothing if there is only one or no elements.
  */
-void	sb(t_list **stack_b, t_operations *op)
+void	sb(t_list **stack_b, t_operations *op, int bench)
 {
 	swap_cmd(stack_b);
 	op->sb += 1;
-	ft_printf("sb\n");
+	if (bench == 0)
+		ft_printf("sb\n");
 }
 
 /**
  * @brief sa and sb at the same time.
  */
-void	ss(t_list **stack_a, t_list **stack_b, t_operations *op)
+void	ss(t_list **stack_a, t_list **stack_b, t_operations *op, int bench)
 {
 	swap_cmd(stack_a);
 	swap_cmd(stack_b);
 	op->ss += 1;
-	ft_printf("ss\n");
+	if (bench == 0)
+		ft_printf("ss\n");
 }

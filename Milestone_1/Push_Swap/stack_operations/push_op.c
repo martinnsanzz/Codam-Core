@@ -16,20 +16,22 @@ static void	push_cmd(t_list **src, t_list **dst)
  * @brief Take the first element at the top of b and put it at the top of a.
  * 		  Do nothing if b is empty.
  */
-void	pa(t_list **stack_a, t_list **stack_b, t_operations *op)
+void	pa(t_list **stack_a, t_list **stack_b, t_operations *op, int bench)
 {
 	push_cmd(stack_b, stack_a);
 	op->pa += 1;
-	ft_printf("pa\n");
+	if (bench == 0)
+		ft_printf("pa\n");
 }
 
 /**
  * @brief Take the first element at the top of a and put it at the top of b.
  * 		  Do nothing if a is empty.
  */
-void	pb(t_list **stack_b, t_list **stack_a, t_operations *op)
+void	pb(t_list **stack_b, t_list **stack_a, t_operations *op, int bench)
 {
 	push_cmd(stack_a, stack_b);
 	op->pb += 1;
-	ft_printf("pb\n");
+	if (bench == 0)
+		ft_printf("pb\n");
 }
