@@ -22,7 +22,7 @@ void	bench(t_flags flags, t_operations op, float disorder)
 	big_o[2] = "O(nlogn)";
 	printf("%f\n", disorder);
 	print_disorder(disorder);
-	print_strat(strats[flags.strategy], bbig_o[flags.strategy - 1]);
+	print_strat(strats[flags.strategy], big_o[flags.strategy - 1]);
 	print_operations("[bench] total_ops: ", sum_operations(op), 1);
 	print_operations("[bench] sa: ", op.sa, 0);
 	print_operations(" sb: ", op.sb, 0);
