@@ -1,5 +1,4 @@
 #include "../push_swap.h"
-#include <stdio.h>
 
 static void	print_disorder(float disorder);
 static void	print_strat(char *strat, char *big_o);
@@ -20,7 +19,6 @@ void	bench(t_flags flags, t_operations op, float disorder)
 	big_o[0] = "O(n^2)";
 	big_o[1] = "O(n√n)";
 	big_o[2] = "O(nlogn)";
-	printf("%f\n", disorder);
 	print_disorder(disorder);
 	print_strat(strats[flags.strategy], big_o[flags.strategy - 1]);
 	print_operations("[bench] total_ops: ", sum_operations(op), 1);
