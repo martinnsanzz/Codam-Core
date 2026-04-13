@@ -115,7 +115,10 @@ static int	check_duplicate_argv(int argc, char *argv[], int **unsorted_lst)
 		while (j < (size_t)n_elements)
 		{
 			if ((*unsorted_lst)[i] == (*unsorted_lst)[j])
+			{
+				free (*unsorted_lst);
 				print_error();
+			}
 			j++;
 		}
 		i++;
