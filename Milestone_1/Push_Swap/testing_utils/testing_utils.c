@@ -9,7 +9,7 @@ void	print_stack(t_list *stack, char *var_name)
 	ft_printf("Stack '%s': ", var_name);
 	while (stack != NULL)
 	{
-		printf("[%d] ", *(int *)stack->content);
+		printf("%d ", *(int *)stack->content);
 		stack = stack->next;
 		i++;
 	}

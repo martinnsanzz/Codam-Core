@@ -1,7 +1,5 @@
 #include "../push_swap.h"
 
-static int	find_min(t_list	*stack);
-
 void	simple_strat(t_list **stack_a, t_list **stack_b,
 				t_operations *op, t_flags *flags)
 {
@@ -13,24 +11,19 @@ void	simple_strat(t_list **stack_a, t_list **stack_b,
 	{
 		stack_size = ft_lstsize(*stack_a);
 		min_pos_index = find_min(*stack_a);
-		if (min_pos_index == 0)
-			pb(stack_b, stack_a, op, flags->bench);
-		else if (min_pos_index < stack_size / 2)
+		if (min_pos_index < stack_size / 2)
 			while (min_pos_index--)
 				ra(stack_a, op, flags->bench);
-		else
-		{
-			min_pos_index = stack_size - min_pos_index;
-			while (min_pos_index--)
+		else if (min_pos_index != 0)
+			while (min_pos_index++ !=  (stack_size + 1))
 				rra(stack_a, op, flags->bench);
-		}
 		pb(stack_b, stack_a, op, flags->bench);
 	}
 	while (*stack_b != NULL)
 		pa(stack_a, stack_b, op, flags->bench);
 }
 
-static int	find_min(t_list	*stack)
+int	find_min(t_list	*stack)
 {
 	t_list	*min_node;
 	int		node_pos;

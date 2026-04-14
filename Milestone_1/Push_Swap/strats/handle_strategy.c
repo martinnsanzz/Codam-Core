@@ -1,7 +1,6 @@
 #include "../push_swap.h"
 #include <stdio.h>
 
-static float	compute_disorder(t_list *stack_a);
 
 /**
  * @brief  Selects and dispatches a sorting strategy based on flags 
@@ -54,7 +53,7 @@ void	select_strategy(t_list **stack_a, t_list **stack_b, t_flags *flags)
  *                 0.0 indicates a fully sorted list or NULL/single-node input.
  *                 1.0 indicates a fully reversed list.
  */
-static float	compute_disorder(t_list *stack_a)
+float	compute_disorder(t_list *stack_a)
 {
 	float		mistakes;
 	float		total_pairs;
