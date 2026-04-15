@@ -1,6 +1,6 @@
 #!/usr/bin/env fish
 
-set COUNT 10
+set COUNTS
 set FLAGS
 set BENCH
 
@@ -11,10 +11,25 @@ for arg in $argv
         case --simple --medium --complex --adaptive
             set FLAGS $FLAGS $arg
         case '*'
-            set COUNT $arg
+            set COUNTS $COUNTS $arg
     end
 end
 
-set ARG (shuf -i 0-2147483647 -n $COUNT)
+if test (count $COUNTS) -eq 0
+    set COUNTS 16
+end
+
+if test (count $FLAGS) -eq 0
+    set FLAGS --adaptive
+end
+
 make -C (dirname (status filename))
-./push_swap $FLAGS $BENCH $ARG
+
+for count in $COUNTS
+    set ARG (shuf -i 0-$count -n $count)
+    echo "ARG: $ARG"
+    echo ""
+    echo "--- COUNT: $count ---"
+    ./push_swap $FLAGS $BENCH $ARG
+    echo ""
+end

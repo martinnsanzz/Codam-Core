@@ -52,6 +52,7 @@ int		ft_sqrt(int nb);
 void	print_stack(t_list *stack, char *var_name);
 void	print_flags(t_flags flags);
 void	print_lst(int *lst, int n_elements, char *msg);
+void	print_result(t_list *stack_a);
 
 //Actions functions
 void	sa(t_list **stack_a, t_operations *op, bool bench);

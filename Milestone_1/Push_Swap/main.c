@@ -20,6 +20,7 @@ int	main(int argc, char *argv[])
 	normalize(&tmp_lst, n_elements);
 	linked_lst_creation(&stack_a, tmp_lst, n_elements);
 	select_strategy(&stack_a, &stack_b, &flags);
+	print_result(stack_a);
 	ft_lstclear(&stack_a, (*free));
 	ft_lstclear(&stack_b, (*free));
 	free(tmp_lst);
