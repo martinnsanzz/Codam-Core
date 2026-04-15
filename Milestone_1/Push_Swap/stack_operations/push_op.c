@@ -15,6 +15,7 @@ static void	push_cmd(t_list **src, t_list **dst)
 /**
  * @brief Take the first element at the top of b and put it at the top of a.
  * 		  Do nothing if b is empty.
+ * @note  Adds 1 to the operation count and only prints if bench mode is off
  */
 void	pa(t_list **stack_a, t_list **stack_b, t_operations *op, bool bench)
 {
@@ -27,6 +28,7 @@ void	pa(t_list **stack_a, t_list **stack_b, t_operations *op, bool bench)
 /**
  * @brief Take the first element at the top of a and put it at the top of b.
  * 		  Do nothing if a is empty.
+ * @note  Adds 1 to the operation count and only prints if bench mode is off
  */
 void	pb(t_list **stack_b, t_list **stack_a, t_operations *op, bool bench)
 {

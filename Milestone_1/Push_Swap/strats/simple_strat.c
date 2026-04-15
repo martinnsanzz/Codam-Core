@@ -15,8 +15,11 @@ void	simple_strat(t_list **stack_a, t_list **stack_b,
 			while (min_pos_index--)
 				ra(stack_a, op, flags->bench);
 		else if (min_pos_index != 0)
-			while (min_pos_index++ !=  (stack_size + 1))
+		{
+			min_pos_index = stack_size - min_pos_index;
+			while (min_pos_index--)
 				rra(stack_a, op, flags->bench);
+		}
 		pb(stack_b, stack_a, op, flags->bench);
 	}
 	while (*stack_b != NULL)

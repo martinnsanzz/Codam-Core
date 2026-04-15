@@ -27,7 +27,7 @@ make -C (dirname (status filename))
 
 for count in $COUNTS
     set ARG (shuf -i 0-$count -n $count)
-    echo "ARG: $ARG"
+    #echo "ARG: $ARG"
     echo ""
     echo "--- COUNT: $count ---"
     ./push_swap $FLAGS $BENCH $ARG

@@ -17,6 +17,7 @@ static void	rotate_cmd(t_list **stack)
 /**
  * @brief Shift up all elements of stack a by one.
  * 		  The first element becomes the last one.
+ * @note  Adds 1 to the operation count and only prints if bench mode is off
  */
 void	ra(t_list **stack_a, t_operations *op, bool bench)
 {
@@ -29,6 +30,7 @@ void	ra(t_list **stack_a, t_operations *op, bool bench)
 /**
  * @brief Shift up all elements of stack b by one.
  * 		  The first element becomes the last one.
+ * @note  Adds 1 to the operation count and only prints if bench mode is off
  */
 void	rb(t_list **stack_b, t_operations *op, bool bench)
 {
@@ -40,6 +42,7 @@ void	rb(t_list **stack_b, t_operations *op, bool bench)
 
 /**
  * @brief ra and rb at the same time.
+ * @note  Adds 1 to the operation count and only prints if bench mode is off
  */
 void	rr(t_list **stack_a, t_list **stack_b, t_operations *op, bool bench)
 {

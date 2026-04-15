@@ -19,6 +19,7 @@ static void	rev_rotate_cmd(t_list **stack)
 /**
  * @brief Shift down all elements of stack a by one.
  * 		  The last element becomes the first one.
+ * @note  Adds 1 to the operation count and only prints if bench mode is off
  */
 void	rra(t_list **stack_a, t_operations *op, bool bench)
 {
@@ -31,6 +32,7 @@ void	rra(t_list **stack_a, t_operations *op, bool bench)
 /**
  * @brief Shift down all elements of stack b by one.
  * 		  The last element becomes the first one.
+ * @note  Adds 1 to the operation count and only prints if bench mode is off
  */
 void	rrb(t_list **stack_b, t_operations *op, bool bench)
 {
@@ -42,6 +44,7 @@ void	rrb(t_list **stack_b, t_operations *op, bool bench)
 
 /**
  * @brief rra and rrb at the same time.
+ * @note  Adds 1 to the operation count and only prints if bench mode is off
  */
 void	rrr(t_list **stack_a, t_list **stack_b, t_operations *op, bool bench)
 {

@@ -11,6 +11,8 @@
  * 			 automatically. If a strategy was explicitly
  *           set via flags, dispatches directly to the corresponding
  * 			 function without computing disorder.
+ * @note   If bench mode is TRUE it prints the stats to stderr and
+ * 		   doesn't print the actions to stdout
  */
 void	select_strategy(t_list **stack_a, t_list **stack_b, t_flags *flags)
 {

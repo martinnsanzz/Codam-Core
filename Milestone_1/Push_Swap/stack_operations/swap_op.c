@@ -26,6 +26,7 @@ void	sa(t_list **stack_a, t_operations *op, bool bench)
 /**
  * @brief Swap the first two elements at the top of stack b.
  * 		  Do nothing if there is only one or no elements.
+ * @note  Adds 1 to the operation count and only prints if bench mode is off
  */
 void	sb(t_list **stack_b, t_operations *op, bool bench)
 {
@@ -37,6 +38,7 @@ void	sb(t_list **stack_b, t_operations *op, bool bench)
 
 /**
  * @brief sa and sb at the same time.
+ * @note  Adds 1 to the operation count and only prints if bench mode is off
  */
 void	ss(t_list **stack_a, t_list **stack_b, t_operations *op, bool bench)
 {

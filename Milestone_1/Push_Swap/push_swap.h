@@ -71,7 +71,6 @@ void	rrb(t_list **stack_b, t_operations *op, bool bench);
 void	rrr(t_list **stack_a, t_list **stack_b, t_operations *op, bool bench);
 
 //Alghoritm functions
-float	compute_disorder(t_list *stack_a);
 void	bench(t_flags flags, t_operations op, float disorder);
 void	select_strategy(t_list **stack_a, t_list **stack_b, t_flags *flags);
 void	simple_strat(t_list **stack_a, t_list **stack_b,
@@ -80,7 +79,10 @@ void	medium_strat(t_list **stack_a, t_list **stack_b,
 			t_operations *op, t_flags *flags);
 void	complex_strat(t_list **stack_a, t_list **stack_b,
 			t_operations *op, t_flags *flags);
+			
+//Alghoritm utils 
 int		find_max(t_list	*stack);
 int		find_min(t_list	*stack);
-
+float	compute_disorder(t_list *stack_a);
+			
 #endif
