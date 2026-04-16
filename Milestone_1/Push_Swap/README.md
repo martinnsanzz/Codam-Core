@@ -32,6 +32,11 @@
 
 [Push Swap Visualizer](https://saadloukili.github.io/Push-Swap-Visualizer/index.html)
 
+[N log N alghorithms](https://www.educative.io/answers/nlogn-sorting-algorithms)
+
+[GeeksforGeeks - Radix Sort](https://www.geeksforgeeks.org/dsa/radix-sort/)
+
+[YT - Bitwise Operators](https://www.youtube.com/watch?v=igIjGxF2J-w)
 **AI usage:**
 
 
