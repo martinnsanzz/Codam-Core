@@ -42,8 +42,8 @@ int		check_argv(int argc, char *argv[], int **unsorted_lst, t_flags *flags);
 void	print_error(void);
 long	ft_atoi_strict(const char *nptr);
 int		ft_strcmp(const char *s1, const char *s2);
-void	delete_content(void *content);
 int		sum_operations(t_operations op);
+void	set_flags(t_flags *flags, int flag);
 
 //Maths utils functions
 int		ft_sqrt(int nb);
@@ -81,10 +81,8 @@ void	medium_strat(t_list **stack_a, t_list **stack_b,
 			t_operations *op, t_flags *flags);
 void	complex_strat(t_list **stack_a, t_list **stack_b,
 			t_operations *op, t_flags *flags);
-//Alghoritm utils 
 int		find_max(t_list	*stack);
 int		find_min(t_list	*stack);
 float	compute_disorder(t_list *stack_a);
-void	set_flags(t_flags *flags, int flag);
 
 #endif
