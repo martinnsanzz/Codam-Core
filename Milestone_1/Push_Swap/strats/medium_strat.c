@@ -32,7 +32,7 @@ void	medium_strat(t_list **stack_a, t_list **stack_b,
 	int	curr_chunk;
 	int	node_index;
 
-	flags->strategy = MEDIUM;
+	set_flags(flags, MEDIUM);
 	stack_size = ft_lstsize(*stack_a);
 	total_chunks = ft_sqrt(stack_size);
 	chunk_size = (stack_size + total_chunks - 1) / total_chunks;

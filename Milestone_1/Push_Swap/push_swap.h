@@ -14,7 +14,8 @@ typedef enum e_strategy
 
 typedef struct s_flags
 {
-	t_strategy	strategy;
+	t_strategy  user_strat;
+	t_strategy	sys_strat;
 	bool		bench;
 	int			n_flags;
 }	t_flags;
@@ -49,10 +50,11 @@ int		ft_sqrt(int nb);
 
 //TO BE DELETED
 //Printing functions to test
-void	print_stack(t_list *stack, char *var_name);
+void	print_stack(t_list *stack, char *name);
 void	print_flags(t_flags flags);
 void	print_lst(int *lst, int n_elements, char *msg);
 void	print_result(t_list *stack_a);
+void	print_stack_int_base(t_list *stack, char *name, char *base);
 
 //Actions functions
 void	sa(t_list **stack_a, t_operations *op, bool bench);
@@ -84,5 +86,6 @@ void	complex_strat(t_list **stack_a, t_list **stack_b,
 int		find_max(t_list	*stack);
 int		find_min(t_list	*stack);
 float	compute_disorder(t_list *stack_a);
+void	set_flags(t_flags *flags, int flag);
 			
 #endif

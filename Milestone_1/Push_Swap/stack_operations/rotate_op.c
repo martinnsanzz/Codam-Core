@@ -5,7 +5,7 @@ static void	rotate_cmd(t_list **stack)
 	t_list	*first;
 	t_list	*last;
 
-	if (!stack || !(*stack)->next)
+	if (!stack || !*stack || !(*stack)->next)
 		return ;
 	first = *stack;
 	*stack = (*stack)->next;

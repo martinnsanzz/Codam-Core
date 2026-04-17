@@ -37,7 +37,8 @@ static void	init_flags(t_flags *flags)
 {
 	flags->n_flags = 0;
 	flags->bench = false;
-	flags->strategy = ADAPTIVE;
+	flags->user_strat = ADAPTIVE;
+	flags->sys_strat = ADAPTIVE;
 }
 
 /**

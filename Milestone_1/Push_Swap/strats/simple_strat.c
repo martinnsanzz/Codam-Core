@@ -6,7 +6,7 @@ void	simple_strat(t_list **stack_a, t_list **stack_b,
 	int	min_pos_index;
 	int	stack_size;
 
-	flags->strategy = SIMPLE;
+	set_flags(flags, SIMPLE);
 	while (*stack_a != NULL)
 	{
 		stack_size = ft_lstsize(*stack_a);

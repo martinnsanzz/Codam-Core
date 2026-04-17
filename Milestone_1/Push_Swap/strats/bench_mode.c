@@ -20,7 +20,7 @@ void	bench(t_flags flags, t_operations op, float disorder)
 	big_o[1] = "O(n√n)";
 	big_o[2] = "O(nlogn)";
 	print_disorder(disorder);
-	print_strat(strats[flags.strategy], big_o[flags.strategy - 1]);
+	print_strat(strats[flags.sys_strat], big_o[flags.user_strat - 1]);
 	print_operations("[bench] total_ops: ", sum_operations(op), 1);
 	print_operations("[bench] sa: ", op.sa, 0);
 	print_operations(" sb: ", op.sb, 0);
@@ -80,4 +80,12 @@ static void	print_operations(char *text, int num, int new_line)
 	ft_putnbr_fd(num, 2);
 	if (new_line == 1)
 		ft_putendl_fd("", 2);
+}
+
+void	set_flags(t_flags *flags, int flag)
+{
+	if (flags->sys_strat == ADAPTIVE)
+		flags-> user_strat = flag;
+	else
+		flags-> user_strat = flags->sys_strat;
 }

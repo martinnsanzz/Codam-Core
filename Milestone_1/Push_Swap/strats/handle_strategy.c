@@ -21,7 +21,7 @@ void	select_strategy(t_list **stack_a, t_list **stack_b, t_flags *flags)
 
 	disorder = compute_disorder(*stack_a);
 	ft_memset(&operations, 0, sizeof(t_operations));
-	if (flags->strategy == ADAPTIVE)
+	if (flags->sys_strat == ADAPTIVE)
 	{
 		if (disorder < 0.2)
 			simple_strat(stack_a, stack_b, &operations, flags);
@@ -32,11 +32,11 @@ void	select_strategy(t_list **stack_a, t_list **stack_b, t_flags *flags)
 	}
 	else
 	{
-		if (flags->strategy == SIMPLE)
+		if (flags->sys_strat == SIMPLE)
 			simple_strat(stack_a, stack_b, &operations, flags);
-		else if (flags->strategy == MEDIUM)
+		else if (flags->sys_strat == MEDIUM)
 			medium_strat(stack_a, stack_b, &operations, flags);
-		else if (flags->strategy == COMPLEX)
+		else if (flags->sys_strat == COMPLEX)
 			complex_strat(stack_a, stack_b, &operations, flags);
 	}
 	if (flags->bench == true)

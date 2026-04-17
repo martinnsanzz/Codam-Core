@@ -50,13 +50,13 @@ static void	check_flag(int argc, char *argv[], t_flags *flags)
 		if (argv[i][0] == '-' && argv[i][1] == '-')
 		{
 			if (!ft_strcmp(argv[i], "--simple"))
-				flags->strategy = SIMPLE;
+				flags->sys_strat = SIMPLE;
 			else if (!ft_strcmp(argv[i], "--medium"))
-				flags->strategy = MEDIUM;
+				flags->sys_strat = MEDIUM;
 			else if (!ft_strcmp(argv[i], "--complex"))
-				flags->strategy = COMPLEX;
+				flags->sys_strat = COMPLEX;
 			else if (!ft_strcmp(argv[i], "--adaptive"))
-				flags->strategy = ADAPTIVE;
+				flags->sys_strat = ADAPTIVE;
 			else if (flags->bench == false && !ft_strcmp(argv[i], "--bench"))
 				flags->bench = true;
 			else

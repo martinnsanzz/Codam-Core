@@ -1,37 +1,60 @@
 #include "../push_swap.h"
 
+static int	max_bits(t_list *stack);
+
 void	complex_strat(t_list **stack_a, t_list **stack_b,
 				t_operations *op, t_flags *flags)
 {
 	int stack_size;
-	int	max_value;
 	int restore;
-	//int	bit;
+	int	i;
+	int	bits;
 
-	stack_size = ft_lstsize(*stack_a);
-	ft_printf("Stack_size: %d\n", stack_size);
-	max_value = stack_size - 1;
-	restore = 0;
-	//bit = 0;
-	ft_printf("\nBefore sort\n");
-	print_stack(*stack_a, "Stack A");
-	print_stack(*stack_b, "Stack B");
-	while (stack_size > 0)
+
+	set_flags(flags, COMPLEX);
+	bits = max_bits(*stack_a);
+	ft_printf("\n\nMaximum bits [%d]\n\n", bits);
+	// ft_printf("\nBefore sort\n");
+	// print_stack_int_base(*stack_a, "Stack A", "01");
+	// print_stack_int_base(*stack_b, "Stack B", "01");
+	i = 0;
+	while (i < bits)
 	{
-		if (((*(int *)(*stack_a)->content >> 0) & 1) == 1)
+		stack_size = ft_lstsize(*stack_a);
+		while (stack_size > 0)
 		{
-			restore++;
-			pb(stack_b, stack_a, op, flags->bench);
+			if (((*(int *)(*stack_a)->content >> i) & 1) == 0)
+				pb(stack_b, stack_a, op, flags->bench);
+			else
+				ra(stack_a, op, flags->bench);
+			stack_size--;
 		}
-		ra(stack_a, op, flags->bench);
-		max_value >>= 1;
-		stack_size--;
-		//bit++;
+		ft_printf("Bit [%d]\n", i);
+		print_stack_int_base(*stack_a, "Stack A", "01");
+		print_stack_int_base(*stack_b, "Stack B", "01");
+		restore = ft_lstsize(*stack_b);
+		while (restore--)
+			pa(stack_a, stack_b, op, flags->bench);
+		i++;
 	}
-	print_stack(*stack_b, "Stack B");
-	while (restore--)
-		pa(stack_a, stack_b, op, flags->bench);
-	ft_printf("\nAfter sort\n");
-	print_stack(*stack_a, "Stack A");
-	print_stack(*stack_b, "Stack B");
+	ft_printf("After sort\n");
+	print_stack_int_base(*stack_a, "Stack A", "01");
+	print_stack_int_base(*stack_b, "Stack B", "01");
+}
+
+static int	max_bits(t_list *stack)
+{
+	int	stack_size;
+	int	max_value;
+	int	bits;
+
+	stack_size = ft_lstsize(stack);
+	max_value = stack_size - 1;
+	bits = 0;
+	while (max_value)
+	{
+		bits++;
+		max_value >>= 1;
+	}
+	return (bits);
 }

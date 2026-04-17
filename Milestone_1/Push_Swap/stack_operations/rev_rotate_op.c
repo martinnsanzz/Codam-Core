@@ -5,7 +5,7 @@ static void	rev_rotate_cmd(t_list **stack)
 	t_list	*last;
 	t_list	*sec_last;
 
-	if (!stack || !(*stack)->next)
+	if (!stack || !*stack || !(*stack)->next)
 		return ;
 	last = ft_lstlast(*stack);
 	sec_last = *stack;
