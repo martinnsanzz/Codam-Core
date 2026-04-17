@@ -20,7 +20,6 @@ int	main(int argc, char *argv[])
 	normalize(&tmp_lst, n_elements);
 	linked_lst_creation(&stack_a, tmp_lst, n_elements);
 	select_strategy(&stack_a, &stack_b, &flags);
-	print_result(stack_a);
 	ft_lstclear(&stack_a, (*free));
 	ft_lstclear(&stack_b, (*free));
 	free(tmp_lst);
@@ -39,6 +38,14 @@ static void	init_flags(t_flags *flags)
 	flags->bench = false;
 	flags->user_strat = ADAPTIVE;
 	flags->sys_strat = ADAPTIVE;
+}
+
+void	set_flags(t_flags *flags, int flag)
+{
+	if (flags->sys_strat == ADAPTIVE)
+		flags->user_strat = flag;
+	else
+		flags->user_strat = flags->sys_strat;
 }
 
 /**

@@ -14,7 +14,7 @@ typedef enum e_strategy
 
 typedef struct s_flags
 {
-	t_strategy  user_strat;
+	t_strategy	user_strat;
 	t_strategy	sys_strat;
 	bool		bench;
 	int			n_flags;
@@ -57,20 +57,20 @@ void	print_result(t_list *stack_a);
 void	print_stack_int_base(t_list *stack, char *name, char *base);
 
 //Actions functions
-void	sa(t_list **stack_a, t_operations *op, bool bench);
-void	sb(t_list **stack_b, t_operations *op, bool bench);
-void	ss(t_list **stack_a, t_list **stack_b, t_operations *op, bool bench);
+void	sa(t_list **stack_a, t_operations *op);
+void	sb(t_list **stack_b, t_operations *op);
+void	ss(t_list **stack_a, t_list **stack_b, t_operations *op);
 
-void	pa(t_list **stack_a, t_list **stack_b, t_operations *op, bool bench);
-void	pb(t_list **stack_b, t_list **stack_a, t_operations *op, bool bench);
+void	pa(t_list **stack_a, t_list **stack_b, t_operations *op);
+void	pb(t_list **stack_b, t_list **stack_a, t_operations *op);
 
-void	ra(t_list **stack_a, t_operations *op, bool bench);
-void	rb(t_list **stack_b, t_operations *op, bool bench);
-void	rr(t_list **stack_a, t_list **stack_b, t_operations *op, bool bench);
+void	ra(t_list **stack_a, t_operations *op);
+void	rb(t_list **stack_b, t_operations *op);
+void	rr(t_list **stack_a, t_list **stack_b, t_operations *op);
 
-void	rra(t_list **stack_a, t_operations *op, bool bench);
-void	rrb(t_list **stack_b, t_operations *op, bool bench);
-void	rrr(t_list **stack_a, t_list **stack_b, t_operations *op, bool bench);
+void	rra(t_list **stack_a, t_operations *op);
+void	rrb(t_list **stack_b, t_operations *op);
+void	rrr(t_list **stack_a, t_list **stack_b, t_operations *op);
 
 //Alghoritm functions
 void	bench(t_flags flags, t_operations op, float disorder);
@@ -81,11 +81,10 @@ void	medium_strat(t_list **stack_a, t_list **stack_b,
 			t_operations *op, t_flags *flags);
 void	complex_strat(t_list **stack_a, t_list **stack_b,
 			t_operations *op, t_flags *flags);
-			
 //Alghoritm utils 
 int		find_max(t_list	*stack);
 int		find_min(t_list	*stack);
 float	compute_disorder(t_list *stack_a);
 void	set_flags(t_flags *flags, int flag);
-			
+
 #endif

@@ -3,9 +3,10 @@
 
 static bool	find_node(t_list *stack, int *index, int cur_chunk, int chunk_size);
 static void	rotate_to_top(t_list **stack, int node_index,
-				t_operations *op, bool bench);
+				t_operations *op);
 static void	push_sorted_to_a(t_list **stack_b, t_list **stack_a,
-				t_operations *op, bool bench);
+				t_operations *op);
+
 /**
  * @brief  Sorts stack_a using a chunk-based strategy. It sorts the values
  *         into chunks, pushes them to stack_b and sends back the values sorted.
@@ -16,7 +17,8 @@ static void	push_sorted_to_a(t_list **stack_b, t_list **stack_a,
  * 			 Iterates through each chunk in order: for every node
  *           in stack_a belonging to the current chunk, rotates it to the top and
  *           pushes it to stack_b. Once all chunks are processed, calls
- *           `push_sorted_to_a` to drain stack_b back into stack_a in sorted order.
+ *           `push_sorted_to_a` to drain stack_b back into stack_a in sorted 
+ * 			 order.
 
  * @note  The ceiling division `(stack_size + total_chunks - 1) / total_chunks`
  *        ensures no values fall outside the last chunk due to rounding.
@@ -24,7 +26,7 @@ static void	push_sorted_to_a(t_list **stack_b, t_list **stack_a,
  *        always restarts from the head of the current stack_a state.
  */
 void	medium_strat(t_list **stack_a, t_list **stack_b,
-			t_operations *op, t_flags *flags)
+				t_operations *op, t_flags *flags)
 {
 	int	total_chunks;
 	int	chunk_size;
@@ -42,13 +44,13 @@ void	medium_strat(t_list **stack_a, t_list **stack_b,
 		while (find_node(*stack_a, &node_index, curr_chunk, chunk_size))
 		{
 			if (node_index != 0)
-				rotate_to_top(stack_a, node_index, op, flags->bench);
-			pb(stack_b, stack_a, op, flags->bench);
+				rotate_to_top(stack_a, node_index, op);
+			pb(stack_b, stack_a, op);
 			node_index = 0;
 		}
 		curr_chunk++;
 	}
-	push_sorted_to_a(stack_b, stack_a, op, flags->bench);
+	push_sorted_to_a(stack_b, stack_a, op);
 }
 
 /**
@@ -97,17 +99,17 @@ static bool	find_node(t_list *stack, int *index, int cur_chunk, int chunk_size)
  *           Otherwise it is reverse-rotated `size - node_index` times.
  */
 static void	rotate_to_top(t_list **stack, int node_index,
-				t_operations *op, bool bench)
+				t_operations *op)
 {
 	int	cur_size;
 
 	cur_size = ft_lstsize(*stack);
 	if (node_index < cur_size / 2)
 		while (node_index--)
-			ra(stack, op, bench);
+			ra(stack, op);
 	else
 		while (node_index++ != cur_size)
-			rra(stack, op, bench);
+			rra(stack, op);
 }
 
 /**
@@ -123,7 +125,7 @@ static void	rotate_to_top(t_list **stack, int node_index,
  *           stack_a receives elements in descending order of value.
  */
 static void	push_sorted_to_a(t_list **stack_b, t_list **stack_a,
-					t_operations *op, bool bench)
+					t_operations *op)
 {
 	int	stack_size;
 	int	max_pos;
@@ -136,22 +138,25 @@ static void	push_sorted_to_a(t_list **stack_b, t_list **stack_a,
 		restore = max_pos;
 		if (max_pos != 0)
 			while (max_pos--)
-				rb(stack_b, op, bench);
-		pa(stack_a, stack_b, op, bench);
+				rb(stack_b, op);
+		pa(stack_a, stack_b, op);
 		if (restore != 0)
 			while (restore--)
-				rrb (stack_b, op, bench);
+				rrb (stack_b, op);
 	}
 }
 
 /**
- * @brief  Finds the index of the node holding the maximum integer value in a linked list.
+ * @brief  Finds the index of the node holding the maximum integer value 
+ * 		   in a linked list.
  *
- * @details  Traverses the entire list once, tracking the node with the highest
- *           integer value by dereferencing each node's `content` pointer as `int *`.
- *           The position index is zero-based and increments with each node visited.
+ * @details  Traverses the entire list once, tracking the node with the
+ * 			 highest integer value by dereferencing each node's `content`
+ * 			 pointer as `int *`. The position index is zero-based and 
+ * 			 increments with each node visited.
  *
- * @return int — Zero-based index of the node containing the maximum integer value.
+ * @return int — Zero-based index of the node containing the maximum 
+ * 				 integer value.
  *               Returns 0 if the list is NULL or contains a single node.
  */
 int	find_max(t_list	*stack)

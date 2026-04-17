@@ -32,7 +32,7 @@ void	print_stack(t_list *stack, char *name)
 	ft_printf("'%s': ", name);
 	while (stack != NULL)
 	{
-		ft_printf("[%d] ", *(int *)stack->content);
+		ft_printf("%d ", *(int *)stack->content);
 		stack = stack->next;
 	}
 	ft_printf("\n");

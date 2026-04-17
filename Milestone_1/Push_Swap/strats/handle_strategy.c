@@ -1,7 +1,6 @@
 #include "../push_swap.h"
 #include <stdio.h>
 
-
 /**
  * @brief  Selects and dispatches a sorting strategy based on flags 
  * 		   or disorder score.

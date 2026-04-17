@@ -13,17 +13,17 @@ void	simple_strat(t_list **stack_a, t_list **stack_b,
 		min_pos_index = find_min(*stack_a);
 		if (min_pos_index < stack_size / 2)
 			while (min_pos_index--)
-				ra(stack_a, op, flags->bench);
+				ra(stack_a, op);
 		else if (min_pos_index != 0)
 		{
 			min_pos_index = stack_size - min_pos_index;
 			while (min_pos_index--)
-				rra(stack_a, op, flags->bench);
+				rra(stack_a, op);
 		}
-		pb(stack_b, stack_a, op, flags->bench);
+		pb(stack_b, stack_a, op);
 	}
 	while (*stack_b != NULL)
-		pa(stack_a, stack_b, op, flags->bench);
+		pa(stack_a, stack_b, op);
 }
 
 int	find_min(t_list	*stack)

@@ -1,16 +1,6 @@
 #include "libft.h"
 #include <stdint.h>
 
-/**
- * @brief  Writes a pointer address to stdout in hex format and updates the length counter.
- *
- * @details  If `p` is NULL, prints the string "(nil)" to fd 1 and increments `len`
- *           accordingly. For non-NULL pointers, casts `p` to `uintptr_t` and prints the
- *           address prefixed with "0x" in lowercase hexadecimal via `ft_putnbr_base`.
- *
- * @note  `ft_putnbr_base` is responsible for both printing the hex digits and
- *        updating `len` for that portion of the output.
- */
 void	ft_printf_ptr(void *p, int *len)
 {
 	uintptr_t	ptr;

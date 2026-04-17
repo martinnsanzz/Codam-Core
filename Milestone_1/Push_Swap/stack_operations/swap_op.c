@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   swap_op.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: masanz-s <masanz-s@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/17 15:25:47 by masanz-s          #+#    #+#             */
+/*   Updated: 2026/04/17 15:26:42 by masanz-s         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../push_swap.h"
 
 static void	swap_cmd(t_list **stack)
@@ -14,37 +26,35 @@ static void	swap_cmd(t_list **stack)
 /**
  * @brief Swap the first two elements at the top of stack a. 
  * 		  Do nothing if there is only one or no elements.
+ * @note  Adds 1 to the operation count.
  */
-void	sa(t_list **stack_a, t_operations *op, bool bench)
+void	sa(t_list **stack_a, t_operations *op)
 {
 	swap_cmd(stack_a);
 	op->sa += 1;
-	if (bench == false)
-		ft_printf("sa\n");
+	ft_printf("sa\n");
 }
 
 /**
  * @brief Swap the first two elements at the top of stack b.
  * 		  Do nothing if there is only one or no elements.
- * @note  Adds 1 to the operation count and only prints if bench mode is off
+ * @note  Adds 1 to the operation count.
  */
-void	sb(t_list **stack_b, t_operations *op, bool bench)
+void	sb(t_list **stack_b, t_operations *op)
 {
 	swap_cmd(stack_b);
 	op->sb += 1;
-	if (bench == false)
-		ft_printf("sb\n");
+	ft_printf("sb\n");
 }
 
 /**
  * @brief sa and sb at the same time.
- * @note  Adds 1 to the operation count and only prints if bench mode is off
+ * @note  Adds 1 to the operation count.
  */
-void	ss(t_list **stack_a, t_list **stack_b, t_operations *op, bool bench)
+void	ss(t_list **stack_a, t_list **stack_b, t_operations *op)
 {
 	swap_cmd(stack_a);
 	swap_cmd(stack_b);
 	op->ss += 1;
-	if (bench == false)
-		ft_printf("ss\n");
+	ft_printf("ss\n");
 }

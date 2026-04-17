@@ -5,7 +5,7 @@ static void	rev_rotate_cmd(t_list **stack)
 	t_list	*last;
 	t_list	*sec_last;
 
-	if (!stack || !*stack || !(*stack)->next)
+	if (!stack || !(*stack)->next)
 		return ;
 	last = ft_lstlast(*stack);
 	sec_last = *stack;
@@ -19,38 +19,35 @@ static void	rev_rotate_cmd(t_list **stack)
 /**
  * @brief Shift down all elements of stack a by one.
  * 		  The last element becomes the first one.
- * @note  Adds 1 to the operation count and only prints if bench mode is off
+ * @note  Adds 1 to the operation count.
  */
-void	rra(t_list **stack_a, t_operations *op, bool bench)
+void	rra(t_list **stack_a, t_operations *op)
 {
 	rev_rotate_cmd(stack_a);
 	op->rra += 1;
-	if (bench == false)
-		ft_printf("rra\n");
+	ft_printf("rra\n");
 }
 
 /**
  * @brief Shift down all elements of stack b by one.
  * 		  The last element becomes the first one.
- * @note  Adds 1 to the operation count and only prints if bench mode is off
+ * @note  Adds 1 to the operation count.
  */
-void	rrb(t_list **stack_b, t_operations *op, bool bench)
+void	rrb(t_list **stack_b, t_operations *op)
 {
 	rev_rotate_cmd(stack_b);
 	op->rrb += 1;
-	if (bench == false)
-		ft_printf("rrb\n");
+	ft_printf("rrb\n");
 }
 
 /**
  * @brief rra and rrb at the same time.
- * @note  Adds 1 to the operation count and only prints if bench mode is off
+ * @note  Adds 1 to the operation count.
  */
-void	rrr(t_list **stack_a, t_list **stack_b, t_operations *op, bool bench)
+void	rrr(t_list **stack_a, t_list **stack_b, t_operations *op)
 {
 	rev_rotate_cmd(stack_a);
 	rev_rotate_cmd(stack_b);
 	op->rrr += 1;
-	if (bench == false)
-		ft_printf("rrr\n");
+	ft_printf("rrr\n");
 }
