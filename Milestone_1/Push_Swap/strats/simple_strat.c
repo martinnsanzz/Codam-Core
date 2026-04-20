@@ -1,5 +1,7 @@
 #include "../push_swap.h"
 
+static int	find_min(t_list	*stack);
+
 /**
  * @brief	Sorts stack_a using a selection sort strategy. It repeatedly finds
  * 			the minimum value, rotates it to tje top, pushes tp stack_b, then
@@ -55,7 +57,7 @@ void	simple_strat(t_list **stack_a, t_list **stack_b,
  * @return	Zero-based index of the node containing the minimum integer value.
  * 			Returns 0 if the list is NULL or contains a single node.
  */
-int	find_min(t_list	*stack)
+static int	find_min(t_list	*stack)
 {
 	t_list	*min_node;
 	int		node_pos;

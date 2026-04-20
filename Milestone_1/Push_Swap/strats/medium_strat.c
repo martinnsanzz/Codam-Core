@@ -2,8 +2,7 @@
 #include <stdio.h>
 
 static bool	find_node(t_list *stack, int *index, int cur_chunk, int chunk_size);
-static void	rotate_to_top(t_list **stack, int node_index,
-				t_operations *op);
+static int	find_max(t_list	*stack);
 static void	push_sorted_to_a(t_list **stack_b, t_list **stack_a,
 				t_operations *op);
 
@@ -44,7 +43,8 @@ void	medium_strat(t_list **stack_a, t_list **stack_b,
 		while (find_node(*stack_a, &node_index, curr_chunk, chunk_size))
 		{
 			if (node_index != 0)
-				rotate_to_top(stack_a, node_index, op);
+				while (node_index--)
+					ra(stack_a, op);
 			pb(stack_b, stack_a, op);
 			node_index = 0;
 		}
@@ -87,29 +87,6 @@ static bool	find_node(t_list *stack, int *index, int cur_chunk, int chunk_size)
 		stack = stack->next;
 	}
 	return (false);
-}
-
-/**
- * @brief  Rotates a stack to bring the node at a given index to the top
- *         using the minimum number of rotation operations.
- *
- * @details  Computes the stack size once at entry, then chooses the cheaper
- *           rotation direction. If the target index falls in the first half
- *           (index < size / 2), the stack is rotated forward `node_index` times.
- *           Otherwise it is reverse-rotated `size - node_index` times.
- */
-static void	rotate_to_top(t_list **stack, int node_index,
-				t_operations *op)
-{
-	int	cur_size;
-
-	cur_size = ft_lstsize(*stack);
-	if (node_index < cur_size / 2)
-		while (node_index--)
-			ra(stack, op);
-	else
-		while (node_index++ != cur_size)
-			rra(stack, op);
 }
 
 /**
@@ -159,7 +136,7 @@ static void	push_sorted_to_a(t_list **stack_b, t_list **stack_a,
  * 				 integer value.
  *               Returns 0 if the list is NULL or contains a single node.
  */
-int	find_max(t_list	*stack)
+static int	find_max(t_list	*stack)
 {
 	t_list	*max_node;
 	int		node_pos;

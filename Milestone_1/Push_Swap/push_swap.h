@@ -81,8 +81,6 @@ void	medium_strat(t_list **stack_a, t_list **stack_b,
 			t_operations *op, t_flags *flags);
 void	complex_strat(t_list **stack_a, t_list **stack_b,
 			t_operations *op, t_flags *flags);
-int		find_max(t_list	*stack);
-int		find_min(t_list	*stack);
 float	compute_disorder(t_list *stack_a);
 
 #endif
