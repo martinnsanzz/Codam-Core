@@ -44,16 +44,16 @@ This builds `push_swap` and compiles `libft` as a dependency.
 - `--simple` / `--medium` / `--complex` / `--adaptive` — force a specific strategy (default: adaptive)
 - `--bench` — prints operations to stdout and print algorithm stats to stderr (disorder score, strategy used, operation counts)
 
-**Testing with checker_linux:**
+**Testing**
 
 fish:
 ```fish
-set ARG (seq 1 100 | sort -R) ; ./push_swap --bench --medium $ARG | ./checker_linux $ARG
+shuf -i 0-9999 -n 500 > args.txt ; ./push_swap --bench (cat args.txt) 1> actions.txt
 ```
 
 bash:
 ```bash
-ARG=$(seq 1 100 | sort -R | tr '\n' ' ') && ./push_swap --bench --medium $ARG | ./checker_linux $ARG
+shuf -i 0-9999 -n 500 > args.txt && ./push_swap --bench $(cat args.txt) 1> actions.txt
 ```
 
 **Additional Makefile targets:**
