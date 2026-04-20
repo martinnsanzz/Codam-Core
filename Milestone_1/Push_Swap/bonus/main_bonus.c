@@ -12,11 +12,11 @@ int	main(int argc, char *argv[])
 
 	stack_b = NULL;
 	n_elements = check_argv(argc, argv, &tmp_lst);
-	if (!tmp_lst)
+	if (!tmp_lst || argc < 3)
 		return (0);
 	normalize(&tmp_lst, n_elements);
 	linked_lst_creation(&stack_a, tmp_lst, n_elements);
-	print_stack(stack_a, "Stack A");
+	read_input(&stack_a, &stack_b);
 	check_results(stack_a, stack_b);
 	ft_lstclear(&stack_a, (*free));
 	ft_lstclear(&stack_b, (*free));

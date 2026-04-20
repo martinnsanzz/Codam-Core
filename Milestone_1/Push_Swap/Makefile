@@ -25,10 +25,11 @@ SRCS = $(wildcard *.c) \
 		$(wildcard $(TESTING_UTILS_DIR)/*.c) \
 		$(wildcard $(STRATS_DIR)/*.c)
 SRCS_BONUS = $(wildcard $(BONUS_DIR)/*.c) \
-				$(wildcard $(BONUS_DIR)/$(STACK_OP_DIR)/*.c)
+				$(wildcard $(BONUS_DIR)/$(STACK_OP_DIR)/*.c) \
+				$(wildcard $(BONUS_DIR)/get_next_line/*.c)
 
 OBJS = $(SRCS:%.c=$(OBJS_DIR)/%.o)
-OBJS_BONUS = $(patsubst $(BONUS_DIR)/%.c, $(BONUS_DIR)/$(OBJS_DIR_BONUS)/%.o, $(SRCS_BONUS)) \
+OBJS_BONUS = $(patsubst $(BONUS_DIR)/%.c, $(BONUS_DIR)/$(OBJS_DIR_BONUS)/%.o, $(SRCS_BONUS))
 
 CC = cc
 CFLAGS = -Wall -Werror -Wextra
@@ -83,7 +84,7 @@ clean:
 	@echo "${RED}objects removed.${RESET}"
 
 fclean: clean
-	@$(RM) $(NAME) $(NAME_BONUS) $(DEBUGEXEC)
+	@$(RM) $(NAME) $(NAME_BONUS) $(DEBUGEXEC) $(DEBUGEXEC_BONUS)
 	@$(MAKE) --no-print-directory -C $(LIBFT_DIR) fclean
 	@echo "${RED}program and debugger removed.${RESET}"
 
