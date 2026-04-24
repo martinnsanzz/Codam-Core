@@ -1,4 +1,4 @@
-def ft_seed_inventory(seed_type: str, quantity: int, unit: str)-> None:
+def ft_seed_inventory(seed_type: str, quantity: int, unit: str) -> None:
     if (unit == "packets"):
         msg = f"{quantity} packets available"
     elif (unit == "grams"):
