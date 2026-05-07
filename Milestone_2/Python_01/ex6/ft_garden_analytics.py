@@ -70,7 +70,7 @@ class Plant:
             print(f"{self.show_count} show")
 
     @staticmethod
-    def check_days(days: int) -> str:
+    def check_days(days: int) -> None:
         print(f"Is {days} days more than a year? -> ", end="")
         print(("False", "True")[days > 365])
 
@@ -106,7 +106,7 @@ class Tree(Plant):
                  growth_rate: float, trunk_diameter: float) -> None:
         super().__init__(name, height, plant_age, growth_rate)
         self.trunk_diameter = trunk_diameter
-        self.stats = self.Stats(0, 0, 0, 0)
+        self.stats : Tree.Stats = self.Stats(0, 0, 0, 0)
 
     def show(self) -> None:
         super().show()
