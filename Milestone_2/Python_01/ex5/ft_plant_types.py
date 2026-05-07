@@ -35,7 +35,6 @@ class Plant:
     def set_height(self, amount: float):
         if amount > 0:
             self._height = amount
-            print(f"Height updated: {round(amount)}cm")
         else:
             print(f"{self.name}: Error, height can't be negative")
             print("Height update rejected")
@@ -43,7 +42,6 @@ class Plant:
     def set_age(self, amount: int):
         if amount > 0:
             self._plant_age = amount
-            print(f"Age updated: {amount} days")
         else:
             print(f"{self.name}: Error, age can't be negative")
             print("Age update rejected")
@@ -65,13 +63,14 @@ class Flower(Plant):
     def show(self) -> None:
         super().show()
         print(f" Color: {self.color}")
+        if not self.has_bloom:
+            print(f" {self.name} has not bloomed yet")
+        else:
+            print(f" {self.name} is blooming beautifully!")
 
     def bloom(self) -> None:
         if not self.has_bloom:
-            print(f" {self.name} has not bloomed yet")
-            print(f"[asking the {self.name.lower()} to bloom]")
             self.show()
-            print(f" {self.name} is blooming beautifully!")
             self.has_bloom = True
         else:
             print(f" {self.name} has already bloomed...")
@@ -88,7 +87,6 @@ class Tree(Plant):
         print(f" Trunk diameter: {self.trunk_diameter}cm")
 
     def produce_shade(self) -> None:
-        print(f"[asking the {self.name.lower()} to produce shade]")
         print(f"Tree {self.name} now produces a shade ", end="")
         print(f"of {self._height}cm ", end="")
         print(f"long and {self.trunk_diameter}cm wide.")
@@ -111,8 +109,6 @@ class Vegetable(Plant):
         super().age()
 
     def grow(self, days: int) -> None:
-        print(f"[make {self.name.lower()} grow and age for ", end="")
-        print(f"{days} days]")
         self.nutritional_value = days
         for x in range(days):
             self.age()
@@ -127,10 +123,14 @@ if __name__ == "__main__":
     print("=== Garden Plant Types ===")
     print("=== Flower")
     flower.show()
+    print(f"[asking the {flower.name.lower()} to bloom]")
     flower.bloom()
     print("\n=== Tree")
     tree.show()
+    print(f"[asking the {tree.name.lower()} to produce shade]")
     tree.produce_shade()
     print("\n=== Vegetable")
     vegetable.show()
+    print(f"[make {vegetable.name.lower()} grow and age for ", end="")
+    print("20 days]")
     vegetable.grow(20)

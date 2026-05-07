@@ -35,7 +35,6 @@ class Plant:
     def set_height(self, amount: float):
         if amount > 0:
             self._height = amount
-            print(f"Height updated: {round(amount)}cm")
         else:
             print(f"{self.name}: Error, height can't be negative")
             print("Height update rejected")
@@ -43,7 +42,6 @@ class Plant:
     def set_age(self, amount: int):
         if amount > 0:
             self._plant_age = amount
-            print(f"Age updated: {amount} days")
         else:
             print(f"{self.name}: Error, age can't be negative")
             print("Age update rejected")
@@ -53,7 +51,7 @@ class Plant:
 
     def get_age(self) -> int:
         return (self._plant_age)
-    
+
 
 if __name__ == "__main__":
     plant: Plant = Plant("Rose", 15.0, 10, 0.8)
@@ -61,10 +59,10 @@ if __name__ == "__main__":
     print("=== Garden Security System ===")
     print("Plant created: ", end="")
     plant.show()
-    print("")
+    print("\nHeigth updated: 25cm")
     plant.set_height(25.0)
+    print("Age updated: 30 days", end="\n\n")
     plant.set_age(30)
-    print("")
     plant.set_height(-25)
     plant.set_age(-30)
     print("\nCurrent state: ", end="")

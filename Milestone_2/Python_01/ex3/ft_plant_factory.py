@@ -30,14 +30,14 @@ class Plant:
 
 
 if __name__ == "__main__":
-    plant_1 : Plant = Plant("Rose", 25.0, 30, 0.0)
-    plant_2 : Plant = Plant("Oak", 200.0, 365, 0.0)
-    plant_3 : Plant = Plant("Cactus", 5.0, 90, 0.0)
-    plant_4 : Plant = Plant("Sunflower", 80.0, 45, 0.0)
-    plant_5 : Plant = Plant("Fern", 15.0, 120, 0.0)
+    plant_1: Plant = Plant("Rose", 25.0, 30, 0.0)
+    plant_2: Plant = Plant("Oak", 200.0, 365, 0.0)
+    plant_3: Plant = Plant("Cactus", 5.0, 90, 0.0)
+    plant_4: Plant = Plant("Sunflower", 80.0, 45, 0.0)
+    plant_5: Plant = Plant("Fern", 15.0, 120, 0.0)
     plants_lst = [plant_1, plant_2, plant_3, plant_4, plant_5]
-    
+
     print("=== Plant Factory Output ===")
     for x in plants_lst:
         print("Created: ", end="")
-        x.show()                                          
+        x.show()
