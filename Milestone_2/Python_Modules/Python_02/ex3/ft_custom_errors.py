@@ -3,10 +3,7 @@
 
 class GardenError(Exception):
     def __init__(self, msg: str = "Unknown garden error") -> None:
-        self.msg = msg
-
-    def __str__(self):
-        return f"{self.msg}"
+        super().__init__(msg)
 
 
 class PlantError(GardenError):
