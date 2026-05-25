@@ -64,7 +64,7 @@ def print_most_least(inventory: dict) -> None:
             most_abundant = item
             tmp_max = inventory[item]
 
-    print(Colors.OKCYAN + "Item most abundant: ", end="")
+    print(Colors.OKCYAN + "\nItem most abundant: ", end="")
     print(Colors.ENDC, end="")
     print(f"{most_abundant} with quantity {int(inventory[most_abundant])}")
 
@@ -85,20 +85,24 @@ if __name__ == "__main__":
     print("=== Inventory System Analysis ===" + Colors.ENDC)
 
     inventory: dict = parse_params(sys.argv)
-    print(Colors.OKCYAN + "\nGot inventory: " + Colors.ENDC, end="")
-    print(inventory)
 
-    print(Colors.OKCYAN + "Item list: " + Colors.ENDC, end="")
-    print(list(inventory.keys()))
+    if not len(inventory) == 0:
+        print(Colors.OKCYAN + "\nGot inventory: " + Colors.ENDC, end="")
+        print(inventory)
 
-    print(Colors.OKCYAN + "Total quantity of the ", end="")
-    print(f"{len(inventory)} items: " + Colors.ENDC, end="")
-    total_quantity = sum(int(x) for x in list(inventory.values()))
-    print(total_quantity, end="\n\n")
+        print(Colors.OKCYAN + "Item list: " + Colors.ENDC, end="")
+        print(list(inventory.keys()))
+        print(Colors.OKCYAN + "Total quantity of the ", end="")
+        print(f"{len(inventory)} items: " + Colors.ENDC, end="")
+        total_quantity = sum(int(x) for x in list(inventory.values()))
+        print(total_quantity, end="\n\n")
 
-    print_perc_of_item(inventory, total_quantity)
+        print_perc_of_item(inventory, total_quantity)
 
-    print_most_least(inventory)
+        print_most_least(inventory)
+    else:
+        print(Colors.WARNING + "Inventory is empty, no objects provided...")
+        print(Colors.ENDC, end="")
 
     inventory.update({"pickaxe": "1"})
     print(Colors.OKCYAN + "\nUpdated inventory: " + Colors.ENDC, end="")
