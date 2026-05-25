@@ -45,17 +45,18 @@ if __name__ == "__main__":
 
     print(Colors.OKCYAN + "\nNew list of capitalized names only: ", end="")
     print(Colors.ENDC, end="")
-    cap_lst: list = [x for x in init_lst if x.capitalize() == x]
-    print(cap_lst)
+    init_cap_lst: list = [x for x in init_lst if x.capitalize() == x]
+    print(init_cap_lst)
 
     print(Colors.OKCYAN + "\nScore dict: ", end="" + Colors.ENDC)
-    score_dict: dict = {name: random.randint(0, 1000) for name in cap_lst}
+    score_dict: dict = {name: random.randint(0, 1000) for name in init_cap_lst}
     print(score_dict)
 
     print(Colors.OKCYAN + "\nScore average is: ", end="" + Colors.ENDC)
-    score_avg: float = sum(score for score in score_dict.values()) / len(score_dict)
+    score_avg: float = sum(score_dict[x] for x in score_dict) / len(score_dict)
     print(round(score_avg, 1))
 
     print(Colors.OKCYAN + "\nHigh Scores: ", end="" + Colors.ENDC)
-    high_score: dict = {x:score_dict[x] for x in score_dict if score_dict[x] > score_avg}
+    high_score: dict = {x: score_dict[x] for x in score_dict
+                        if score_dict[x] > score_avg}
     print(high_score)
