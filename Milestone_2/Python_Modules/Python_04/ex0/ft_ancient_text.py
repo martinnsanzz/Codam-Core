@@ -2,7 +2,6 @@
 
 
 import sys
-import typing
 
 
 class Colors:
