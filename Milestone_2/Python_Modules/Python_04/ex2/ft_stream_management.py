@@ -17,7 +17,7 @@ class Colors:
 
     def msg(self, color: str, msg: str, std: str = "out"):
         if std == "err":
-            sys.stdout.write(getattr(self, color) + msg + Colors.ENDC)
+            sys.stderr.write(getattr(self, color) + msg + Colors.ENDC)
         elif std == "out":
             sys.stdout.write(getattr(self, color) + msg + Colors.ENDC + '\n')
 
