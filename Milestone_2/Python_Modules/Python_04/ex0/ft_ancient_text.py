@@ -20,24 +20,26 @@ class Colors:
         print(getattr(self, color) + msg + Colors.ENDC)
 
 
-def read_file(content: typing.IO) -> str:
-    return content.read()
+def read_file(file: str) -> None:
+    f = open(file, "r")
+    print("---\n")
+    print(f.read())
+    f.close()
+    print("\n---")
+    Colors().print_msg("OKCYAN", f"File '{file}' closed.")
 
 
-def main(argv: list) -> None:
+def main(file: str) -> None:
     Colors().print_msg("HEADER", "=== Cyber Archives Recovery ===")
+    Colors().print_msg("OKCYAN", f"Accesing file '{file}'")
     try:
-        Colors().print_msg("OKCYAN", f"Accesing file '{argv[1]}'")
-        content = open(argv[1], 'r')
-        print(read_file(content))
-        content.close()
-        Colors().print_msg("OKCYAN", f"File '{argv[1]}' closed.")
+        read_file(file)
     except Exception as error:
-        Colors().print_msg("FAIL", f"Error opening file '{argv[1]}': {error}")
+        Colors().print_msg("FAIL", f"Error opening file '{file}': {error}")
 
 
 if __name__ == "__main__":
     if len(sys.argv) == 2:
-        main(sys.argv)
+        main(sys.argv[1])
     else:
         Colors().print_msg("WARNING", "Usage: ft_ancient_text.py <file>")
