@@ -19,6 +19,11 @@ class Colors:
         print(getattr(self, color) + msg + Colors.ENDC)
 
 
+class CustomError(Exception):
+    def __init__(self, msg: str) -> None:
+        super().__init__(msg)
+
+
 def read_file(file: str) -> None:
     f = open(file, "r")
     print("---\n")
@@ -41,39 +46,45 @@ def print_edit_file(file: str) -> None:
 
 def safe_edit_file(file: str) -> None:
     print(Colors.OKCYAN, end="")
-    file_name = input("Enter new file name (or empty): ")
+    user_name = input("Enter new file name (or empty): ")
     print(Colors.ENDC, end="")
 
-    if not file_name:
+    if not user_name:
         Colors().print_msg("WARNING", "Not saving data.")
-    if ".txt" not in file_name:
-        raise Exception("File extension must be .txt")
+    if ".txt" not in user_name:
+        raise CustomError("File name must have extension .txt")
     else:
-        Colors().print_msg("OKGREEN", f"Saving data to '{file_name}'")
-        Colors().print_msg("OKGREEN", f"Data saved in file '{file_name}'")
-        f = open(file, "r")
-        new_file = open(file_name, "w")
-        text = f.read().split('\n')
-        index = 0
-        for line in text:
-            if index != (len(text) - 1):
-                new_file.write(line + "#" + '\n')
-            else:
-                new_file.write(line + "#")
-            index += 1
-        f.close()
-        new_file.close()
+        create_new_file(file, user_name)
+
+
+def create_new_file(file: str, user_name: str):
+    Colors().print_msg("OKGREEN", f"Saving data to '{user_name}'")
+    Colors().print_msg("OKGREEN", f"Data saved in file '{user_name}'")
+    f = open(file, "r")
+    new_file = open(user_name, "w")
+    text = f.read().split('\n')
+    index = 0
+    for line in text:
+        if index != (len(text) - 1):
+            new_file.write(line + "#" + '\n')
+        else:
+            new_file.write(line + "#")
+        index += 1
+    f.close()
+    new_file.close()
 
 
 def main(file: str) -> None:
-    Colors().print_msg("HEADER", "=== Cyber Archives Recovery ===")
+    Colors().print_msg("HEADER", "=== Archives Recovery & Preservation ===")
     Colors().print_msg("OKCYAN", f"Accesing file '{file}'")
     try:
         read_file(file)
         print_edit_file(file)
         safe_edit_file(file)
+    except CustomError as error:
+        Colors().print_msg("FAIL", f"Error: {error}")
     except Exception as error:
-        Colors().print_msg("FAIL", f"Error with file: {error}")
+        Colors().print_msg("FAIL", f"Error opening file {file}: {error}")
 
 
 if __name__ == "__main__":
