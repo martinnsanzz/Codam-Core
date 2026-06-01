@@ -20,12 +20,18 @@ class C:
 
 
 class DataProcessor(ABC):
-    def __init__(self):
-        super().__init__()
+    def __init__(self) -> None:
         self.data: list = []
+        self.output_count = 0
 
     def output(self) -> tuple[int, str]:
-        pass
+        if not self.data:
+            raise Exception("Data is empty")
+        try:
+            return (self.output_count, self.data[0])
+        finally:
+            self.output_count += 1
+            self.data.pop(0)
 
     @abstractmethod
     def validate(self, data: Any) -> bool:
@@ -43,7 +49,12 @@ class NumericProcessor(DataProcessor):
         return isinstance(data, (int, float))
 
     def ingest(self, data: int | float | list[int | float]) -> None:
-        ...
+        if not self.validate(data):
+            raise TypeError("Improper numeric data")
+        if not isinstance(data, list):
+            self.data.append(str(data))
+        else:
+            self.data.extend(str(x) for x in data)
 
 
 class TextProcessor(DataProcessor):
@@ -53,7 +64,12 @@ class TextProcessor(DataProcessor):
         return isinstance(data, str)
 
     def ingest(self, data: str | list[str]) -> None:
-        ...
+        if not self.validate(data):
+            raise TypeError("Improper str data")
+        if not isinstance(data, list):
+            self.data.append(data)
+        else:
+            self.data.extend(x for x in data)
 
 
 class LogProcessor(DataProcessor):
@@ -67,24 +83,80 @@ class LogProcessor(DataProcessor):
             )
         if isinstance(data, dict):
             return all((isinstance(k, str) and
-                        isinstance(v, str))
-                    for k, v in data.items())
+                        isinstance(v, str)) for k, v in data.items())
         else:
             return False
 
     def ingest(self, data: dict[str, str] | list[dict[str, str]]) -> None:
-        ...
+        if not self.validate(data):
+            raise TypeError("Improper str data")
+        if not isinstance(data, list):
+            self.data.append(': '.join(data.values()))
+        else:
+            for x in data:
+                self.data.append(': '.join(x.values()))
 
 
-def num_proc_tester(num_inst: NumericProcessor) -> None:
-    ...
+def num_proc_tester() -> None:
+    num_proc: NumericProcessor = NumericProcessor()
+
+    C().msg("C", "\nTesting Numeric Processor...")
+    print("Trying to validate input '42': ", end="")
+    print(C.G + str(num_proc.validate(42)) + C.E)
+
+    print("Trying to validate input 'Hello': ", end="")
+    print(C.F + str(num_proc.validate("Hello")) + C.E)
+
+    print("Test invalid ingestion of string 'foo' "
+          "without prior validation:")
+    try:
+        num_proc.ingest("foo")
+    except Exception as error:
+        print(C.F + f"Got exception: {error}" + C.E)
+    num_proc.ingest([1, 2, 3, 4, 5])
+    print(f"Processing data: {num_proc.data}")
+    print(num_proc.data)
+
+    print(C.Bo + "Extracting 3 values..." + C.E)
+    for _ in range(3):
+        output = num_proc.output()
+        print(f"Numeric value {output[0]}: {output[1]}")
+
+
+def text_proc_test() -> None:
+    text_proc: TextProcessor = TextProcessor()
+
+    C().msg("C", "\nTesting Numeric Processor...")
+    print("Trying to validate input '42': ", end="")
+    print(C.F + str(text_proc.validate(42)) + C.E)
+
+    text_proc.ingest(["Hello", "Nexus", "World"])
+    print(f"Processing data: {text_proc.data}")
+
+    print(C.Bo + "Extracting 1 value..." + C.E)
+    output = text_proc.output()
+    print(f"Text value {output[0]}: {output[1]}")
+
+
+def log_proc_test() -> None:
+    log_proc: LogProcessor = LogProcessor()
+
+    C().msg("C", "\nTesting Numeric Processor...")
+    print("Trying to validate input 'Hello': ", end="")
+    print(C.F + str(log_proc.validate("Hello")) + C.E)
+
+    log_proc.ingest([{'log_level': 'NOTICE',
+                      'log_message': 'Connection to server'},
+                    {'log_level': 'ERROR',
+                     'log_message': 'Unauthorized access!!'}])
+    print(C.Bo + "Extracting 2 values..." + C.E)
+    for _ in range(2):
+        output = log_proc.output()
+        print(f"Numeric value {output[0]}: {output[1]}")
 
 
 if __name__ == "__main__":
-    num_proc: NumericProcessor = NumericProcessor()
-    # text_proc: TextProcessor = TextProcessor()
-    log_proc: LogProcessor = LogProcessor()
-
     C().msg("H", "=== Code Nexus - Data Processor ===")
-    print(num_proc.validate([42, 42]))
-    print(log_proc.validate())
+    num_proc_tester()
+    text_proc_test()
+    log_proc_test()
