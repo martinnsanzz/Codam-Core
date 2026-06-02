@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 
-from typing import Any
-from abc import ABC, abstractmethod
+import typing
+import abc
 
 
 class C:
@@ -19,7 +19,7 @@ class C:
         print(getattr(self, color) + msg + C.E)
 
 
-class DataProcessor(ABC):
+class DataProcessor(abc.ABC):
     def __init__(self) -> None:
         self.data: list = []
         self.output_count = 0
@@ -33,17 +33,17 @@ class DataProcessor(ABC):
             self.output_count += 1
             self.data.pop(0)
 
-    @abstractmethod
-    def validate(self, data: Any) -> bool:
+    @abc.abstractmethod
+    def validate(self, data: typing.Any) -> bool:
         pass
 
-    @abstractmethod
-    def ingest(self, data: Any) -> None:
+    @abc.abstractmethod
+    def ingest(self, data: typing.Any) -> None:
         pass
 
 
 class NumericProcessor(DataProcessor):
-    def validate(self, data: Any) -> bool:
+    def validate(self, data: typing.Any) -> bool:
         if isinstance(data, list):
             return all(isinstance(x, (int, float)) for x in data)
         return isinstance(data, (int, float))
@@ -58,7 +58,7 @@ class NumericProcessor(DataProcessor):
 
 
 class TextProcessor(DataProcessor):
-    def validate(self, data: Any) -> bool:
+    def validate(self, data: typing.Any) -> bool:
         if isinstance(data, list):
             return all(isinstance(x, str) for x in data)
         return isinstance(data, str)
@@ -73,7 +73,7 @@ class TextProcessor(DataProcessor):
 
 
 class LogProcessor(DataProcessor):
-    def validate(self, data: Any) -> bool:
+    def validate(self, data: typing.Any) -> bool:
         if isinstance(data, list):
             return all(
                 isinstance(x, dict) and
@@ -145,6 +145,10 @@ def log_proc_test() -> None:
     print("Trying to validate input 'Hello': ", end="")
     print(C.F + str(log_proc.validate("Hello")) + C.E)
 
+    print("Processing data: [{'log_level': 'NOTICE', \
+'log_message': 'Connection to server'}, \
+{'log_level': 'ERROR', \
+'log_message': 'Unauthorized access!!'}]")
     log_proc.ingest([{'log_level': 'NOTICE',
                       'log_message': 'Connection to server'},
                     {'log_level': 'ERROR',
