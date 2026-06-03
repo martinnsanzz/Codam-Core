@@ -135,6 +135,100 @@ element in stream: {data}" + C.E)
                       end="")
                 print(f"remaining {len(proc.data)} on processor")
 
+    def output_pipeline(self, nb: int, plugin: 'ExportPlugin') -> None:
+        for proc in self.proc_lst:
+            data_lst: list = []
+            for x in range(nb):
+                try:
+                    data_lst.append(proc.output())
+                except Exception:
+                    pass
+            if data_lst:
+                plugin.process_output(data_lst)
+
+
+class ExportPlugin(typing.Protocol):
+    def process_output(self, data: list[tuple[int, str]]) -> None:
+        pass
+
+
+class CSV():
+    def __init__(self) -> None:
+        self.data_holder: list = []
+
+    def process_output(self, data: list[tuple[int, str]]) -> None:
+        result: str = ",".join(tup[1] for tup in data)
+        print(C.C + "CSV output:" + C.E)
+        print(result)
+
+
+class JSON():
+    def process_output(self, data: list[tuple[int, str]]) -> None:
+        tmp_lst: list = []
+        for x in data:
+            tmp_lst.append((f'"item_{x[0]}": "{x[1]}"'))
+        result = ", ".join(tmp_lst)
+        print(C.C + "JSON output:" + C.E)
+        print(f"{{{result}}}")
+
 
 if __name__ == "__main__":
-    ...
+    num_proc: NumericProcessor = NumericProcessor()
+    text_proc: TextProcessor = TextProcessor()
+    log_proc: LogProcessor = LogProcessor()
+    csv_plugin: ExportPlugin = CSV()
+    json_plugin: ExportPlugin = JSON()
+
+    print(C.H + "=== Code Nexus - Data Stream ===" + C.E)
+    print("Initialize Data Stream...")
+    data_stream: DataStream = DataStream()
+    data_stream.print_processors_stats()
+
+    print(C.U + "\nRegistering Processors:" + C.E)
+    data_stream.register_processor(num_proc)
+    data_stream.register_processor(text_proc)
+    data_stream.register_processor(log_proc)
+
+    print("Send first batch of data on stream: ['Hello world', \
+[3.14, -1, 2.71], [{'log_level': 'WARNING', \
+'log_message': 'Telnet access! Use ssh instead'}, \
+{'log_level': 'INFO', 'log_message': 'User wil is \
+connected'}], 42, ['Hi', 'five']]\n")
+    data_stream.process_stream(['Hello world',
+                                [3.14, -1, 2.71],
+                                [{'log_level': 'WARNING',
+                                  'log_message': 'Telnet access! \
+Use ssh instead'},
+                                    {'log_level': 'INFO', 'log_message':
+                                     'User wil is connected'}],
+                                42,
+                                ['Hi', 'five']])
+
+    data_stream.print_processors_stats()
+    print(C.Bo + "\nSend 3 processed data from each \
+processor to a CSV plugin:" + C.E)
+    data_stream.output_pipeline(3, csv_plugin)
+    data_stream.print_processors_stats()
+
+    print("\nSend another batch of data: [21, ['I love AI', \
+'LLMs are wonderful', 'Stay healthy'], [{'log_level': \
+'ERROR', 'log_message': '500 server crash'}, {'log_level': \
+'NOTICE', 'log_message': 'Certificate expires in 10 days'}], \
+[32, 42, 64, 84, 128, 168], 'World hello'")
+    data_stream.process_stream([21, ['I love AI',
+                                     'LLMs are wonderful',
+                                     'Stay healthy'],
+                                [{'log_level':
+                                  'ERROR', 'log_message':
+                                  '500 server crash'},
+                               {'log_level':
+                                 'NOTICE', 'log_message':
+                                 'Certificate expires \
+in 10 days'}],
+                               [32, 42, 64, 84, 128, 168],
+                               'World hello'])
+    data_stream.print_processors_stats()
+    print(C.Bo + "\nSend 5 processed data from each \
+processor to a JSON plugin:" + C.E)
+    data_stream.output_pipeline(5, json_plugin)
+    data_stream.print_processors_stats()

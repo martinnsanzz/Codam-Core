@@ -119,8 +119,11 @@ def num_proc_tester() -> None:
 
     print(C.Bo + "Extracting 3 values..." + C.E)
     for _ in range(3):
-        output = num_proc.output()
-        print(f"Numeric value {output[0]}: {output[1]}")
+        try:
+            output = num_proc.output()
+            print(f"Numeric value {output[0]}: {output[1]}")
+        except Exception as error:
+            print(error)
 
 
 def text_proc_test() -> None:
@@ -134,8 +137,11 @@ def text_proc_test() -> None:
     print(f"Processing data: {text_proc.data}")
 
     print(C.Bo + "Extracting 1 value..." + C.E)
-    output = text_proc.output()
-    print(f"Text value {output[0]}: {output[1]}")
+    try:
+        output = text_proc.output()
+        print(f"Numeric value {output[0]}: {output[1]}")
+    except Exception as error:
+        print(error)
 
 
 def log_proc_test() -> None:
@@ -155,8 +161,11 @@ def log_proc_test() -> None:
                      'log_message': 'Unauthorized access!!'}])
     print(C.Bo + "Extracting 2 values..." + C.E)
     for _ in range(2):
-        output = log_proc.output()
-        print(f"Numeric value {output[0]}: {output[1]}")
+        try:
+            output = log_proc.output()
+            print(f"Numeric value {output[0]}: {output[1]}")
+        except Exception as error:
+            print(error)
 
 
 if __name__ == "__main__":

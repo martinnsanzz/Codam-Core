@@ -184,9 +184,19 @@ connected'}], 42, ['Hi', 'five']]\n")
 
     print(C.Bo + "\nConsume some elements from the data processors: \
 Numeric 3, Text 2, Log 1" + C.E)
-    for i in range(3):
-        num_proc.output()
-    for i in range(2):
-        text_proc.output()
-    log_proc.output()
+    try:
+        for i in range(3):
+            output = num_proc.output()
+    except Exception as error:
+        print(f"Numeric Processor: {error}")
+    try:
+        for i in range(2):
+            output = text_proc.output()
+    except Exception as error:
+        print(f"Text Processor: {error}")
+    try:
+        output = log_proc.output()
+    except Exception as error:
+        print(f"Log Processor: {error}")
+
     data_stream.print_processors_stats()
