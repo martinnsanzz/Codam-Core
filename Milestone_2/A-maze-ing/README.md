@@ -1,0 +1,97 @@
+*This project has been created as part of the 42 curriculum by masanz-s and cpfister*
+
+[Martin GitHub](https://github.com/martinnsanzz) | [Carlos GitLab](https://gitlab.com/Sustaxata)
+
+---
+
+## Description
+
+**amazing** is a python maze generator project from the 42 curriculum. It perfect (or imperfect)
+mazes based on a configuration file, outputs them in hexadecimal format, and provides 
+ASCII/graphical visualization with user interactions.
+
+The program reads a configuration file specifying maze dimensions, entry/exit points, and
+generation parameters, then generates a valid maze structure and displays it visually with
+the ability to show solution paths and modify colors.
+
+---
+
+## Instructions
+
+
+---
+
+## Configuration File Format
+
+---
+
+## Maze Generation Algorithm
+
+**Algorithm Used:** [INSERT YOUR ALGORITHM NAME]
+
+### Why This Algorithm
+
+
+---
+
+## Code Reusability
+
+
+### Using the Reusable Module
+
+
+
+---
+
+## Team & Project Management
+
+### Roles
+
+- **masanz-s (Martin):** [Your specific responsibilities]
+- **cpfister (Carlos):** [Your specific responsibilities]
+
+### Planning & Evolution
+
+**Initial Plan:**
+[Describe what you planned at the start]
+
+**Evolution:**
+[Describe how the plan changed and why]
+
+### What Worked Well
+
+- [Success 1]
+- [Success 2]
+
+### What Could Be Improved
+
+- [Area for improvement 1]
+- [Area for improvement 2]
+
+### Tools Used
+
+
+---
+
+## Resources
+
+
+
+---
+
+## AI Usage
+
+**AI was NOT used to generate code.** All function implementations were written by Martin and Carlos.
+
+**Where AI was used:**
+-
+-
+-
+
+
+**What was NOT generated:**
+-
+-
+-
+
+---
