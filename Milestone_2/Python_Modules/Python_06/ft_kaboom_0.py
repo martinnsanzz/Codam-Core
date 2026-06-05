@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 
-from Milestone_2.Python_Modules.Python_06.alchemy import create_air
+import alchemy.grimoire
 
 
 class C:
@@ -20,7 +20,12 @@ class C:
 
 
 if __name__ == "__main__":
-    C().msg("H", "=== Alembic 5 ===")
-    print("Accessing the alchemy module using 'from alchemy import ...'")
-    print("Testing create_air: ", end="")
-    C().msg("C", create_air())
+    C().msg("H", "=== Kaboon 0 ===")
+    print("Using grimoire module directly")
+    print("Testing record light spell: ", end="")
+    is_valid = alchemy.grimoire.light_spell_record("Fantasy", "Earth, wind and fire")
+
+    if "INVALID" in is_valid:
+        C().msg("F", is_valid)
+    else:
+        C().msg("G", is_valid)

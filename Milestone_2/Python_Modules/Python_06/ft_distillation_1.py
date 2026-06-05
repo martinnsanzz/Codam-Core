@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 
-from Milestone_2.Python_Modules.Python_06.alchemy import create_air
+import alchemy
 
 
 class C:
@@ -20,7 +20,10 @@ class C:
 
 
 if __name__ == "__main__":
-    C().msg("H", "=== Alembic 5 ===")
-    print("Accessing the alchemy module using 'from alchemy import ...'")
-    print("Testing create_air: ", end="")
-    C().msg("C", create_air())
+    C().msg("H", "=== Distillation 1 ===")
+    C().msg("Bo", "Using: 'import alchemy' structure to access potions")
+    print("Testing strength_potion: ", end="")
+    C().msg("F", alchemy.strength_potion())
+
+    print("\nTesting healing_potion: ", end="")
+    C().msg("G", alchemy.healing_potion())

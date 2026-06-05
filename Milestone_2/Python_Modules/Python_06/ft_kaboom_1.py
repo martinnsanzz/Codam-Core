@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 
 
-from Milestone_2.Python_Modules.Python_06.alchemy import create_air
-
-
 class C:
     H = '\033[95m'  # Header
     B = '\033[94m'  # Blue
@@ -20,7 +17,11 @@ class C:
 
 
 if __name__ == "__main__":
-    C().msg("H", "=== Alembic 5 ===")
-    print("Accessing the alchemy module using 'from alchemy import ...'")
-    print("Testing create_air: ", end="")
-    C().msg("C", create_air())
+    C().msg("H", "=== Kaboon 1===")
+    print("Access to alchemy/grimoire/dark_spellbook.py directly")
+    print("Testing import now: ", end="")
+    C().msg("F", "THIS WILL RAISE AN UNCAUGHT EXCEPTION")
+    
+    import alchemy.grimoire.dark_spellbook as dark
+    is_valid = dark.dark_spell_record("Fantasy", "frogs, wind and fire")
+

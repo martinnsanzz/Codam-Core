@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 
-from Milestone_2.Python_Modules.Python_06.alchemy import create_air
+import alchemy.transmutation.recipes
 
 
 class C:
@@ -20,7 +20,6 @@ class C:
 
 
 if __name__ == "__main__":
-    C().msg("H", "=== Alembic 5 ===")
-    print("Accessing the alchemy module using 'from alchemy import ...'")
-    print("Testing create_air: ", end="")
-    C().msg("C", create_air())
+    C().msg("H", "=== Transmutation 0 ===")
+    print("Testing lead to gold: ", end="")
+    C().msg("C", alchemy.transmutation.recipes.lead_to_gold())

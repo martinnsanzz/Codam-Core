@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 
-import alchemy
+import Milestone_2.Python_Modules.Python_06.alchemy as alchemy
 
 
 class C:
