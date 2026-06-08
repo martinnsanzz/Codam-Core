@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 
-from Milestone_2.Python_Modules.Python_06.alchemy import create_air
+from alchemy import create_air
 
 
 class C:

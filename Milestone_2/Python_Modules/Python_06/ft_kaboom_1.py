@@ -22,6 +22,9 @@ if __name__ == "__main__":
     print("Testing import now: ", end="")
     C().msg("F", "THIS WILL RAISE AN UNCAUGHT EXCEPTION")
     
-    import alchemy.grimoire.dark_spellbook as dark
-    is_valid = dark.dark_spell_record("Fantasy", "frogs, wind and fire")
+    try: 
+        import alchemy.grimoire.dark_spellbook as dark
+        is_valid = dark.dark_spell_record("Fantasy", "frogs, wind and fire")
+    except Exception as error:
+        C().msg("F", str(error))
 

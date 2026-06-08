@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 
-import Milestone_2.Python_Modules.Python_06.alchemy as alchemy
+import alchemy
 
 
 class C:
@@ -32,9 +32,9 @@ if __name__ == "__main__":
     try:
         print("Testing the hidden create_earth: ", end="")
         print(alchemy.create_earth())
-    except AttributeError as error:
+    except Exception as error:
         C().msg("F", str(error).capitalize())
 
     # Without catching the error
-    print("\n\nTesting the hidden create_earth: ", end="")
-    print(alchemy.create_earth())
+    # print("\n\nTesting the hidden create_earth: ", end="")
+    # print(alchemy.create_earth())
