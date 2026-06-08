@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 
-import ex0
+from typing import cast, Protocol
 import ex1
 
 
@@ -20,9 +20,22 @@ class C:
         print(getattr(self, color) + msg + C.E)
 
 
-def heal_factory_test(factory: ex0.CreatureFactory) -> None:
-    base_creature = factory.create_base()
-    evolved_creature = factory.create_evolved()
+class HealableCreature(Protocol):
+    def describe(self) -> str: ...
+    def attack(self) -> str: ...
+    def heal(self) -> str: ...
+
+
+class TransformCreature(Protocol):
+    def describe(self) -> str: ...
+    def attack(self) -> str: ...
+    def transform(self) -> str: ...
+    def revert(self) -> str: ...
+
+
+def heal_factory_test(factory: ex1.HealingCreatureFactory) -> None:
+    base_creature = cast(HealableCreature, factory.create_base())
+    evolved_creature = cast(HealableCreature, factory.create_evolved())
 
     C().msg("Bo", " base: ")
     print(base_creature.describe())
@@ -34,9 +47,9 @@ def heal_factory_test(factory: ex0.CreatureFactory) -> None:
     print(evolved_creature.heal())
 
 
-def transform_factory_test(factory: ex0.CreatureFactory) -> None:
-    base_creature = factory.create_base()
-    evolved_creature = factory.create_evolved()
+def transform_factory_test(factory: ex1.TransformCreatureFactory) -> None:
+    base_creature = cast(TransformCreature, factory.create_base())
+    evolved_creature = cast(TransformCreature, factory.create_evolved())
 
     C().msg("Bo", " base: ")
     print(base_creature.describe())
@@ -59,7 +72,7 @@ if __name__ == "__main__":
     C().msg("H", "=== Testing Creature with healing \
 capability ===")
     heal_factory_test(heal_factory)
-    
+
     C().msg("H", "=== Testing Creature with Transform \
 capability ===")
     transform_factory_test(transform_factory)
