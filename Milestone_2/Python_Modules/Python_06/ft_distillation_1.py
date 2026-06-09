@@ -26,4 +26,4 @@ if __name__ == "__main__":
     C().msg("F", alchemy.strength_potion())
 
     print("\nTesting healing_potion: ", end="")
-    C().msg("G", alchemy.healing_potion())
+    C().msg("G", alchemy.heal())
