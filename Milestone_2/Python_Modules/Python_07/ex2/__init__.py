@@ -1,4 +1,5 @@
-from .battle_strategy import BattleStrategy, NormalStrategy, AggresiveStrategy, DefensiveStrategy
+from .battle_strategy import BattleStrategy, NormalStrategy, \
+    AggresiveStrategy, DefensiveStrategy
 
 
 __all__ = [
