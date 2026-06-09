@@ -4,7 +4,7 @@ def light_spell_allowed_ingredients() -> list:
 
 def light_spell_record(spell_name: str, ingredients: str) -> str:
     from .light_validator import validate_ingredients
-    
+
     is_valid: str = validate_ingredients(ingredients)
 
     if "INVALID" in is_valid:

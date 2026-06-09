@@ -23,7 +23,8 @@ if __name__ == "__main__":
     C().msg("H", "=== Kaboon 0 ===")
     print("Using grimoire module directly")
     print("Testing record light spell: ", end="")
-    is_valid = alchemy.grimoire.light_spell_record("Fantasy", "Earth, wind and fire")
+    is_valid = alchemy.grimoire.light_spell_record("Fantasy", "Earth, \
+wind and fire")
 
     if "INVALID" in is_valid:
         C().msg("F", is_valid)
