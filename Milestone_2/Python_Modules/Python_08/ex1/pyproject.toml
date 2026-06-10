@@ -1,0 +1,19 @@
+[project]
+name = "matrix-env"
+version = "0.1.0"
+description = "Virtual environment package set up with Poetry Package Manager"
+authors = [
+    {name = "masanz-s",email = "masanz-s@student.codam.nl"}
+]
+requires-python = ">=3.13"
+dependencies = [
+    "requests (>=2.34.2,<3.0.0)",
+    "numpy (>=2.4.6,<3.0.0)",
+    "matplotlib (>=3.10.9,<4.0.0)",
+    "pandas (>=3.0.3,<4.0.0)",
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

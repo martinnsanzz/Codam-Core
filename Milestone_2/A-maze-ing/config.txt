@@ -1,0 +1,13 @@
+# File format 'KEY=VALUE'
+#
+# Mandatory keys:
+#
+# Key           Description                     Example
+# WIDTH         Maze width (number of cells)    WIDTH=20
+# HEIGHT        Maze height                     HEIGHT=15
+# ENTRY         Entry coordinates (x,y)         ENTRY=0,0
+# EXIT          Exit coordinates (x,y)          EXIT=19,14
+# OUTPUT_FILE   Output filename                 OUTPUT_FILE=maze.txt
+# PERFECT       Is the maze perfect?            PERFECT=True
+#
+# Additional keys could be (e.g., seed, alghorithm, display mode)
