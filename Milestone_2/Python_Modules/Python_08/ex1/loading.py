@@ -88,7 +88,8 @@ def get_data() -> dict[str, list]:
 if __name__ == "__main__":
     if TOTAL_ERRORS != 0:
         install_instructions()
-    dependencies_info()
+    if TOTAL_ERRORS != 4:
+        dependencies_info()
 
     if TOTAL_ERRORS == 0:
         C().msg("H", "\n=== Testing dependencies ===")
@@ -101,17 +102,21 @@ if __name__ == "__main__":
         print(f"Size of array (n-elements): {array.size}")
         print(f"Number of dimensions: {array.ndim}")
 
-        C().msg("Bo", "\nThis uses panda to manipulate data")
-        df = pd.read_csv('la_liga.csv')
-        C().msg("Bo", "\nData frame: ")
-        print(df)
-        C().msg("Bo", "\nData frame head (first 3): ")
-        print(df.head(3))
-        C().msg("Bo", "\nData frame tail (last 3): ")
-        print(df.tail(3))
+        try:
+            C().msg("Bo", "\nThis uses panda to manipulate data")
+            df = pd.read_csv('la_liga.csv')
+            C().msg("Bo", "\nData frame: ")
+            print(df)
+            C().msg("Bo", "\nData frame head (first 3): ")
+            print(df.head(3))
+            C().msg("Bo", "\nData frame tail (last 3): ")
+            print(df.tail(3))
+
+        except FileNotFoundError:
+            C().msg("F", "File 'la_liga.csv' does not exist")
 
         C().msg("Bo", "\nUsing requests to get data of crypto prices \
-over the last 30 days")
+    over the last 30 days")
         C().msg("Bo", "\nCreating crypto_analysis.png")
         prices = get_data()
         df = pd.DataFrame(prices, columns=['Timestamp', 'Price'])
