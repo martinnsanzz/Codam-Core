@@ -1,3 +1,5 @@
+# DO NOT REMOVE # CODE WILL BREAK
+#
 # File format 'KEY=VALUE'
 #
 # Mandatory keys:
@@ -11,3 +13,12 @@
 # PERFECT       Is the maze perfect?            PERFECT=True
 #
 # Additional keys could be (e.g., seed, alghorithm, display mode)
+WIDTH=20
+HEIGHT=5
+ENTRY=0,0
+EXIT=19,5
+OUTPUT_FILE=maze.txt
+PERFECT=True
+SEED=123456789
+ALGHORITHM=1
+DISPLAY_MODE=0
