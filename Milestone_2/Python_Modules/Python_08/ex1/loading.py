@@ -123,7 +123,7 @@ if __name__ == "__main__":
 
         df['moving_avg'] = df['Price'].rolling(window=7).mean()
 
-        import matplotlib.pyplot as plt  # noqa
+        import matplotlib.pyplot as plt  # type: ignore # noqa
         plt.plot(df['Price'], label='BTC Price')
         plt.plot(df['moving_avg'], label='7-day MA')
 
