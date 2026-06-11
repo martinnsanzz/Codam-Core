@@ -1,4 +1,4 @@
-from .exceptions import CustomError
+from .utils import CustomError
 
 CONFIG_SCHEMA = {
     'WIDTH': int,
