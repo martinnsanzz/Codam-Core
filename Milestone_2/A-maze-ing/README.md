@@ -76,6 +76,7 @@ the ability to show solution paths and modify colors.
 ## Resources
 
 [Maze generations](https://medium.com/analytics-vidhya/maze-generations-algorithms-and-visualizations-9f5e88a3ae37)
+[W3Schools - Python](https://www.w3schools.com/python/default.asp)
 
 
 ---
