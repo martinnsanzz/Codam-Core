@@ -22,31 +22,35 @@ C().msg("W", "LOADING STATUS: Loading programs...")
 TOTAL_ERRORS = 0
 
 import sys  # noqa
+from typing import Any  # noqa
+
+
+np: Any = None
+pd: Any = None
+plt: Any = None
+requests: Any = None
 
 
 try:
-    plt = None
     import matplotlib as plt  # type: ignore
 except (ModuleNotFoundError, ImportError) as error:
     TOTAL_ERRORS += 1
     C().msg("F", f"     -{str(error)}")
+    plt = None
 
 try:
-    pd = None
     import pandas as pd  # type: ignore
 except (ModuleNotFoundError, ImportError) as error:
     TOTAL_ERRORS += 1
     C().msg("F", f"     -{str(error)}")
 
 try:
-    np = None
     import numpy as np  # type: ignore
 except (ModuleNotFoundError, ImportError) as error:
     TOTAL_ERRORS += 1
     C().msg("F", f"     -{str(error)}")
 
 try:
-    requests = None
     import requests  # type: ignore
 except (ModuleNotFoundError, ImportError) as error:
     TOTAL_ERRORS += 1

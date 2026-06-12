@@ -22,9 +22,10 @@ class C:
     def msg(self, color: str, msg: str) -> None:
         print(getattr(self, color) + msg + C.E)
 
+
 try:
-    from dotenv import load_dotenv # type: ignore
-    load_dotenv() # Loads variables from .env into os.environ
+    from dotenv import load_dotenv  # type: ignore
+    load_dotenv()  # Loads variables from .env into os.environ
 except (ModuleNotFoundError, ImportError) as error:
     C().msg("F", f"{str(error)}")
     sys.exit()
@@ -43,6 +44,7 @@ def display_conf() -> None:
     print(f"    Log Level: {log_level}")
     print(f"    Zion Network: {zion}")
 
+
 def security_check() -> None:
     mode = os.getenv("MATRIX_MODE")
     db_url = os.getenv("DATABASE_URL")
@@ -54,11 +56,12 @@ def security_check() -> None:
 
     for x in lst:
         if not x:
-            C().msg("F", f"[KO] .env file not configured properly")
+            C().msg("F", "[KO] .env file not configured properly")
             sys.exit()
     C().msg("G", "  [OK] No hardcoded secrets detected")
     C().msg("G", "  [OK] .env file properly configured")
     C().msg("G", "  [OK] Production overrides available")
+
 
 if __name__ == "__main__":
     script_dir: str = os.path.dirname(__file__)
