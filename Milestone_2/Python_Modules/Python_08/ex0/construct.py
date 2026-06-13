@@ -16,7 +16,7 @@ class C:
     Bo = '\033[1m'  # Bold
     U = '\033[4m'
 
-    def msg(self, color: str, msg: str):
+    def msg(self, color: str, msg: str) -> None:
         print(getattr(self, color) + msg + C.E)
 
 
