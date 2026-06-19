@@ -44,13 +44,15 @@ def enchantment_factory(enchantment_type: str) -> Callable[[str], str]:
 
 
 def memory_vault() -> dict[str, Callable]:
+    vault: dict = {}
 
-    def store(key: str, value: int):
-        ...
+    def store(key: str, value: int) -> None:
+        vault.update({key:value})
     
     def recall(key: str) -> int | str:
-        ...
-    return {recall:store}
+        return vault[key] if key in vault else "Memory not found"
+
+    return {"store":store, "recall":recall}
 
 
 if __name__ == "__main__":
@@ -83,3 +85,13 @@ if __name__ == "__main__":
           f"{water_enchant("helmet")}")
     print("Enchanting boots with wind enchant:",
           f"{wind_enchant("boots")}")
+
+    print(C.U, end="")
+    C().msg("Bo", "\nTesting memory vault:")
+    vault = memory_vault()
+
+    print("Store 'secret' = 42")
+    vault["store"]("secret", 42)
+    print(f"Recall 'secret' : {vault["recall"]("secret")}")
+    print(f"Recall 'unknown' : {vault["recall"]("unknown")}")
+    
