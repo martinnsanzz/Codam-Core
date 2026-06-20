@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 
-
+# Built-in modules
 import sys
+from typing import Any
+
+# Local modules
 import src
 
 
 def main(config_file: str) -> None:
-    config: dict = src.config_parser(config_file)
+    config: dict[str, Any] = src.config_parser(config_file)
     print(config)
 
 
@@ -22,4 +25,3 @@ can only be 'config.txt' (e.g., ./a_maze_ing.py 'context.txt')")
 'config.txt' is accepted !")
     except src.CustomError as error:
         src.C().msg("F", str(error))
-
