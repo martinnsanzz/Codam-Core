@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 
-from typing import Callable
+from typing import Callable, Any
 
 
 class C:
@@ -43,16 +43,16 @@ def enchantment_factory(enchantment_type: str) -> Callable[[str], str]:
     return lambda item: enchantment_type + " " + item
 
 
-def memory_vault() -> dict[str, Callable]:
-    vault: dict = {}
+def memory_vault() -> dict[str, Callable[..., Any]]:
+    vault = {}
 
     def store(key: str, value: int) -> None:
-        vault.update({key:value})
-    
+        vault.update({key: value})
+
     def recall(key: str) -> int | str:
         return vault[key] if key in vault else "Memory not found"
 
-    return {"store":store, "recall":recall}
+    return {"store": store, "recall": recall}
 
 
 if __name__ == "__main__":
@@ -94,4 +94,3 @@ if __name__ == "__main__":
     vault["store"]("secret", 42)
     print(f"Recall 'secret' : {vault["recall"]("secret")}")
     print(f"Recall 'unknown' : {vault["recall"]("unknown")}")
-    

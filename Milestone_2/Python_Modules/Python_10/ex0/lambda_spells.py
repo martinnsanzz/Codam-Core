@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 
 
+from typing import cast
+
+
 class C:
     H = '\033[95m'  # Header
     B = '\033[94m'  # Blue
@@ -16,19 +19,22 @@ class C:
         print(getattr(self, color) + msg + C.E)
 
 
-def artifact_sorter(artifacts: list[dict]) -> list[dict]:
+def artifact_sorter(artifacts: list[dict[str, str | int]]) -> \
+        list[dict[str, str | int]]:
     return sorted(artifacts, key=lambda x: x["power"], reverse=True)
 
 
-def power_filter(mages: list[dict], min_power: int) -> list[dict]:
-    return list(filter(lambda x: x["power"] >= min_power, mages))
+def power_filter(mages: list[dict[str, str | int]], min_power: int) -> \
+        list[dict[str, str | int]]:
+    return list(filter(lambda x: cast(int, x["power"]) >= min_power, mages))
 
 
 def spell_transformer(spells: list[str]) -> list[str]:
     return list(map(lambda x: '* ' + x + ' *', spells))
 
 
-def mage_stats(mages: list[dict]) -> dict:
+def mage_stats(mages: list[dict[str, str | int]]) -> \
+        dict[str, dict[str, str | int] | float]:
     max_power = min(mages, key=lambda x: x["power"])
     min_power = max(mages, key=lambda x: x["power"])
     avg_power = sum(map(lambda x: int(x["power"]), mages)) / len(mages)
@@ -38,7 +44,8 @@ def mage_stats(mages: list[dict]) -> dict:
             }
 
 
-def display(artifacts: list[dict], mages: list[dict],
+def display(artifacts: list[dict[str, str | int]],
+            mages: list[dict[str, str | int]],
             spells: list[str]) -> None:
     C().msg("Bo", "Sorting artifacts by power level in descending order:")
     print(f"Original -> {artifacts}", end="\n\n")
@@ -61,21 +68,21 @@ def display(artifacts: list[dict], mages: list[dict],
 
 
 if __name__ == "__main__":
-    artifacts: list = [
+    artifacts: list[dict[str, str | int]] = [
         {"name": "Fire Staff", "power": 40, "type": "Fire"},
         {"name": "Crystal Orb", "power": 2, "type": "Water"},
         {"name": "Nature Scepter", "power": 78, "type": "Grass"},
         {"name": "Stone Hammer", "power": 100, "type": "Rock"}
     ]
 
-    mages: list = [
+    mages: list[dict[str, str | int]] = [
         {"name": "Aldric", "power": 95, "element": "Fire"},
         {"name": "Maris", "power": 65, "element": "Water"},
         {"name": "Theron", "power": 72, "element": "Grass"},
         {"name": "Kael", "power": 80, "element": "Rock"}
     ]
 
-    spells: list = [
+    spells: list[str] = [
         "Aqua Blast",
         "Inferno Strike",
         "Boulder Crush",
