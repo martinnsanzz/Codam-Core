@@ -2,15 +2,18 @@
 
 # Built-in modules
 import sys
+import curses
 from typing import Any
 
 # Local modules
 import src
+from ui import main as tui_main
 
 
 def main(config_file: str) -> None:
     config: dict[str, Any] = src.config_parser(config_file)
-    print(config)
+    curses.wrapper(tui_main)
+    
 
 
 if __name__ == "__main__":
