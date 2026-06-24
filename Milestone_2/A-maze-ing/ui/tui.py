@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import curses
+from random import randint
 from src.config_parser import config_parser
 
 
@@ -90,23 +91,30 @@ def maze_tui_window(stdscr: curses.window) -> str:
 
     config_opt = WINDOWS["maze_window"]["sub_options"]
     config_maze = WINDOWS["maze_window"]["sub_maze"]
-
+ 
     opt: Menu = Menu(stdscr, config_opt["title"], config_opt["options"])
     maze: Menu = Menu(stdscr, config_maze["title"], config_maze["options"])
 
     opt_window = opt.draw(config_opt["h"], config_opt["w"])
     try:
         maze_window = maze.draw(maze_config["HEIGHT"], maze_config["WIDTH"])
-        maze_window.refresh()
-    except Exception as e:
+    except Exception:
         opt_window.addstr(8, 2, "Error")
 
-    while True: 
+    while True:
+        num = randint(0, 100)
+        if 'maze_window' in locals():
+            maze_window.addstr(15, 15, str(num))
+            maze_window.refresh()
         opt_window.refresh()
 
         key = opt.get_input()
-        if key in config_opt["keys"]:
-            return config_opt["keys"][key]
+        if key == "R":
+            pass
+        elif key == "C":
+            pass
+        elif key == "Q":
+            return "quit"
 
 
 def main(stdscr: curses.window) -> None:
