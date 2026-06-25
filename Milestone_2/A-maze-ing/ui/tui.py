@@ -3,6 +3,7 @@
 import curses
 from random import randint
 from src.config_parser import config_parser
+from src.maze.maze_gen import generate_maze, change_color, draw_maze
 
 
 WINDOWS = {
@@ -88,6 +89,7 @@ def window(stdscr: curses.window, state: str) -> str:
 
 def maze_tui_window(stdscr: curses.window) -> str:
     maze_config = config_parser("config.txt")
+    current_color = change_color()
 
     config_opt = WINDOWS["maze_window"]["sub_options"]
     config_maze = WINDOWS["maze_window"]["sub_maze"]
@@ -97,22 +99,21 @@ def maze_tui_window(stdscr: curses.window) -> str:
 
     opt_window = opt.draw(config_opt["h"], config_opt["w"])
     try:
-        maze_window = maze.draw(maze_config["HEIGHT"], maze_config["WIDTH"])
+        maze_window = maze.draw(maze_config["HEIGHT"] + 1, maze_config["WIDTH"] + 1)
+        current_maze = generate_maze(maze_config)
     except Exception:
         opt_window.addstr(8, 2, "Error")
 
     while True:
-        num = randint(0, 100)
-        if 'maze_window' in locals():
-            maze_window.addstr(15, 15, str(num))
-            maze_window.refresh()
+        draw_maze(maze_window, current_maze, current_color)
+        maze_config = config_parser("config.txt")
         opt_window.refresh()
 
         key = opt.get_input()
         if key == "R":
-            pass
+            current_maze = generate_maze(maze_config)
         elif key == "C":
-            pass
+            current_color = change_color()
         elif key == "Q":
             return "quit"
 
@@ -122,7 +123,7 @@ def main(stdscr: curses.window) -> None:
 
     states: list[str] = ["menu_window", "display_window",
                          "maze_options_window", "mlx", "quit"]
-    cur_state = states[0]
+    cur_state = states[2]
 
     while cur_state != states[-1]:
         if cur_state == states[-2]:

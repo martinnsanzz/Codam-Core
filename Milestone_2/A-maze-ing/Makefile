@@ -1,6 +1,6 @@
 .ONESHELL:
 
-.DEFAULT_GOAL := run
+.DEFAULT_GOAL := install
 
 #COLORS
 GREEN = \033[1;92m
