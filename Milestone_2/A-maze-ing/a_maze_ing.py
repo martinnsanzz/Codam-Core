@@ -3,16 +3,14 @@
 # Built-in modules
 import sys
 import curses
-from typing import Any
 
 # Local modules
-from src.utils import CustomError, C
-from ui import main as tui_main
+from src import C, CustomError
+import ui
 
 
 def main() -> None:
-    curses.wrapper(tui_main)
-    
+    curses.wrapper(ui.main)
 
 
 if __name__ == "__main__":

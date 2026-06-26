@@ -1,4 +1,3 @@
-from ui.tui.states import main
+from .game_loop import run_maze_loop
 
-
-__all__ = ["main"]
+__all__ = ["run_maze_loop"]

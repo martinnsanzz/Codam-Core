@@ -1,5 +1,4 @@
-#!/usr/bin/env python3
-
+# Built-in modules
 from random import randint
 import curses
 
@@ -14,7 +13,8 @@ COLORS = [
 
 current_color_index = 0
 
-def generate_maze(maze_h: int, maze_w: int) -> list[str, str]:
+
+def generate_maze(maze_h: int, maze_w: int) -> list[list[str]]:
     list_2d = []
 
     for _ in range(0, maze_h):
@@ -29,16 +29,18 @@ def generate_maze(maze_h: int, maze_w: int) -> list[str, str]:
     return list_2d
 
 
-def draw_maze(maze_window: curses.window, maze: list,
+def draw_maze(maze_window: curses.window, maze: list[list[str]],
               color: int) -> None:
     for i in range(1, len(maze)):
         for j in range(1, len(maze[i])):
             maze_window.addstr(i, j, maze[i - 1][j - 1], color)
     maze_window.refresh()
 
+
 def change_color() -> int:
     global current_color_index
-    curses.init_pair(current_color_index + 1, COLORS[current_color_index], curses.COLOR_BLACK)
+    curses.init_pair(current_color_index + 1, COLORS[current_color_index],
+                     curses.COLOR_BLACK)
     color = curses.color_pair(current_color_index + 1)
     current_color_index = (current_color_index + 1) % len(COLORS)
     return color
