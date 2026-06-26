@@ -2,7 +2,6 @@
 from random import randint
 import curses
 
-
 COLORS = [
     curses.COLOR_WHITE,
     curses.COLOR_RED,
@@ -34,6 +33,7 @@ def draw_maze(maze_window: curses.window, maze: list[list[str]],
     for i in range(1, len(maze)):
         for j in range(1, len(maze[i])):
             maze_window.addstr(i, j, maze[i - 1][j - 1], color)
+
     maze_window.refresh()
 
 

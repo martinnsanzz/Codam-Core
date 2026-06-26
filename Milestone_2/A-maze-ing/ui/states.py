@@ -12,7 +12,7 @@ from typing import Any
 # Local modules
 from .menu import Menu
 from .windows_config import WINDOWS
-from .tui import run_maze_loop
+from .tui.game_loop import run_maze_loop, maze_opt_window, maze_window
 
 
 # Display a generic menu window and return the next state based on key input.
@@ -33,33 +33,36 @@ def window(stdscr: curses.window, state: str) -> Any:
             return config["keys"][key]
 
 
-# Display the maze game loop with an overlay menu.
-
-# Renders two overlapping windows: the main maze display and a floating
-# options menu (regen, color, quit). Delegates to run_maze_loop for game
-# logic and returns the next state when user exits.
+# Execute the maze game with transparent window resizing.
+# Runs the main maze loop. If config dimensions change during gameplay,
+# clears the screen and rebuilds windows, then restarts the loop with
+# the same color scheme. Returns only when user quits.
 def maze_tui_window(stdscr: curses.window) -> str:
+    current_color = None
 
-    config_opt = WINDOWS["maze_window"]["sub_options"]
-    config_maze = WINDOWS["maze_window"]["sub_maze"]
-
-    opt = Menu(stdscr, config_opt["title"], config_opt["options"])
-    maze = Menu(stdscr, config_maze["title"], config_maze["options"])
-
-    opt_window = opt.draw(config_opt["h"], config_opt["w"], config_opt["pos"])
-    maze_window = maze.draw(config_maze["h"], config_maze["w"],
-                            config_maze["pos"])
-
-    return run_maze_loop(stdscr, opt_window, maze_window, config_maze)
+    while True:
+        opt_window = maze_opt_window(stdscr)
+        maze_win = maze_window(stdscr)
+        
+        result, current_color = run_maze_loop(stdscr, opt_window, maze_win,
+                              WINDOWS["maze_window"]["sub_maze"], current_color)
+        
+        if result == "quit":
+            return result
+        if result == "resize":
+            stdscr.clear()
+            continue
 
 
 # Entry point for the TUI application. Runs the state machine loop.
+# Initializes curses (hides cursor), starts at "maze_options_window", and
+# transitions between states until "quit" is returned.
 def main(stdscr: curses.window) -> None:
 
     windows_list = ["menu_window", "display_window", "maze_options_window"]
 
     curses.curs_set(0)
-    cur_state = windows_list[2]
+    cur_state = windows_list[0]
 
     while cur_state != "quit":
         if cur_state == "mlx":

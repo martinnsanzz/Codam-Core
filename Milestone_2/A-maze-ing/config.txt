@@ -14,7 +14,7 @@
 #
 # Additional keys could be (e.g., seed, alghorithm, display mode)
 WIDTH=60
-HEIGHT=20
+HEIGHT=30
 ENTRY=0,0
 EXIT=19,5
 OUTPUT_FILE=maze.txt

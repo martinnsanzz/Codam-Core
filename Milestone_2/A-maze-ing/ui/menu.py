@@ -10,6 +10,9 @@ with customizable menu items.
 import curses
 from typing import Any
 
+# Local modules
+from src.utils import CustomError
+
 
 class Menu():
     def __init__(self, stdscr: curses.window, title: str,
@@ -25,6 +28,13 @@ class Menu():
     def draw(self, menu_h: int, menu_w: int, pos: list[Any]) -> curses.window:
         self.stdscr.refresh()
         term_h, term_w = self.stdscr.getmaxyx()
+
+        if menu_h >= term_h:
+            raise CustomError("Height of maze bigger than terminal height. "
+                              "Reduce height in 'config.txt'")
+        elif menu_w >= term_w:
+            raise CustomError("Width of maze bigger than terminal width. "
+                              "Reduce width in 'config.txt'")
 
         if pos[0] == "center":
             y = ((term_h - menu_h) // 2)
