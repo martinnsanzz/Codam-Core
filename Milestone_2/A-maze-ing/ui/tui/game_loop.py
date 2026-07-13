@@ -13,6 +13,7 @@ from typing import Any
 # Local modules
 from src.maze.maze_gen import generate_maze, change_color, draw_maze
 from src.config_parser import config_parser
+from src.utils import CustomError
 from ui.windows_config import WINDOWS
 from ui.menu import Menu
 
@@ -56,7 +57,11 @@ def maze_opt_window(stdscr: curses.window) -> curses.window:
 
     opt = Menu(stdscr, config_opt["title"], config_opt["options"])
 
-    opt_window = opt.draw(config_opt["h"], config_opt["w"], config_opt["pos"])
+    try: 
+        opt_window = opt.draw(config_opt["h"], config_opt["w"], config_opt["pos"])
+    except BaseException:
+        raise CustomError("Maze option menu outside of screen. "
+                                "Reduce height in 'config.txt'")
 
     return opt_window
 
@@ -71,8 +76,12 @@ def maze_window(stdscr: curses.window) -> curses.window:
 
     maze = Menu(stdscr, config_maze["title"], config_maze["options"])
 
-    maze_window = maze.draw(config_maze["h"], config_maze["w"],
-                            config_maze["pos"])
+    try: 
+        maze_window = maze.draw(config_maze["h"], config_maze["w"],
+                        config_maze["pos"])
+    except BaseException:
+        raise CustomError("Screen does not fit maze. "
+                              "Reduce width in 'config.txt'")
 
     return maze_window
 

@@ -42,11 +42,12 @@ WINDOWS: dict[str, Any] = {
     "maze_window": {
         "sub_options": {
             "title": "Maze-menu",
-            "options": [{"(R) Regenerate maze": [3, 2],
-                         "(C) Change color": [4, 2],
-                         "(Q) Quit": [6, 2]}],
-            "h": 10, "w": 25,
-            "pos": ["fixed", 0, 0],
+            "options": [{"(R) Regenerate maze": [2, 3],
+                         "(C) Change color": [3, 3],
+                         "(Q) Quit": [3, 25]}],
+            "h": 6,
+            "w": 50,
+            "pos": ["top-maze"],
             "keys": {"R": "regen", "C": "change_color", "Q": "quit"}
         },
         "sub_maze": {

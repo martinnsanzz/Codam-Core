@@ -15,6 +15,7 @@ from .windows_config import WINDOWS
 from .tui.game_loop import run_maze_loop, maze_opt_window, maze_window
 
 
+
 # Display a generic menu window and return the next state based on key input.
 
 # Loads window config from WINDOWS, renders the menu, and loops until user
@@ -62,7 +63,7 @@ def main(stdscr: curses.window) -> None:
     windows_list = ["menu_window", "display_window", "maze_options_window"]
 
     curses.curs_set(0)
-    cur_state = windows_list[0]
+    cur_state = windows_list[2]
 
     while cur_state != "quit":
         if cur_state == "mlx":

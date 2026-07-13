@@ -12,7 +12,7 @@ from typing import Any
 
 # Local modules
 from src.utils import CustomError
-
+from .windows_config import WINDOWS
 
 class Menu():
     def __init__(self, stdscr: curses.window, title: str,
@@ -26,22 +26,16 @@ class Menu():
 # at their configured positions. Supports two positioning modes: centered
 # on screen or fixed at absolute coordinates.
     def draw(self, menu_h: int, menu_w: int, pos: list[Any]) -> curses.window:
+        maze_config = WINDOWS["maze_window"]["sub_maze"]
         self.stdscr.refresh()
         term_h, term_w = self.stdscr.getmaxyx()
-
-        if menu_h >= term_h:
-            raise CustomError("Height of maze bigger than terminal height. "
-                              "Reduce height in 'config.txt'")
-        elif menu_w >= term_w:
-            raise CustomError("Width of maze bigger than terminal width. "
-                              "Reduce width in 'config.txt'")
 
         if pos[0] == "center":
             y = ((term_h - menu_h) // 2)
             x = ((term_w - menu_w) // 2)
-        elif pos[0] == "fixed":
-            y = pos[1]
-            x = pos[2]
+        elif pos[0] == "top-maze":
+            y = ((term_h - maze_config["h"]) // 2) - menu_h
+            x = ((term_w - menu_w) // 2)
 
         menu = curses.newwin(menu_h, menu_w, y, x)
         menu.box()
