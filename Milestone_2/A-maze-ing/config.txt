@@ -13,7 +13,7 @@
 # PERFECT       Is the maze perfect?            PERFECT=True
 #
 # Additional keys could be (e.g., seed, alghorithm, display mode)
-WIDTH=41
+WIDTH=80
 HEIGHT=30
 ENTRY=0,0
 EXIT=19,5

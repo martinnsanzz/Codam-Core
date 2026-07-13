@@ -36,10 +36,15 @@ class Menu():
         elif pos[0] == "top-maze":
             y = ((term_h - maze_config["h"]) // 2) - menu_h
             x = ((term_w - menu_w) // 2)
+        elif pos[0] == "left_maze":
+            y = ((term_h - menu_h) // 2)
+            x = ((term_w - menu_w) // 2) + (maze_config["w"] // 2 + (menu_w // 2 + 1))
+
 
         menu = curses.newwin(menu_h, menu_w, y, x)
         menu.box()
         menu.addstr(0, 0, self.title, curses.A_BOLD)
+
 
         for _ in self.options:
             for key, value in _.items():

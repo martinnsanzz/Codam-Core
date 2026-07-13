@@ -50,6 +50,16 @@ WINDOWS: dict[str, Any] = {
             "pos": ["top-maze"],
             "keys": {"R": "regen", "C": "change_color", "Q": "quit"}
         },
+        "sub_color_palette": {
+            "title": "Palette",
+            "options": [{"Wall": [2, 6],
+                         "Cell": [3, 6],
+                         "Start": [4, 6],
+                         "End": [5, 6]}],
+            "h": 8,
+            "w": 14,
+            "pos": ["left_maze"],
+        },
         "sub_maze": {
             "title": "Maze",
             "options": [],

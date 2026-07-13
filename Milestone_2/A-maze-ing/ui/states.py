@@ -12,7 +12,7 @@ from typing import Any
 # Local modules
 from .menu import Menu
 from .windows_config import WINDOWS
-from .tui.game_loop import run_maze_loop, maze_opt_window, maze_window
+from .tui.game_loop import run_maze_loop, maze_opt_window, maze_window, palette_window
 
 
 
@@ -42,10 +42,11 @@ def maze_tui_window(stdscr: curses.window) -> str:
     current_color = None
 
     while True:
-        opt_window = maze_opt_window(stdscr)
+        opt_win = maze_opt_window(stdscr)
         maze_win = maze_window(stdscr)
+        pal_win = palette_window(stdscr)
         
-        result, current_color = run_maze_loop(stdscr, opt_window, maze_win,
+        result, current_color = run_maze_loop(stdscr, opt_win, maze_win, pal_win,
                               WINDOWS["maze_window"]["sub_maze"], current_color)
         
         if result == "quit":

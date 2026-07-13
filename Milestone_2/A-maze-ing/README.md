@@ -77,6 +77,10 @@ the ability to show solution paths and modify colors.
 
 [Maze generations](https://medium.com/analytics-vidhya/maze-generations-algorithms-and-visualizations-9f5e88a3ae37)
 [W3Schools - Python](https://www.w3schools.com/python/default.asp)
+[Maze Generation Algorithms](https://www.youtube.com/watch?v=ioUl1M77hww)
+[DFS Algorithm to solve a maze](https://medium.com/swlh/solving-mazes-with-depth-first-search-e315771317ae)
+[Maze Generation Algorithms](https://professor-l.github.io/mazes/)
+[Path Finding Algorithms Comparison](https://www.youtube.com/watch?v=GC-nBgi9r0U)
 
 
 ---

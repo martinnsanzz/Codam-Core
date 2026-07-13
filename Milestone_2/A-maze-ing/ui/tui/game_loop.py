@@ -23,7 +23,7 @@ from ui.menu import Menu
 # capture keyboard input, and dispatch action (regenerate, color change,
 # or resize). Returns when user quits or config file triggers a resize.
 def run_maze_loop(stdscr: curses.window, opt_window: curses.window,
-                  maze_window: curses.window,
+                  maze_window: curses.window, pal_window: curses.window,
                   config_maze: dict[str, Any],
                   current_color: tuple | None = None) -> tuple[str, tuple]:
     current_maze = generate_maze(config_maze["h"] - 1, config_maze["w"] - 1)
@@ -33,6 +33,7 @@ def run_maze_loop(stdscr: curses.window, opt_window: curses.window,
     while True:
         draw_maze(maze_window, current_maze, current_color)
         opt_window.refresh()
+        pal_window.refresh()
 
         key = stdscr.getkey().upper()
         action = handle_maze_input(key)
@@ -86,6 +87,18 @@ def maze_window(stdscr: curses.window) -> curses.window:
     return maze_window
 
 
+def palette_window(stdscr: curses.window) -> curses.window:
+    config_pal = WINDOWS["maze_window"]["sub_color_palette"]
+
+    pal = Menu(stdscr, config_pal["title"], config_pal["options"])
+
+    try: 
+        opt_window = pal.draw(config_pal["h"], config_pal["w"], config_pal["pos"])
+    except BaseException:
+        raise CustomError("Palette outside of screen. "
+                                "Reduce height in 'config.txt'")
+    
+    return opt_window
 
 # Regenerate maze or detect if config dimensions have changed 
 # (requiring resize).
