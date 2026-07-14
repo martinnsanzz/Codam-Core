@@ -49,6 +49,9 @@ clean:
 
 	@echo "${RED}Removing '__pycache__' folders.${RESET}"
 	@find . -type d -name __pycache__ -exec rm -rf {} +
+	
+	@echo "${RED}Removing '.pyc' files.${RESET}"
+	@find . -type d -name *.pyc -exec rm -rf {} +
 
 fclean: clean
 	@rm -rf $(VENV)

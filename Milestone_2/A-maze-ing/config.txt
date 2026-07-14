@@ -13,10 +13,10 @@
 # PERFECT       Is the maze perfect?            PERFECT=True
 #
 # Additional keys could be (e.g., seed, alghorithm, display mode)
-WIDTH=80
-HEIGHT=30
-ENTRY=0,0
-EXIT=19,5
+WIDTH=5
+HEIGHT=5
+ENTRY=1,0
+EXIT=0,0
 OUTPUT_FILE=maze.txt
 PERFECT=True
 SEED=123456789
