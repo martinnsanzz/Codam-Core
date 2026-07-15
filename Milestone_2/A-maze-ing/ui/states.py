@@ -9,7 +9,6 @@ from .tui.game_loop import run_maze_loop, maze_opt_window, maze_window
 
 
 def window(stdscr: curses.window, state: str) -> Any:
-
     config = WINDOWS[state]
     opt = Menu(stdscr, config["title"], config["options"])
     menu_window = opt.draw(config["h"], config["w"], config["pos"])
@@ -28,8 +27,7 @@ def maze_tui_window(stdscr: curses.window) -> str:
         opt_win = maze_opt_window(stdscr)
         maze_win = maze_window(stdscr)
         
-        result, current_color = run_maze_loop(stdscr, opt_win, maze_win,
-                              WINDOWS["maze_window"]["sub_maze"], current_color)
+        result, current_color = run_maze_loop(stdscr, opt_win, maze_win, current_color)
         
         if result == "quit":
             return result
@@ -46,6 +44,7 @@ def main(stdscr: curses.window) -> None:
     cur_state = windows_list[2]
 
     while cur_state != "quit":
+        stdscr.clear()
         if cur_state == "mlx":
             break
         elif cur_state == "maze_options_window":

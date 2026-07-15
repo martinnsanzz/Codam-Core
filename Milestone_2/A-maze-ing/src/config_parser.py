@@ -7,8 +7,8 @@ from .utils import CustomError
 
 
 class MazeConfig(BaseModel):
-    width: int = Field(gt=2)
-    height: int = Field(gt=2)
+    width: int = Field(ge=2, le=44)
+    height: int = Field(ge=2, le=18)
     entry: tuple
     exit: tuple
     output_file: str

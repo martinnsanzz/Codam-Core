@@ -46,8 +46,8 @@ WINDOWS: dict[str, Any] = {
         "sub_maze": {
             "title": "Maze",
             "options": [],
-            "h": maze_config.height,
-            "w": maze_config.width,
+            "h": 2 * maze_config.height + 1,
+            "w": 2 * (2 * maze_config.width + 1) + 1,
             "pos": ["center"],
         }
     }
