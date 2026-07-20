@@ -16,7 +16,7 @@ def draw_maze(maze_window: curses.window, maze_grid: list[list[str]],
               color: int) -> None:
     for x in range(len(maze_grid)):
         for y in range(len(maze_grid[x])):
-            char = maze_grid[x][y] * 2
+            char = maze_grid[x][y]
             maze_window.addstr(x, y * 2, char, color)
 
     maze_window.refresh()

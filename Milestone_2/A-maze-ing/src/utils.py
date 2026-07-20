@@ -1,9 +1,12 @@
 class CustomError(Exception):
+    """Exception raised for application-specific error conditions."""
     def __init__(self, msg: str) -> None:
+        """Initialize the exception with a descriptive message."""
         super().__init__(msg)
 
 
 class C:
+    """ANSI escape code constants for colored terminal output."""
     H = "\033[95m"  # Header
     B = "\033[94m"  # Blue
     C = "\033[96m"  # Cyan
@@ -15,4 +18,5 @@ class C:
     U = "\033[4m"
 
     def msg(self, color: str, msg: str) -> None:
+        """Print a message wrapped in the given ANSI color code."""
         print(getattr(self, color) + msg + C.E)

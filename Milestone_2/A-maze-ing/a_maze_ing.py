@@ -6,11 +6,12 @@ import curses
 
 # Local modules
 from src import C, CustomError
-import ui
+from ui import main as ui_main
 
 
 def main() -> None:
-    curses.wrapper(ui.main)
+    """Initializes curses and starts the main program."""
+    curses.wrapper(ui_main)
 
 
 if __name__ == "__main__":

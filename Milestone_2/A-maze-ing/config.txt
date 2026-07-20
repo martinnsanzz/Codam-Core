@@ -15,10 +15,11 @@
 # Additional keys could be (e.g., seed, alghorithm, display mode)
 WIDTH=10
 HEIGHT=10
-ENTRY=1,0
-EXIT=0,0
+ENTRY=0,0
+EXIT=1,0
 OUTPUT_FILE=maze.txt
 PERFECT=True
-SEED=123456789
-ALGHORITHM=1
-DISPLAY_MODE=0
+# SEED=0
+# Valid alghorithms ("kruskal", "dfs") 
+ALGORITHM=dfs
+# DISPLAY_MODE=0

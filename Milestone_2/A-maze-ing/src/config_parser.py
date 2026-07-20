@@ -2,68 +2,124 @@
 from typing import Any, Self
 
 # Local modules
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, model_validator
 from .utils import CustomError
 
 
 class MazeConfig(BaseModel):
-    width: int = Field(ge=2, le=44)
-    height: int = Field(ge=2, le=18)
-    entry: tuple
-    exit: tuple
+    """Validated configuration model for maze generation and I/O.
+
+    Parses and validates maze parameters loaded from ``config.txt``,
+    converting comma-separated entry/exit strings into coordinate
+    tuples and enforcing bounds/format constraints before the model
+    is considered valid.
+
+    Attributes:
+        width: Maze width in cells.
+        height: Maze height in cells.
+        entry: Entry coordinate as ``(x, y)``, parsed from a
+            comma-separated string by ``convert_tuple``.
+        exit: Exit coordinate as ``(x, y)``, parsed the same way.
+        output_file: Path to write generated maze output to.
+        perfect: Whether the maze should be a "perfect" maze (no loops).
+            [INFERRED — meaning of "perfect" not defined in this file]
+        seed: Optional RNG seed for reproducible generation.
+        alghorithm: Optional algorithm selector.
+            [INFERRED — likely a typo of "algorithm"; kept as-is since
+            it's a field name referenced elsewhere via ``ALGHORITHM``]
+        display_mode: Optional display mode selector.
+    """
+    width: int
+    height: int
+    entry: tuple[int, int]
+    exit: tuple[int, int]
     output_file: str
     perfect: bool
-    seed: int
-    alghorithm: int
-    display_mode: int
-
-    @model_validator(mode='before')
-    def convert_tuple(cls, data: Any) -> Any:
-        temp_entry: list = data["entry"].split(",")
-        temp_exit: list = data["exit"].split(",")
-
-        if len(temp_entry) > 2:
-            raise CustomError(f"Entry should only have (x,y) values {data["entry"]}"
-                               "Update config.txt")
-
-        if len(temp_exit) > 2:
-            raise CustomError(f"Exit should only have (x,y) values {data["exit"]}"
-                    "Update config.txt")
-    
-        try:
-            for i in range(2):
-                temp_entry[i] = int(temp_entry[i])
-                temp_exit[i] = int(temp_exit[i])
-
-                if temp_entry[i] < 0 or temp_exit[i] < 0:
-                    raise CustomError(f"Entry and exit point must be positive!!. " )
-        except ValueError:
-            raise CustomError("Entry and exit should be (x, y) format. INT ONLY !!")
-        
-        if temp_entry == temp_exit:
-            raise CustomError("Entry and exit can't be the same !! Update config.txt")
-        data["entry"] = tuple(temp_entry)
-        data["exit"] = tuple(temp_exit)
-
-        return data
+    seed: int | None
+    algorithm: str | None
+    display_mode: int | None
 
     @model_validator(mode='after')
-    def validate_bounds(self) -> Self:
-        if self.entry[0] > self.width or self.exit[0] >self.width:
-            raise CustomError(f"Entry and exit point must be within maze bounds!! {self.entry[0]} {self.exit[0]}")
-        
-        if self.entry[1] > self.height or self.exit[1] >self.height:
-            raise CustomError(f"Entry and exit point must be within maze bounds!! {self.entry[1]} {self.exit[1]}")
+    def validate_entry_exit(self) -> Self:
+        """Validate entry/exit valuess.
+
+        Checks that entry and exit coordinates are non-negative,
+        distinct from each other, and within the maze's width/height
+        bounds.
+
+        Returns:
+            The validated ``MazeConfig`` instance, unchanged.
+
+        Raises:
+            CustomError: If entry or exit contains a negative value,
+                if entry equals exit, if entry or exit falls outside
+                the maze bounds.
+        """
+        for val in self.entry:
+            if val < 0:
+                raise CustomError(f"Entry can't be negative: {self.entry}")
+
+        for val in self.exit:
+            if val < 0:
+                raise CustomError(f"Exit can't be negative: {self.exit}")
+
+        if self.entry == self.exit:
+            raise CustomError("Entry and exit can't be the same.")
+
+        if self.entry[0] > self.width or self.entry[1] > self.height:
+            raise CustomError("Entry point must be within maze bounds:"
+                              f"{self.entry}")
+
+        if self.exit[0] > self.width or self.exit[1] > self.height:
+            raise CustomError("Exit point must be within maze bounds:"
+                              f"{self.exit}")
+
+        return self
+
+    @model_validator(mode='after')
+    def validate_maze_dimensions(self) -> Self:
+        """Validate maze dimensions."""
+        if self.width < 2 or self.height < 2:
+            raise CustomError("Minimum size of maze 2x2. "
+                              "Update width x height.")
+
+        return self
+    
+    @model_validator(mode="after")
+    def validate_algorithm_name(self) -> Self:
+        accepted_algorithms = ["kruskal", "dfs"]
+
+        if self.algorithm.lower() not in accepted_algorithms:
+            raise CustomError("Use a valid algorithm name. Available algorithms "
+                              "shown in config.txt")
         return self
 
 
 def _config_parser(file_name: str) -> dict[str, Any]:
+    """Read a config file and extract its key-value pairs.
+
+    Args:
+        file_name (str): Files name to read from.
+    Returns:
+        A mapping of uppercase config keys to their raw string values.
+    """
     with open(file_name, "r") as file:
         content = file.readlines()
         return _extract_config_data(content)
 
 
 def _extract_config_data(file_data: list[str]) -> dict[str, Any]:
+    """Parse config file lines into a key-value mapping.
+
+    Skips lines containing ``#`` (comments) and splits remaining
+    lines on ``=`` into uppercase keys and stripped string values.
+
+    Args:
+        file_data (list[str]): Lines read from a config file.
+
+    Returns:
+        A mapping of uppercase config keys to their string values.
+    """
     maze_config: dict[str, Any] = {}
 
     for line in file_data:
@@ -74,16 +130,28 @@ def _extract_config_data(file_data: list[str]) -> dict[str, Any]:
 
 
 def load_maze_config() -> MazeConfig:
+    """Load and validate the maze configuration from ``config.txt``.
+
+    Reads ``config.txt`` from the current working directory and
+    constructs a validated ``MazeConfig`` instance from its contents.
+
+    Returns:
+        A validated ``MazeConfig`` instance.
+
+    Note:
+        If config file does not contain key:value pair it provides a
+        defualt value
+    """
     config_dict = _config_parser("config.txt")
     maze_config: MazeConfig = MazeConfig(
-        width=config_dict["WIDTH"],
-        height=config_dict["HEIGHT"],
-        entry=config_dict["ENTRY"],
-        exit=config_dict["EXIT"],
-        output_file=config_dict["OUTPUT_FILE"],
-        perfect=config_dict["PERFECT"],
-        seed=config_dict["SEED"],
-        alghorithm=config_dict["ALGHORITHM"],
-        display_mode=config_dict["DISPLAY_MODE"]
+        width=config_dict.get("WIDTH", 20),
+        height=config_dict.get("HEIGHT", 20),
+        entry=tuple(config_dict.get("ENTRY", "0,0").split(",")),
+        exit=tuple(config_dict.get("EXIT", "20,20").split(",")),
+        output_file=config_dict.get("OUTPUT_FILE", "maze.txt"),
+        perfect=config_dict.get("PERFECT", False),
+        seed=config_dict.get("SEED", None),
+        algorithm=config_dict.get("ALGORITHM", None),
+        display_mode=config_dict.get("DISPLAY_MODE", None)
     )
     return maze_config

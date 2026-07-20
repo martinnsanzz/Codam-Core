@@ -1,2 +1,4 @@
 pudb
 pydantic
+mypy
+flake8

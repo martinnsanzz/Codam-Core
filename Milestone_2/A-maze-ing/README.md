@@ -81,7 +81,9 @@ the ability to show solution paths and modify colors.
 [DFS Algorithm to solve a maze](https://medium.com/swlh/solving-mazes-with-depth-first-search-e315771317ae)
 [Maze Generation Algorithms](https://professor-l.github.io/mazes/)
 [Path Finding Algorithms Comparison](https://www.youtube.com/watch?v=GC-nBgi9r0U)
-
+[Pac-man Mazegen](https://shaunlebron.github.io/pacman-mazegen/)
+[Depth First Search](https://medium.com/@nacerkroudir/randomized-depth-first-search-algorithm-for-maze-generation-fb2d83702742)
+[DFS Wiki](https://en.wikipedia.org/wiki/Maze_generation_algorithm)
 
 ---
 
