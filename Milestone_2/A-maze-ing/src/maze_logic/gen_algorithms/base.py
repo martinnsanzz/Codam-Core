@@ -15,8 +15,6 @@ class Maze_Gen(ABC):
 
     Attributes:
        _maze (Maze): Maze object to modify.
-       open_cells (set[Cell]): A set of cells with more than 1 wall open used
-                               to build an imperfect maze
     """
     def __init__(self, maze: Maze) -> None:
         """
@@ -28,7 +26,6 @@ class Maze_Gen(ABC):
         super().__init__()
         self._maze: Maze = maze
         self._maze.lock_42_cells()
-        self.open_cells: set[Cell] = set()
 
     @abstractmethod
     def construct(self) -> None:
@@ -130,29 +127,18 @@ class Maze_Gen(ABC):
         """
         Converts a perfect maze into a 'perfectly imperfect' maze () dead ends 
         in total.
-            1. Selects a random cell of the maze to start from.
-            2. If not dead end_cell adds to list of open_cells.
-            3. Loops until open_cells is equal to total not_locked cells.
-                3a. If cell is dead_end open a random wall based on the available
-                    neighbours and then add it to open_cells[].
-                3b. If not dead end add it to open_cells[] and select a
-                    neighhbour to be the next cell.
+            1. Loop through the array of cell (colxrow).
+            2. Check for neighbours of current cell.
+            3. If current cell is a dead_end choose a valid neighbour and break a wall
+               between the cells.
         """
-        current_cell: Cell = self.select_rand_cell()
-        if not self.is_dead_end(current_cell):
-            self.open_cells.add(current_cell)
-
-        while len(self.open_cells) != self.count_not_locked():
-            cell_neighbours = Maze_Gen.get_neighbours(self, current_cell)
-
-            if self.is_dead_end(current_cell):
-                while self.is_dead_end(current_cell):
-                    next_cell: tuple[Dir, Cell] = random.choice(cell_neighbours)
-                    if current_cell.get_wall(next_cell[0]):
-                        Maze_Gen.break_wall(self, current_cell, next_cell[0], next_cell[1])
-                self.open_cells.add(current_cell)
-                current_cell = next_cell[1]
-            else:
-                self.open_cells.add(current_cell)
-                next_cell: tuple[Dir, Cell] = random.choice(cell_neighbours)
-                current_cell = next_cell[1]
+        for row in range(self._maze._width):
+            for col in range(self._maze._height):
+                current_cell = self._maze._cells[col][row]
+                cell_neighbours = Maze_Gen.get_neighbours(self, current_cell)
+                if self.is_dead_end(current_cell):
+                    while self.is_dead_end(current_cell):
+                        neigbour = random.choice(cell_neighbours)
+                        if current_cell.get_wall(neigbour[0]):
+                            Maze_Gen.break_wall(self, current_cell, neigbour[0], 
+                                                neigbour[1])
