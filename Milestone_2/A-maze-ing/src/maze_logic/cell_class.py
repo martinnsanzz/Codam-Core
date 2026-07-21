@@ -1,8 +1,9 @@
 # Build-in modules
 from typing import Self, Optional
 from enum import Enum, auto
+
 # Local modules
-from .dir import Dir
+from .dir_class import Dir
 
 
 class Cell():

@@ -1,5 +1,6 @@
 # Built-in modules
 from typing import Any, Self
+from random import choice
 
 # Local modules
 from pydantic import BaseModel, model_validator
@@ -22,11 +23,8 @@ class MazeConfig(BaseModel):
         exit: Exit coordinate as ``(x, y)``, parsed the same way.
         output_file: Path to write generated maze output to.
         perfect: Whether the maze should be a "perfect" maze (no loops).
-            [INFERRED — meaning of "perfect" not defined in this file]
         seed: Optional RNG seed for reproducible generation.
-        alghorithm: Optional algorithm selector.
-            [INFERRED — likely a typo of "algorithm"; kept as-is since
-            it's a field name referenced elsewhere via ``ALGHORITHM``]
+        algorithm: Optional algorithm selector.
         display_mode: Optional display mode selector.
     """
     width: int
@@ -143,6 +141,8 @@ def load_maze_config() -> MazeConfig:
         defualt value
     """
     config_dict = _config_parser("config.txt")
+    default_algorithms = ["kruskal", "dfs"]
+
     maze_config: MazeConfig = MazeConfig(
         width=config_dict.get("WIDTH", 20),
         height=config_dict.get("HEIGHT", 20),
@@ -151,7 +151,7 @@ def load_maze_config() -> MazeConfig:
         output_file=config_dict.get("OUTPUT_FILE", "maze.txt"),
         perfect=config_dict.get("PERFECT", False),
         seed=config_dict.get("SEED", None),
-        algorithm=config_dict.get("ALGORITHM", None),
+        algorithm=config_dict.get("ALGORITHM", choice(default_algorithms)),
         display_mode=config_dict.get("DISPLAY_MODE", None)
     )
     return maze_config

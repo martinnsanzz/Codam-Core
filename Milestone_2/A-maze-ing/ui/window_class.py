@@ -3,8 +3,8 @@ import curses
 from typing import Any
 
 # Local modules
-from .tui.windows_setup import WINDOWS
 from src import CustomError
+from .windows_config import WINDOWS
 
 
 # COLOR_MAP = {

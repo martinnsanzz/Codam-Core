@@ -7,5 +7,4 @@ class State(Enum):
     QUIT = auto()
     START_WIN = auto()
     GEN_MAZE = auto()
-    REGEN = auto()
     CHANGE_COLOR = auto()

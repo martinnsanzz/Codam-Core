@@ -6,7 +6,7 @@ import curses
 
 # Local modules
 from src import C, CustomError
-from ui import main as ui_main
+from ui.tui_logic.state_loop import main as ui_main
 
 
 def main() -> None:

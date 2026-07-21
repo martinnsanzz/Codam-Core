@@ -1,5 +1,6 @@
+# Local Modules
 from .base import Maze_Solve
-from ..cell import Cell
+from ..cell_class import Cell
 
 
 class Maze_Solve_Perfect(Maze_Solve):

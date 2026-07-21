@@ -1,12 +1,12 @@
-# Global modules
+# Built-in modules
 from copy import deepcopy
 from abc import abstractmethod
 
 # Local modules
-from ..cell import Cell
-from ..maze import Maze
-from ..dir import Dir
-from ..generators.base import Maze_Gen
+from ..cell_class import Cell
+from ..maze_class import Maze
+from ..dir_class import Dir
+from ..gen_algorithms.base import Maze_Gen
 
 
 class Maze_Solve(Maze_Gen):

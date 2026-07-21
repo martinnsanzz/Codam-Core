@@ -2,13 +2,13 @@
 import random
 
 # Local modules
-from ..maze import Maze
-from ..cell import Cell
-from ..dir import Dir
+from ..maze_class import Maze
+from ..cell_class import Cell
+from ..dir_class import Dir
 from .base import Maze_Gen
 
 
-class Gen_Kruskal(Maze_Gen):
+class Kruskal(Maze_Gen):
     def __init__(self, maze: Maze) -> None:
         """
         Kruskal algorithm which implements additional attributes and

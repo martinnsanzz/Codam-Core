@@ -2,10 +2,9 @@
 import random
 
 # Local modules
-from src.maze_logic.maze import Maze
-from src.maze_logic.cell import Cell
-from src.maze_logic.dir import Dir
-from src.config_parser import MazeConfig
+from ..maze_class import Maze
+from ..cell_class import Cell
+from ..dir_class import Dir
 from .base import Maze_Gen
 
 

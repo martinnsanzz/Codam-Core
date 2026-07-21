@@ -1,10 +1,10 @@
 # Built-in modules
 import random
+from typing import Self
 
 # Local modules
 from src import MazeConfig
-from .dir import Dir
-from .cell import Cell
+from .cell_class import Cell
 
 
 class Maze():
@@ -123,23 +123,23 @@ class Maze():
                 Cell.stamp(output, cell)
         return output
 
-    # @classmethod
-    # def from_string(cls, hex_str: str) -> Self:
-    #     """
-    #     Read a hex string and convert it to a maze object
+    @classmethod
+    def from_string(cls, hex_str: str) -> Self:
+        """
+        Read a hex string and convert it to a maze object
 
-    #     Keyword arguments:
-    #     hex_str -- String of a maze represented by hex values
-    #                of the walls of the cells
-    #     """
-    #     if len(hex_str.strip("\n0123456789abcdefABCDEF")):
-    #         raise RuntimeError("The input contains unexpected characters")
-    #     rows: list[str] = hex_str.split("\n")
-    #     values: list[list[int]] = []
-    #     for row in rows:
-    #         values.append([int(x, 16) for x in row])
+        Keyword arguments:
+        hex_str -- String of a maze represented by hex values
+                   of the walls of the cells
+        """
+        if len(hex_str.strip("\n0123456789abcdefABCDEF")):
+            raise RuntimeError("The input contains unexpected characters")
+        rows: list[str] = hex_str.split("\n")
+        values: list[list[int]] = []
+        for row in rows:
+            values.append([int(x, 16) for x in row])
 
-    #     w: int = len(values[0])
-    #     h: int = len(values)
-    #     maze = Maze(w, h, values)
-    #     return maze
+        w: int = len(values[0])
+        h: int = len(values)
+        maze = Maze(w, h, values)
+        return maze

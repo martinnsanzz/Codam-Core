@@ -1,9 +1,9 @@
 # Built-int modules
 from typing import Any
+from pydantic import ValidationError
 
 # Local modules
-from src import load_maze_config, CustomError, C
-from pydantic import ValidationError
+from src import CustomError, C, load_maze_config
 
 
 try:

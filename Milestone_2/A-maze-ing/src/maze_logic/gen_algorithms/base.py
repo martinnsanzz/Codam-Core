@@ -3,9 +3,9 @@ from abc import ABC, abstractmethod
 import random
 
 # Local modules
-from ..cell import Cell
-from ..maze import Maze
-from ..dir import Dir
+from ..cell_class import Cell
+from ..maze_class import Maze
+from ..dir_class import Dir
 
 
 class Maze_Gen(ABC):

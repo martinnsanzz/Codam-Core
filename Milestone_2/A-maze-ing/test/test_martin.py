@@ -34,7 +34,7 @@ def main() -> None:
     # builder.construct(1)
     # print(m.get_print_string())
 
-    m = src.select_gen_algorithm(src.load_maze_config())
+    # m = src.select_gen_algorithm(src.load_maze_config())
     
     print(m.get_print_string())
 
