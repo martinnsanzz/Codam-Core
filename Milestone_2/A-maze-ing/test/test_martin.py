@@ -1,10 +1,7 @@
 #!/usr/bin/env python3
 
-# import maze as mz
-# from maze_kruskal import Gen_Kruskal
-# from maze_solve import Maze_Solve
-import src
-import random
+from src.maze_logic.maze_class import Maze
+from src import select_gen_algorithm, load_maze_config
 
 test_maze = """9139551111555515515395153
 ac2a9102829113855692c3a92
@@ -29,22 +26,10 @@ c44556c6c555455546c446c46"""
 
 
 def main() -> None:
-    m = src.Maze(src.load_maze_config())
-    # builder = src.Gen_Kruskal(m)
-    # builder.construct(1)
-    # print(m.get_print_string())
-
-    # m = src.select_gen_algorithm(src.load_maze_config())
-    
+    maze_config = load_maze_config()
+    m = Maze(maze_config)
+    m = select_gen_algorithm(maze_config)
     print(m.get_print_string())
-
-    # visited_cnt = 0
-    # for row in m.cells:
-    #     for cell in row:
-    #         if cell.visited:
-    #             visited_cnt += 1
-
-    # print(visited_cnt)
 
 if __name__ == "__main__":
     main()

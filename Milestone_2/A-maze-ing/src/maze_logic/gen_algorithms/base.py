@@ -3,18 +3,27 @@ from abc import ABC, abstractmethod
 import random
 
 # Local modules
+from src.utils import CustomError
 from ..cell_class import Cell
 from ..maze_class import Maze
 from ..dir_class import Dir
 
 
 class Maze_Gen(ABC):
+    """ This abstract class provides the required attributes and methods
+    for any algorithm that inherits from it.
+
+    Attributes:
+       _maze (Maze): Maze object to modify.
+       open_cells (set[Cell]): A set of cells with more than 1 wall open used
+                               to build an imperfect maze
+    """
     def __init__(self, maze: Maze) -> None:
         """
-        Generic maze generation class that can serve as base for various algorithms
+        Generic maze generation class that can serve as base for various algorithms.
 
-        Keyword arguments:
-        maze -- Maze object to be modified
+        Args:
+            maze (Maze) Maze object to be modified.
         """
         super().__init__()
         self._maze: Maze = maze
@@ -23,18 +32,18 @@ class Maze_Gen(ABC):
 
     @abstractmethod
     def construct(self) -> None:
-        """
-        Function to build or construct the maze
-        """
+        """Function to build or construct the maze."""
         pass
 
     def get_neighbours(self, cell: Cell) -> list[tuple[Dir, Cell]]:
         """
         Get all the neighbours the current cell.
-        Returns a list of tuples with (direction, cell)
 
-        Keyword arguments:
-        cell -- Cell object to be checked
+        Args:
+            cell (Cell) Cell object to be checked.
+        
+        Returns:
+            A list of tuples with (direction, cell).
         """
         row, col = cell.pos
         nbs: list[tuple[Dir, Cell]] = []
@@ -57,20 +66,30 @@ class Maze_Gen(ABC):
         Error if walls are missaligned.
         Do nothing if walls are already broken
 
-        Keyword arguments:
-        cell -- Current cell in focus
-        direction -- Wall to break in the current cell
-        tar_cell -- Cell to open a path to
+        Args:
+            cell (Cell) Current cell in focus.
+            direction (Dir) Wall to break in the current cell.
+            tar_cell (Cell) Cell to open a path to.
+        
+        Raises:
+            Error if walls are misaligned or if the wall has already being
+            broken.
         """
         tar_dir = Dir.reverse(direction)
         if(cell.get_wall(direction) != tar_cell.get_wall(tar_dir)):
-            raise RuntimeError("Aborting gen due to unmatched walls")
+            raise CustomError("Aborting gen due to unmatched walls")
         elif(not cell.get_wall(direction)):
-            raise RuntimeError("Wall has already been broken")
+            raise CustomError("Wall has already been broken")
         cell.toggle_wall(direction)
         tar_cell.toggle_wall(tar_dir)
 
     def select_rand_cell(self) -> Cell:
+        """
+        Selects a random cell from the list of cells.
+        
+        Note:
+            Keeps selecting a cell until the choosen cell is not locked.
+        """
         cell: Cell = None
 
         while not cell:
@@ -81,9 +100,24 @@ class Maze_Gen(ABC):
         return cell
     
     def count_not_locked(self) -> int:
+        """Counts number of locked cells in the maze."""
         return len([x for x in self._maze.cells for y in x if not y.locked])
 
-    def is_dead_end(self, cell: Cell) -> int:
+    def is_dead_end(self, cell: Cell) -> bool:
+        """
+        Checks if the cell is a dead_end based on the walls value of the cell.
+
+        Args:
+            cell (Cell): Cell to check.
+        
+        Returns:
+            True if is a dead end or False if not.
+        
+        Note:
+            If cell only has 1 neighbours but only one wall open its not considered
+            a dead end. Its a cell surrounded by blocked cells (Probably inside the
+            42 pattern).
+        """
         dead_ends = (0b0111, 0b1011, 0b1101, 0b1110)
 
         cell_neighbours = Maze_Gen.get_neighbours(self, cell)
@@ -93,6 +127,17 @@ class Maze_Gen(ABC):
         return cell.walls in dead_ends
 
     def imperfect_maze(self) -> None:
+        """
+        Converts a perfect maze into a 'perfectly imperfect' maze () dead ends 
+        in total.
+            1. Selects a random cell of the maze to start from.
+            2. If not dead end_cell adds to list of open_cells.
+            3. Loops until open_cells is equal to total not_locked cells.
+                3a. If cell is dead_end open a random wall based on the available
+                    neighbours and then add it to open_cells[].
+                3b. If not dead end add it to open_cells[] and select a
+                    neighhbour to be the next cell.
+        """
         current_cell: Cell = self.select_rand_cell()
         if not self.is_dead_end(current_cell):
             self.open_cells.add(current_cell)

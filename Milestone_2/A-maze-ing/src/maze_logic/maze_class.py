@@ -3,17 +3,30 @@ import random
 from typing import Self
 
 # Local modules
-from src import MazeConfig
+from src import MazeConfig, CustomError
 from .cell_class import Cell
 
 
 class Maze():
+    """This class represents the maze grid based on `config.txt`.
+    
+    Attributes:
+        maze_config (MazeConfig): A copy of the maze configuration to be used
+                                  where needed.
+        _width (int): Width of maze.
+        _height (int): Height of maze.
+        _cells (list[list[Cell]]): A 2D list of the cells from the maze.
+    """
     def __init__(self, maze_config: MazeConfig) -> None:
-        """
-        Initialise a new maze based on maze config.
+        """Initialise a new maze based on maze config.
 
-        Parameters:
-            - maze_config: Maze configuration extracted from config.txt
+        Args:
+            maze_config (MazeConfig): Maze configuration extracted 
+                                      from `config.txt`.
+        
+        Notes:
+            Calls random.seed(mazed_condif.seed) to mantain Reproducibility
+            across calls.                     
         """
         self.maze_config = maze_config
         self._width: int = maze_config.width
@@ -31,9 +44,7 @@ class Maze():
             self._cells.append(row)
 
     def lock_42_cells(self) -> None:
-        """
-        Close and lock all the cells that need to draw 42
-        """
+        """Close and lock all the cells that need to draw 42."""
         if (self._width < 9) or (self._height < 7):
             print("Maze is too small for the 42 sign")
             return
@@ -57,39 +68,32 @@ class Maze():
                         pass
 
     def get_print_string(self) -> str:
-        """
-        Return the print string for the maze.
-        This refers to the string that draws the maze, not the hexadecimal
-        representation
-        """
-        output: list[list[str]] = []
-        output = self.get_maze()
-        out_string = "\n".join("".join(x) for x in output)
-        return out_string
+        """Converts the maze from a list[list[Cell] to a string."""
+        return "\n".join("".join(x) for x in self.get_maze())
 
     @property
     def cells(self) -> list[list[Cell]]:
-        """
-        2D list of cells in the maze
-        """
+        """Returns the 2D list of Cells."""
         return self._cells
 
     @cells.setter
     def cells(self, values: list[list[int]]) -> None:
-        """
-        Set the cells of the cells to the given values in the 2D array
+        """Set the cells on the maze cells to the given wall value
 
-        Keyword arguments:
-        values -- 2D array of integer values holding the value of the walls
+        Args:
+            values (list[list[int]]): 2D array of integer values holding the 
+                                      value of the walls
+        Raises:
+            Error if values are bigger than height or width of maze.
         """
         if len(values) != self._height:
-            raise RuntimeError("The height of the provided values does "
+            raise CustomError("The height of the provided values does "
                                "not match the height of the maze. "
                                f"Given: {len(values)}, "
                                f"expected: {self._height}")
         for y, row in enumerate(self._cells):
             if len(row) != self._width:
-                raise RuntimeError("The width of the provided values does"
+                raise CustomError("The width of the provided values does"
                                    "not match the width of the maze. "
                                     f"Given: {len(values)}, "
                                     f"expected: {self._width}")
@@ -98,16 +102,19 @@ class Maze():
 
     @property
     def size(self) -> tuple[int, int]:
-        """
-        The size of the maze in walkable cells
-        """
+        """The size of the maze in walkable cells."""
         return (self._width, self._height)
 
     def get_maze(self) -> list[list[str]]:
-        """
-        Return the print 2D list of strings for the maze.
-        This refers to the string that draws the maze, not the hexadecimal
-        representation
+        """Build the visual grid representation of the maze for curses.
+
+        Constructs a grid of wall blocks sized according to the maze's
+        width and height, then stamps each cell onto the grid to carve
+        out paths.
+
+        Returns:
+            A 2D grid of strings representing the maze, where each 
+            cell is either a wall block ("██") or a path character
         """
         col_cnt = (self._width * 2) + 1
         row_cnt = (self._height * 2) + 1
@@ -125,12 +132,13 @@ class Maze():
 
     @classmethod
     def from_string(cls, hex_str: str) -> Self:
-        """
-        Read a hex string and convert it to a maze object
+        """ Read a hex string and convert it to a maze object.
 
-        Keyword arguments:
-        hex_str -- String of a maze represented by hex values
-                   of the walls of the cells
+        Args:
+            hex_str (str) String of a maze represented by hex values
+                          of the walls of the cells.
+        Returns:
+            A new maze object based on the hex_str.
         """
         if len(hex_str.strip("\n0123456789abcdefABCDEF")):
             raise RuntimeError("The input contains unexpected characters")

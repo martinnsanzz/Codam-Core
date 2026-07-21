@@ -10,11 +10,11 @@ def select_gen_algorithm(maze_config: MazeConfig) -> Maze:
     config.txt
     
     Args:
-        maze_config (MazeConfig): Configuration of the file as an object
+        maze_config (MazeConfig): Configuration of the file as an object.
     
     Returns:
         `maze` as a Maze object with the modified cells to represent the
-        maze grid
+        maze grid.
     """
     algorithm_name: str = maze_config.algorithm
 
@@ -25,14 +25,14 @@ def select_gen_algorithm(maze_config: MazeConfig) -> Maze:
     return maze
 
 def build_kruskal_maze(maze_config: MazeConfig) -> Maze:
-    """Build the maze using the kruskal algorithm"""
+    """Build the maze using the kruskal algorithm."""
     maze = Maze(maze_config)
     builder = Kruskal(maze)
     builder.construct()
     return maze
 
 def build_dfs_maze(maze_config: MazeConfig) -> Maze:
-    """Build the maze using the dfs algorithm"""
+    """Build the maze using the dfs algorithm."""
     maze = Maze(maze_config)
     builder = DFS(maze)
     builder.construct()

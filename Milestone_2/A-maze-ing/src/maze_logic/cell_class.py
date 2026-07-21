@@ -3,17 +3,29 @@ from typing import Self, Optional
 from enum import Enum, auto
 
 # Local modules
+from src import CustomError
 from .dir_class import Dir
 
 
 class Cell():
-    def __init__(self, pos: tuple[int, int], value: Optional[int] = 15):
-        """
-        15 represents the 4 bits we need to describe the walls
+    """ This class represent a cell of a maze.
 
-        Keyword arguments:
-        pos -- (x, y) position of the cell in the 2D array of the maze
-        value -- An optional value of what the wall configuration is (0 - 15)
+    Attributes:
+        _walls (int): Walls around the cell represented by a value (0-15).
+        _pos (tuple[int, int]): Position of the cell in the maze grid.
+        _locked (bool): Status of the cell. If locked cant be modified.
+    """
+    def __init__(self, pos: tuple[int, int], value: Optional[int] = 15):
+        """Initializes the cell with given parameters
+
+        Args:
+            pos tuple[int, int]: (x, y) position of the cell in the 2D array 
+                                 of the maze.
+             value (Optional[int]): An optional value of what the wall 
+                                    configuration is (0 - 15).
+
+        Notes:
+            15 represents the 4 bits we need to describe the walls
         """
         Cell.validate(value)
         self._walls = value
@@ -23,39 +35,37 @@ class Cell():
 
 
     def toggle_wall(self, direction: Dir):
-        """
-        Given a direction it opens or closes the associated wall
+        """Given a direction it opens or closes the associated wall.
 
-        Keyword arguments:
-        direction -- Direction of the wall from the center of the cell
+        Args:
+            direction (Dir) Direction of the wall from the center of the cell.
         """
         if self._locked:
             raise RuntimeError("Cell is locked")
         self._walls = self._walls ^ direction.value
 
     def get_wall(self, direction: Dir) -> bool:
-        """
-        Return a boolean to describe if there is a wall in a given direction
+        """Checks if theres a wall in a given direction.
 
-        Keyword arguments:
-        direction -- Direction of the wall from the center of the cell
+        Args:
+            direction (Dir) Direction of the wall from the center of the cell.
+
+        Returns:
+            True or False based on the state of the wall in the direction given
         """
         return bool(self._walls & direction.value)
 
     @property
     def locked(self) -> bool:
-        """
-        Is this cell locked? If yes it cannot be modified.
-        """
+        """Retuns the locked state of the cell."""
         return self._locked
 
     @locked.setter
     def locked(self, lock: bool) -> None:
-        """
-        Set the lock state of this cell
+        """Set the lock state of this cell.
 
-        Keyword arguments:
-        lock -- If True, this cells walls can no longer be modified
+        Args:
+            lock (bool): If True, this cells walls can no longer be modified.
         """
         self._locked = lock
 
@@ -69,18 +79,15 @@ class Cell():
 
     @property
     def walls(self):
-        """
-        Walls configuration of the cell
-        """
+        """Walls configuration of the cell"""
         return self._walls
 
     @walls.setter
     def walls(self, value: int) -> None:
-        """
-        Set the value of the walls of the cell. This sets ALL walls.
+        """Set the value of the walls of the cell. This sets ALL walls.
 
-        Keyword arguments:
-        value -- 0-15 int to represent the wall configuration
+        Args:
+            value (int): 0-15 int to represent the wall configuration.
         """
         Cell.validate(value)
         if self._locked:
@@ -89,36 +96,31 @@ class Cell():
 
     @property
     def pos(self) -> tuple[int, int]:
-        """
-        Position of the cell in the maze as given by (x,y) coordinates
-        """
+        """Position of the cell in the maze as given by (x,y) coordinates."""
         return self._pos
 
     @property
     def flag(self) -> "Cell.FLAG":
-        """
-        Return the flag set for this cell
-        """
+        """Return the flag set for this cell."""
         return self._flag
 
     @flag.setter
     def flag(self, flag: "Cell.FLAG") -> None:
-        """
-        Set the flag of this cell to something
-        """
+        """Set the flag of this cell to something."""
         self._flag = flag
 
     @staticmethod
     def validate(value: int) -> None:
-        """
-        Validate walls of a cell. Allowed values are 0-15 ints.
-        If the value is allowed, nothing happens, otherwise it errors.
+        """Validate walls of a cell. Allowed values are 0-15 ints.
 
-        Keyword arguments:
-        value -- 0-15 int to represent the wall configuration
+        Args:
+            value (int): 0-15 int to represent the wall configuration.
+
+        Raises:
+            If value is of incorrect value.
         """
         if (value < 0) or (value > 15):
-            raise RuntimeError("Cells cannot have values"
+            raise CustomError("Cells cannot have values"
                                " outside the range 0-15."
                                f" Provided value is {value}")
 
@@ -149,9 +151,7 @@ class Cell():
     #     self._is_entry_exit = True
 
     class FLAG(Enum):
-        """
-        Enum to flag if a cell needs to be treated or drawn in a special way
-        """
+        """Enum to flag if a cell needs to be treated or drawn in a special way."""
         EMPTY = auto()
         PATH = auto()
         PATTERN = auto()

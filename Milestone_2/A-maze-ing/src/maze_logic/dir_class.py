@@ -15,14 +15,8 @@ class Dir(Enum):
     w = 0b1000
 
     @staticmethod
-    def reverse(d: Self) -> Self:
-        """
-        Return the inverse of the given direction
-        Eg. If north is given, it will return south
-
-        Keyword arguments:
-        d -- direction enum
-        """
+    def reverse(d: Self) -> dict['Dir', 'Dir']:
+        """Given a direction a cell returns the opposite"""
         options: dict[Dir, Dir] = {Dir.n: Dir.s,
                                    Dir.e: Dir.w,
                                    Dir.s: Dir.n,
@@ -31,12 +25,7 @@ class Dir(Enum):
 
     @staticmethod
     def offset(d: Self) -> tuple[int, int]:
-        """
-        Return a tuple which indicates the offset a direction represents
-
-        Keyword arguments:
-        d -- Direction
-        """
+        """Given a direction returns the offset of it"""
         offsets = {Dir.n: (-1, 0),
                    Dir.e: (0, 1),
                    Dir.s: (1, 0),
