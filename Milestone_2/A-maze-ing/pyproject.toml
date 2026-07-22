@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = 'a_maze_ing'
+version = '0.0.1'
+description = "A configurable Python maze generator with perfect-maze and visual rendering support."
+authors = [
+    {name = "Martin", email = "masanz-s@student.codam.nl"},
+    {name = "Carlos", email = "cpfister@student.codam.nl"}
+]
+requires-python = ">=3.10"
+dependencies = [
+    "pydantic==2.13.4",
+    "pudb==2025.1.5",
+    "mypy==2.3.0",
+    "flake8==7.3.0"
+]
+
+[tool.setuptools.packages.find]
+where = ['src']

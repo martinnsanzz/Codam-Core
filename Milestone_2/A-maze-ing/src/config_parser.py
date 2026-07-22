@@ -68,7 +68,7 @@ class MazeConfig(BaseModel):
             raise CustomError("Entry point must be within maze bounds:"
                               f"{self.entry}")
 
-        if self.exit[0] > self.width or self.exit[1] > self.height:
+        if self.exit[0] >= self.width or self.exit[1] >= self.height:
             raise CustomError("Exit point must be within maze bounds:"
                               f"{self.exit}")
 

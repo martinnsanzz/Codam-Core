@@ -1,8 +1,8 @@
 # Local Modules
-from src.maze_logic.gen_algorithms.kruskal import Kruskal
-from src.maze_logic.gen_algorithms.dfs import DFS
+from .gen_algorithms import DFS, Kruskal
+from .classes import Maze
 from src.config_parser import MazeConfig
-from .maze_class import Maze
+
 
 def select_gen_algorithm(maze_config: MazeConfig) -> Maze:
     """

@@ -31,7 +31,7 @@ $(VENV):
 
 install: $(VENV)
 	@echo "${YELLOW}Installing dependencies...${RESET}"
-	@$(PIP) install -q --disable-pip-version-check -r requirements.txt
+	@$(PIP) install .
 	
 	@echo "${GREEN}Everything installed ${RESET}"
 
@@ -52,11 +52,23 @@ clean:
 	
 	@echo "${RED}Removing '.pyc' files.${RESET}"
 	@find . -type d -name *.pyc -exec rm -rf {} +
+	
+	@echo "${RED}Removing 'output_maze.txt' files.${RESET}"
+	@find . -type d -name output.txt -exec rm -rf {} +
 
 fclean: clean
-	@rm -rf $(VENV)
 	@echo "${RED}Removing 'env/' from root.${RESET}"
+	@rm -rf $(VENV)
 	
+	@echo "${RED}Removing '.egg-info' folder"
+	@find . -type d -name *.egg-info -exec rm -rf {} +
+	
+	@echo "${RED}Removing 'build' folder"
+	@find . -type d -name build -exec rm -rf {} +
+
+	@echo "${RED}Removing 'dist' folder"
+	@find . -type d -name dist -exec rm -rf {} +
+
 	@echo "${YELLOW}\nMAKE SURE YOU EXIT VENV 'deactivate'.${RESET}"
 
 lint:

@@ -3,33 +3,9 @@ import curses
 
 # Local modules
 from ..window_class import Window
-from ..state import State
 from ..windows_config import WINDOWS
-from .maze_loop import maze_loop, handle_input
-
-
-def main(stdscr: curses.window) -> None:
-    """Run the maze application's main state-machine loop.
-
-    Dispatches control to the appropriate handler for each state
-    (start window, maze generation/play) until ``State.QUIT`` is
-    reached. Tracks ``current_color`` across states so the active
-    color scheme persists between window transitions.
-
-    Args:
-        stdscr: The curses standard screen object.
-    """
-    current_color = None
-
-    curses.curs_set(0)
-    cur_state = State.START_WIN
-
-    while cur_state != State.QUIT:
-        if cur_state == State.START_WIN:
-            cur_state = start_window(stdscr)
-        elif cur_state == State.GEN_MAZE:
-            stdscr.clear()
-            cur_state, current_color = maze_loop(stdscr, current_color)
+from ..state_class import State
+from .maze_loop import maze_loop
 
 
 def start_window(stdscr: curses.window) -> State:
@@ -49,8 +25,48 @@ def start_window(stdscr: curses.window) -> State:
     menu_window = start_win.draw_win(config)
 
     action = None
-    while action not in State:
-        action = handle_input(menu_window.getkey().upper())
-    
+    start_actions = (State.QUIT,
+                     State.GEN_MAZE)
+    while action not in start_actions:
+        action = State.handle_input(menu_window.getkey())
+
     menu_window.refresh()
     return action
+
+
+def main(stdscr: curses.window) -> None:
+    """Run the maze application's main state-machine loop.
+
+    Dispatches control to the appropriate handler for each state
+    (start window, maze generation/play) until ``State.QUIT`` is
+    reached. Tracks ``current_color`` across states so the active
+    color scheme persists between window transitions.
+
+    Args:
+        stdscr: The curses standard screen object.
+    """
+    current_color = 0
+
+    colors = (
+        curses.COLOR_BLACK,
+        curses.COLOR_BLUE,
+        curses.COLOR_RED,
+        curses.COLOR_WHITE,
+        curses.COLOR_GREEN,
+        curses.COLOR_MAGENTA
+    )
+
+    for idx, color in enumerate(colors):
+        curses.init_pair(idx + 1, color, curses.COLOR_BLACK)
+
+    # Hide the cursor
+    curses.curs_set(0)
+    cur_state = State.START_WIN
+
+    # Initialise the starting state
+    while cur_state is not State.QUIT:
+        if cur_state is State.START_WIN:
+            cur_state = start_window(stdscr)
+        elif cur_state is State.GEN_MAZE:
+            stdscr.clear()
+            cur_state, current_color = maze_loop(stdscr, len(colors), current_color)

@@ -3,10 +3,8 @@ from abc import ABC, abstractmethod
 import random
 
 # Local modules
+from ..classes import Cell, Dir, Maze
 from src.utils import CustomError
-from ..cell_class import Cell
-from ..maze_class import Maze
-from ..dir_class import Dir
 
 
 class Maze_Gen(ABC):

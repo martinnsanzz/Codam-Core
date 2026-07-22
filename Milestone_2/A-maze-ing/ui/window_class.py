@@ -7,20 +7,9 @@ from src import CustomError
 from .windows_config import WINDOWS
 
 
-# COLOR_MAP = {
-#     "white": curses.COLOR_WHITE,
-#     "yellow": curses.COLOR_YELLOW,
-#     "green": curses.COLOR_GREEN,
-#     "red": curses.COLOR_RED,
-#     "magenta": curses.COLOR_MAGENTA,
-#     "cyan": curses.COLOR_CYAN,
-#     "blue": curses.COLOR_BLUE,
-# }
-
-
 class Window():
     """A class representing a terminal menu interface.
-    
+
     This class handles the rendering of a window with a title and
     selectable options within a cuses environment.
 
@@ -33,7 +22,7 @@ class Window():
 
     def __init__(self, stdscr: curses.window, config: dict[str, Any]) -> None:
         """Initializes the Window with a terminal window and config.
-        
+
         Args:
             stdscr (curses.window): The standard curses window object.
             config (dict[str, Any]): A dictionary containing menu config,
@@ -46,7 +35,7 @@ class Window():
 
     def draw_win(self, config: dict[str, Any]) -> curses.window:
         """Draws the menu window at a calculated position
-        
+
         Calculates the coords based on the provided position config
         (center or top-maze), creates a new sub-window, draws a box if
         desired and renders the title and options.
@@ -54,7 +43,7 @@ class Window():
         Args:
             config (dict[str, Any]): A dictionary containing menu config,
                 including 'pos', 'options', 'title' etc...
-        
+
         Returns:
             curses.window: The newly created and rendered menu window object
         """
@@ -85,7 +74,7 @@ class Window():
 
 class MazeWindow:
     """A class that representing the maze window.
-    
+
     This class handles the rendering of the window containing the maze and
     the options window on top of the maze.
 
@@ -97,7 +86,7 @@ class MazeWindow:
 
     def __init__(self, stdscr: curses.window) -> None:
         """Initializes and builds the maze and options windows to the terminal.
-        
+
         Args:
             stdscr (curses.window): The standard curses window object.
         """
@@ -109,13 +98,13 @@ class MazeWindow:
     def _build_windows(self) -> None:
         """Initializes and draws the maze and options windows to the terminal.
 
-        Retrieves configuration for both the options and maze sub-windows, 
-        instantiates Window objects, and renders them. Validates that the 
+        Retrieves configuration for both the options and maze sub-windows,
+        instantiates Window objects, and renders them. Validates that the
         configured dimensions fit within the current terminal screen size.
 
         Raises:
-            CustomError: If the options menu dimensions exceed the screen height, 
-                or if the maze dimensions exceed the screen width. The error 
+            CustomError: If the options menu dimensions exceed the screen height,
+                or if the maze dimensions exceed the screen width. The error
                 message advises reducing the respective dimensions in 'config.txt'.
         """
         config_opt = WINDOWS["maze_window"]["sub_options"]

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-from src.maze_logic.maze_class import Maze
-from src import select_gen_algorithm, load_maze_config
+from src.maze_logic.classes.maze_class import Maze
+from src import select_gen_algorithm, load_maze_config, export_maze
 
 test_maze = """9139551111555515515395153
 ac2a9102829113855692c3a92
@@ -29,7 +29,7 @@ def main() -> None:
     maze_config = load_maze_config()
     m = Maze(maze_config)
     m = select_gen_algorithm(maze_config)
-    print(m.get_print_string())
+    export_maze(m)
 
 if __name__ == "__main__":
     main()

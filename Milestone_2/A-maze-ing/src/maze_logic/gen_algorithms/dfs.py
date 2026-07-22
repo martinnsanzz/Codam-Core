@@ -2,10 +2,8 @@
 import random
 
 # Local modules
-from ..maze_class import Maze
-from ..cell_class import Cell
-from ..dir_class import Dir
-from .base import Maze_Gen
+from ..classes import Cell, Dir, Maze
+from .maze_gen import Maze_Gen
 
 
 class DFS(Maze_Gen):

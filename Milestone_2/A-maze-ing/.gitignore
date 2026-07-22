@@ -1,3 +1,23 @@
+# Python compilation files
 __pycache__
+
+# Mypy files
 .mypy_cache
-launch.json
+
+# Vscode congif files
+.vscode
+
+# Test files
+test_carlos.py
+test_martin.py
+
+# Maze export file
+output_maze.txt
+
+# Error log
+error.log
+
+# Package stuff
+build/
+a_maze_ing.egg-info/
+dist/

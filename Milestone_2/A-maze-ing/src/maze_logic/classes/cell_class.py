@@ -4,6 +4,7 @@ from enum import Enum, auto
 
 # Local modules
 from src import CustomError
+from .pixel_class import Flag
 from .dir_class import Dir
 
 
@@ -31,6 +32,7 @@ class Cell():
         self._walls = value
         self._pos = pos
         self._locked = False
+        self._flag = Flag.EMPTY
         # self._is_entry_exit: bool = False
 
 
@@ -69,13 +71,13 @@ class Cell():
         """
         self._locked = lock
 
-    # @property
-    # def visited(self) -> bool:
-    #     return self._visited
-    
-    # @visited.setter
-    # def visited(self, visit: bool) -> None:
-    #     self._visited = visit
+    @property
+    def visited(self) -> bool:
+        return self._visited
+
+    @visited.setter
+    def visited(self, visit: bool) -> None:
+        self._visited = visit
 
     @property
     def walls(self):
@@ -100,13 +102,17 @@ class Cell():
         return self._pos
 
     @property
-    def flag(self) -> "Cell.FLAG":
-        """Return the flag set for this cell."""
+    def flag(self) -> Flag:
+        """
+        Return the flag set for this cell
+        """
         return self._flag
 
     @flag.setter
-    def flag(self, flag: "Cell.FLAG") -> None:
-        """Set the flag of this cell to something."""
+    def flag(self, flag: Flag) -> None:
+        """
+        Set the flag of this cell to something
+        """
         self._flag = flag
 
     @staticmethod
@@ -123,37 +129,3 @@ class Cell():
             raise CustomError("Cells cannot have values"
                                " outside the range 0-15."
                                f" Provided value is {value}")
-
-    @staticmethod
-    def stamp(print_array: list[list[str]], cell: Self) -> None:
-        """
-        Takes a list of lists of strings (rows[columns]) and stamps the
-        surrounding fields around a cell.
-        This establishes values for the 4 fields around a given cell.
-
-        Keyword arguments:
-        print_array -- A 2D list of rows and columns representing
-                       not just the cells but also the walls inbetween them
-        cell -- The cell that is checked whose values are to be
-                written into the print_array
-        """
-        row, col = cell.pos
-        row = 1 + (row * 2)
-        col = 1 + (col * 2)
-        wall = ("  ", "██")
-        print_array[row - 1][col] = wall[cell.get_wall(Dir.n)]
-        print_array[row + 1][col] = wall[cell.get_wall(Dir.s)]
-        print_array[row][col + 1] = wall[cell.get_wall(Dir.e)]
-        print_array[row][col - 1] = wall[cell.get_wall(Dir.w)]
-        print_array[row][col] = ["  ", "░░"][cell.locked]
-
-    # def is_entry_exit(self) -> None:
-    #     self._is_entry_exit = True
-
-    class FLAG(Enum):
-        """Enum to flag if a cell needs to be treated or drawn in a special way."""
-        EMPTY = auto()
-        PATH = auto()
-        PATTERN = auto()
-
-

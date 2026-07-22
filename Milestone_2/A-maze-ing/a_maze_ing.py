@@ -18,11 +18,12 @@ if __name__ == "__main__":
     try:
         _, config_file = sys.argv
         if config_file != "config.txt":
-            raise CustomError("Incorrect argument. Argument \
-can only be 'config.txt' (e.g., ./a_maze_ing.py 'context.txt')")
+            raise CustomError("Incorrect argument. Argument "
+                              "can only be 'config.txt' "
+                              "(e.g., ./a_maze_ing.py 'context.txt')")
         main()
     except ValueError:
-        C().msg("F", "Incorrent command: Too many arguments, only \
-'config.txt' is accepted !")
+        C().msg("F", "Incorrent command: Too many arguments, only "
+                "'config.txt' is accepted !")
     except CustomError as error:
         C().msg("F", str(error))
