@@ -31,9 +31,16 @@ $(VENV):
 
 install: $(VENV)
 	@echo "${YELLOW}Installing dependencies...${RESET}"
-	@$(PIP) install .
+	@$(PIP) install -q -r requirements.txt > /dev/null 2>&1
 	
 	@echo "${GREEN}Everything installed ${RESET}"
+
+wheel:
+	@echo "${YELLOW}Creating package wheel !!${RESET}"
+	@cd src && ../$(PYTHON) -m build > /dev/null 2>&1
+	@cp src/dist/*.whl .
+	@rm -rf src/dist && rm -rf src/mazegen.egg-info
+	@echo "${GREEN}\nSucesfully build mazegen .whl file !!${RESET}"
 
 run: install
 	@echo "${GREEN}\nRunning $(PROG) !!${RESET}"
@@ -54,20 +61,12 @@ clean:
 	@find . -type d -name *.pyc -exec rm -rf {} +
 	
 	@echo "${RED}Removing 'output_maze.txt' files.${RESET}"
-	@find . -type d -name output.txt -exec rm -rf {} +
+	@find . -type f -name output_maze.txt -exec rm -rf {} +
 
-fclean: clean
+fclean: clean clean-build
 	@echo "${RED}Removing 'env/' from root.${RESET}"
 	@rm -rf $(VENV)
-	
-	@echo "${RED}Removing '.egg-info' folder"
-	@find . -type d -name *.egg-info -exec rm -rf {} +
-	
-	@echo "${RED}Removing 'build' folder"
-	@find . -type d -name build -exec rm -rf {} +
 
-	@echo "${RED}Removing 'dist' folder"
-	@find . -type d -name dist -exec rm -rf {} +
 
 	@echo "${YELLOW}\nMAKE SURE YOU EXIT VENV 'deactivate'.${RESET}"
 
@@ -97,4 +96,4 @@ help:
 	@echo "${CYAN}  make clean${RESET}      - Remove cache folders"
 	@echo "${CYAN}  make fclean${RESET}     - Remove venv and cache"
 
-.PHONY: install run debug clean fclean lint lint-strict help
+.PHONY: install wheel run debug clean fclean lint lint-strict help 

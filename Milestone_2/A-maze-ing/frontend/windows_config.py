@@ -3,16 +3,12 @@ from typing import Any
 from pydantic import ValidationError
 
 # Local modules
-from src import CustomError, C, load_maze_config
-
+from .config_parser import load_maze_config
 
 try:
     maze_config = load_maze_config()
 except ValidationError as e:
-    C().msg("F", str(e.errors()[0]['msg']))
-    quit()
-except CustomError as e:
-    C().msg("F", str(e))
+    print(f"\033[91m{str(e.errors()[0]['msg'])}\033[0m")
     quit()
 
 # Window configuration map. Each key is a unique window state.

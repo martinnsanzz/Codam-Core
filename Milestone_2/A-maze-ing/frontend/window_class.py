@@ -3,7 +3,6 @@ import curses
 from typing import Any
 
 # Local modules
-from src import CustomError
 from .windows_config import WINDOWS
 
 
@@ -103,7 +102,7 @@ class MazeWindow:
         configured dimensions fit within the current terminal screen size.
 
         Raises:
-            CustomError: If the options menu dimensions exceed the screen height,
+            RuntimeError: If the options menu dimensions exceed the screen height,
                 or if the maze dimensions exceed the screen width. The error
                 message advises reducing the respective dimensions in 'config.txt'.
         """
@@ -112,14 +111,14 @@ class MazeWindow:
         try:
             self.opt_win = opt.draw_win(config_opt)
         except BaseException:
-            raise CustomError("Maze option menu outside of screen. Reduce height in 'config.txt'")
+            raise RuntimeError("Maze option menu outside of screen. Reduce height in 'config.txt'")
 
         config_maze = WINDOWS["maze_window"]["sub_maze"]
         maze_menu = Window(self.stdscr, config_maze)
         try:
             self.maze_win = maze_menu.draw_win(config_maze)
         except BaseException:
-            raise CustomError("Screen does not fit maze. Reduce width in 'config.txt'")
+            raise RuntimeError("Screen does not fit maze. Reduce width in 'config.txt'")
 
     def refresh_all(self) -> None:
         """Refreshes both windows to display updated content"""

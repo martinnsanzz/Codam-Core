@@ -1,10 +1,9 @@
 # Built-in modules
 from abc import ABC, abstractmethod
-import random
+from random import Random
 
 # Local modules
 from ..classes import Cell, Dir, Maze
-from src.utils import CustomError
 
 
 class Maze_Gen(ABC):
@@ -14,7 +13,7 @@ class Maze_Gen(ABC):
     Attributes:
        _maze (Maze): Maze object to modify.
     """
-    def __init__(self, maze: Maze) -> None:
+    def __init__(self, maze: Maze, rng: Random) -> None:
         """
         Generic maze generation class that can serve as base for various algorithms.
 
@@ -23,6 +22,7 @@ class Maze_Gen(ABC):
         """
         super().__init__()
         self._maze: Maze = maze
+        self._rng = rng
         self._maze.lock_42_cells()
 
     @abstractmethod
@@ -72,9 +72,9 @@ class Maze_Gen(ABC):
         """
         tar_dir = Dir.reverse(direction)
         if(cell.get_wall(direction) != tar_cell.get_wall(tar_dir)):
-            raise CustomError("Aborting gen due to unmatched walls")
+            raise RuntimeError("Aborting gen due to unmatched walls")
         elif(not cell.get_wall(direction)):
-            raise CustomError("Wall has already been broken")
+            raise RuntimeError("Wall has already been broken")
         cell.toggle_wall(direction)
         tar_cell.toggle_wall(tar_dir)
 
@@ -88,7 +88,7 @@ class Maze_Gen(ABC):
         cell: Cell = None
 
         while not cell:
-            cell = random.choice(random.choice(self._maze.cells))
+            cell = self._rng.choice(self._rng.choice(self._maze.cells))
             if cell.locked:
                 cell = None
 
@@ -136,7 +136,7 @@ class Maze_Gen(ABC):
                 cell_neighbours = Maze_Gen.get_neighbours(self, current_cell)
                 if self.is_dead_end(current_cell):
                     while self.is_dead_end(current_cell):
-                        neigbour = random.choice(cell_neighbours)
+                        neigbour = self._rng.choice(cell_neighbours)
                         if current_cell.get_wall(neigbour[0]):
                             Maze_Gen.break_wall(self, current_cell, neigbour[0], 
                                                 neigbour[1])

@@ -1,9 +1,7 @@
 # Build-in modules
-from typing import Self, Optional
-from enum import Enum, auto
+from typing import Optional
 
 # Local modules
-from src import CustomError
 from .pixel_class import Flag
 from .dir_class import Dir
 
@@ -126,6 +124,6 @@ class Cell():
             If value is of incorrect value.
         """
         if (value < 0) or (value > 15):
-            raise CustomError("Cells cannot have values"
+            raise RuntimeError("Cells cannot have values"
                                " outside the range 0-15."
                                f" Provided value is {value}")

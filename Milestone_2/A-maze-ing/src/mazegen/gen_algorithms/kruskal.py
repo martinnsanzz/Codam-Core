@@ -1,5 +1,5 @@
-#  Built-in module
-import random
+# Built-in modules
+from random import Random
 
 # Local modules
 from ..classes import Cell, Dir, Maze
@@ -13,7 +13,7 @@ class Kruskal(Maze_Gen):
         connected (list[set[Cell]]): A list that contains all the cells
                                      that are already connected.
     """
-    def __init__(self, maze: Maze) -> None:
+    def __init__(self, maze: Maze, rng: Random) -> None:
         """
         Initializes the Kruskal algorithm which implements additional attributes 
         and variations of the generic Maze_gen class
@@ -21,7 +21,7 @@ class Kruskal(Maze_Gen):
         Args:
             maze (Maze): Maze object to modify.
         """
-        super().__init__(maze)
+        super().__init__(maze, rng)
         self.connected: list[set[Cell]] = []
 
     def break_wall(self, cell: Cell, direction: Dir, tar_cell: Cell) -> None:
@@ -109,13 +109,13 @@ class Kruskal(Maze_Gen):
         path = self.get_connected(cell)
         while len(path) != cell_cnt:
             i += 1
-            cell = random.choice([x for x in all_cells if x not in path])
+            cell = self._rng.choice([x for x in all_cells if x not in path])
             path = self.get_connected(cell)
             nbs = self.get_neighbours(cell)
             if not len(nbs):
                 continue
-            tar_dir, tar_cell = random.choice(nbs)
+            tar_dir, tar_cell = self._rng.choice(nbs)
             self.break_wall(cell, tar_dir, tar_cell)
 
-        if not self._maze.maze_config.perfect:
+        if not self._maze._perfect:
             self.imperfect_maze()

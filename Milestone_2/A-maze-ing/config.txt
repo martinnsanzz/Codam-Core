@@ -13,12 +13,12 @@
 # PERFECT       Is the maze perfect?            PERFECT=True
 #
 # Additional keys could be (e.g., seed, alghorithm, display mode)
-WIDTH=10
-HEIGHT=10
+WIDTH=30
+HEIGHT=30
 ENTRY=0,0
-EXIT=9,9
+EXIT=29,29
 OUTPUT_FILE=maze.txt
-PERFECT=False
+PERFECT=True
 # SEED=0
 # ------------ Valid alghorithms ("kruskal", "dfs") ------------ #
 ALGORITHM=dfs

@@ -3,8 +3,7 @@ from typing import Any, Self
 from random import choice
 
 # Local modules
-from pydantic import BaseModel, model_validator
-from .utils import CustomError
+from pydantic import BaseModel, model_validator, ValidationError
 
 
 class MazeConfig(BaseModel):
@@ -55,21 +54,21 @@ class MazeConfig(BaseModel):
         """
         for val in self.entry:
             if val < 0:
-                raise CustomError(f"Entry can't be negative: {self.entry}")
+                raise ValidationError(f"Entry can't be negative: {self.entry}")
 
         for val in self.exit:
             if val < 0:
-                raise CustomError(f"Exit can't be negative: {self.exit}")
+                raise ValidationError(f"Exit can't be negative: {self.exit}")
 
         if self.entry == self.exit:
-            raise CustomError("Entry and exit can't be the same.")
+            raise ValidationError("Entry and exit can't be the same.")
 
         if self.entry[0] > self.width or self.entry[1] > self.height:
-            raise CustomError("Entry point must be within maze bounds:"
+            raise ValidationError("Entry point must be within maze bounds:"
                               f"{self.entry}")
 
         if self.exit[0] >= self.width or self.exit[1] >= self.height:
-            raise CustomError("Exit point must be within maze bounds:"
+            raise ValidationError("Exit point must be within maze bounds:"
                               f"{self.exit}")
 
         return self
@@ -78,7 +77,7 @@ class MazeConfig(BaseModel):
     def validate_maze_dimensions(self) -> Self:
         """Validate maze dimensions."""
         if self.width < 2 or self.height < 2:
-            raise CustomError("Minimum size of maze 2x2. "
+            raise ValidationError("Minimum size of maze 2x2. "
                               "Update width x height.")
 
         return self
@@ -88,7 +87,7 @@ class MazeConfig(BaseModel):
         accepted_algorithms = ["kruskal", "dfs"]
 
         if self.algorithm.lower() not in accepted_algorithms:
-            raise CustomError("Use a valid algorithm name. Available algorithms "
+            raise ValidationError("Use a valid algorithm name. Available algorithms "
                               "shown in config.txt")
         return self
 

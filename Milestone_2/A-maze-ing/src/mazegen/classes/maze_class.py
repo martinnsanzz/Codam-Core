@@ -1,9 +1,4 @@
-# Built-in modules
-import random
-from typing import Optional
-
 # Local modules
-from src import MazeConfig, CustomError
 from .pixel_class import Pixel, Flag
 from .dir_class import Dir
 from .cell_class import Cell
@@ -19,7 +14,7 @@ class Maze():
         _height (int): Height of maze.
         _cells (list[list[Cell]]): A 2D list of the cells from the maze.
     """
-    def __init__(self, maze_config: MazeConfig) -> None:
+    def __init__(self, width: int, height: int, perfect: bool) -> None:
         """Initialise a new maze based on maze config.
 
         Args:
@@ -30,17 +25,16 @@ class Maze():
             Calls random.seed(mazed_condif.seed) to mantain Reproducibility
             across calls.
         """
-        self.maze_config = maze_config
-        self._width: int = maze_config.width
-        self._height: int = maze_config.height
+        self._width = width
+        self._height = height
+        self._perfect = perfect
         self._cells : list[list[Cell]] = []
-        random.seed(maze_config.seed)
 
         row: list[Cell]
         cell: Cell
-        for x in range(maze_config.height):
+        for x in range(self._height):
             row: list = []
-            for y in range(maze_config.width):
+            for y in range(self._width):
                 cell = Cell((x, y))
                 row.append(cell)
             self._cells.append(row)
@@ -100,13 +94,13 @@ class Maze():
             Error if values are bigger than height or width of maze.
         """
         if len(values) != self._height:
-            raise CustomError("The height of the provided values does "
+            raise RuntimeError("The height of the provided values does "
                                "not match the height of the maze. "
                                f"Given: {len(values)}, "
                                f"expected: {self._height}")
         for y, row in enumerate(self._cells):
             if len(row) != self._width:
-                raise CustomError("The width of the provided values does"
+                raise RuntimeError("The width of the provided values does"
                                    "not match the width of the maze. "
                                     f"Given: {len(values)}, "
                                     f"expected: {self._width}")
@@ -158,18 +152,17 @@ class Maze():
             maze_hex += "\n"
         return maze_hex
 
-    def export_maze(self, solution: str) -> None:
+    def export_maze(self, entry: tuple[int, int], exit: tuple[int, int],
+                    solution: str) -> None:
         hex_maze = self.get_maze_hex(self._cells)
-        x_entry, y_entry = self.maze_config.entry
-        x_exit, y_exit = self.maze_config.exit
 
         with open("output_maze.txt", "w") as f:
             f.write(f"{hex_maze}\n")
-            f.write(f"{x_entry},{y_entry}\n")
-            f.write(f"{x_exit},{y_exit}\n")
+            f.write(f"{entry[0]},{entry[1]}\n")
+            f.write(f"{exit[0]},{entry[1]}\n")
 
             if solution:
-                f.write(f"{solution}\n")
+                f.write(f"{solution}")
 
 
     def get_pixel(self, pos: tuple[int, int]) -> Pixel:

@@ -16,8 +16,3 @@ output_maze.txt
 
 # Error log
 error.log
-
-# Package stuff
-build/
-a_maze_ing.egg-info/
-dist/

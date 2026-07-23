@@ -1,5 +1,5 @@
-#  Built-in module
-import random
+# Built-in modules
+from random import Random
 
 # Local modules
 from ..classes import Cell, Dir, Maze
@@ -13,13 +13,13 @@ class DFS(Maze_Gen):
         visited_cells (set[Cell]): A set that contains all visited cells
                                     while the algorithm runs.
     """
-    def __init__(self, maze: Maze):
+    def __init__(self, maze: Maze, rng: Random):
         """Initializes dfs class.
         
         Args:
             maze (Maze): Maze object to modify.
         """
-        super().__init__(maze)
+        super().__init__(maze, rng)
         self.visited_cells: set[Cell] = set()
 
     def get_neighbours(self, cell: Cell) -> list[tuple[Dir, Cell]]:
@@ -64,7 +64,7 @@ class DFS(Maze_Gen):
 
             if cell_neighbours:
                 stack.append(current_cell)
-                next_cell: tuple[Dir, Cell] = random.choice(cell_neighbours)
+                next_cell: tuple[Dir, Cell] = self._rng.choice(cell_neighbours)
                 self.visited_cells.add(next_cell[1])
                 self.break_wall(current_cell, next_cell[0], next_cell[1])
                 current_cell = next_cell[1]
@@ -72,5 +72,5 @@ class DFS(Maze_Gen):
                 current_cell = stack[-1]
                 stack.pop()
 
-        if not self._maze.maze_config.perfect:
+        if not self._maze._perfect:
             self.imperfect_maze()

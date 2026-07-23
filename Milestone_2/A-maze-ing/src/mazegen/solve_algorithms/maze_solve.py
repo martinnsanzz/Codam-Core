@@ -3,8 +3,8 @@ from copy import deepcopy
 from abc import abstractmethod
 
 # Local modules
+from ..gen_algorithms.maze_gen import Maze_Gen
 from ..classes import Cell, Dir, Maze
-from ..gen_algorithms import Maze_Gen
 
 
 class Maze_Solve(Maze_Gen):
@@ -35,7 +35,7 @@ class Maze_Solve(Maze_Gen):
 
 
     @abstractmethod
-    def solve(self, maze: Maze):
+    def solve(self, maze: Maze, entry: tuple[int, int], exit: tuple[int, int]):
         """
         Implement the solving algorithm
         """

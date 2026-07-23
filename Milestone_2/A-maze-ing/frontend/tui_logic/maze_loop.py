@@ -2,11 +2,14 @@
 import curses
 
 # Local modules
-from src import load_maze_config, select_gen_algorithm, MazeConfig, \
-                draw_maze, draw_solution, Maze_Solve_Perfect
+from src.mazegen import MazeGenerator
+from .maze_display import draw_maze, draw_solution
+from ..config_parser import load_maze_config, MazeConfig
 from ..window_class import MazeWindow
 from ..state_class import State
 from ..windows_config import WINDOWS
+
+import sys
 
 def maze_loop(stdscr: curses.window, color_cnt: int, current_color: int | None) \
                 -> tuple[State, int | None]:
@@ -32,32 +35,28 @@ def maze_loop(stdscr: curses.window, color_cnt: int, current_color: int | None) 
 
     stdscr.refresh()
     maze_win = maze_window_obj.maze_win
-    maze = select_gen_algorithm(maze_config)
-    maze_grid = maze.get_maze()
-    solver = Maze_Solve_Perfect()
-    solved = False
+    maze_gen = MazeGenerator(maze_config.width, maze_config.height, maze_config.algorithm,
+                             maze_config.perfect, maze_config.seed)
+    maze = maze_gen.generate()
     solution = ""
 
     while True:
-        draw_maze(maze_win, maze_grid, color_cnt, current_color)
-        maze.export_maze(solution)
+        draw_maze(maze_win, maze.get_maze(), color_cnt, current_color)
+        maze.export_maze(maze_config.entry, maze_config.exit, solution)
         
         maze_window_obj.refresh_all()
         action = State.handle_input(stdscr.getkey())
 
         if action == State.GEN_MAZE:
             action, maze_config = regen_maze(maze_config)
-            maze_grid = select_gen_algorithm(maze_config).get_maze()
             return action, current_color
         elif action == State.CHANGE_COLOR:
             current_color = (current_color % color_cnt) + 1
         elif action == State.QUIT:
             return State.QUIT, current_color
-        elif action is State.SOLVE and not solved:
-            solution = solver.solve(maze)
-            draw_solution(maze_win, solver.steps, color_cnt, current_color)
-            maze_grid = maze.get_maze()
-            solved = True
+        elif action is State.SOLVE:
+            solution, steps = maze_gen.solve(maze, maze_config.entry, maze_config.exit)
+            draw_solution(maze_win, steps, color_cnt, current_color)
 
 
 def regen_maze(old_config : MazeConfig) -> tuple[State, MazeConfig]:
