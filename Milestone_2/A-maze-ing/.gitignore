@@ -7,9 +7,6 @@ __pycache__
 # Vscode congif files
 .vscode
 
-# Test files
-test_carlos.py
-test_martin.py
 
 # Maze export file
 output_maze.txt
