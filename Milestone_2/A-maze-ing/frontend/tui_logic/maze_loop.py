@@ -41,8 +41,8 @@ def maze_loop(stdscr: curses.window, color_cnt: int, current_color: int | None) 
     solution = ""
 
     while True:
-        draw_maze(maze_win, maze.get_maze(), color_cnt, current_color)
-        maze.export_maze(maze_config.entry, maze_config.exit, solution)
+        draw_maze(maze_win, maze._get_maze(), color_cnt, current_color)
+        maze._export_maze(maze_config.entry, maze_config.exit, solution)
         
         maze_window_obj.refresh_all()
         action = State.handle_input(stdscr.getkey())

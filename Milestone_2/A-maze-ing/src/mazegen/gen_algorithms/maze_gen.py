@@ -23,7 +23,7 @@ class Maze_Gen(ABC):
         super().__init__()
         self._maze: Maze = maze
         self._rng = rng
-        self._maze.lock_42_cells()
+        self._maze._lock_42_cells()
 
     @abstractmethod
     def construct(self) -> None:

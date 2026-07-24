@@ -39,7 +39,25 @@ class Maze():
                 row.append(cell)
             self._cells.append(row)
 
-    def lock_42_cells(self) -> None:
+        ### --- For testing within the terminal without using curses --- ###
+    def get_print_string(self) -> str:
+        """Converts the maze from a list[list[Pixel] to a string.
+        
+        Notes:
+            This is used to see the maze within the terminal
+        """
+        pixels = self.get_maze()
+        colors = {Flag.EMPTY: "  ",
+                  Flag.SOLUTION: "\033[32m██\033[0m",
+                  Flag.PATTERN: "\033[91m██\033[0m",
+                  Flag.WALL: "██"}
+        str_maze = []
+        for row in pixels:
+            str_row = [colors[p.read()] for p in row]
+            str_maze.append(str_row)
+        return "\n".join("".join(x) for x in str_maze)
+
+    def _lock_42_cells(self) -> None:
         """
         Close and lock all the cells that need to draw 42."""
         if (self._width < 9) or (self._height < 7):
@@ -64,19 +82,6 @@ class Maze():
                         cell.flag = Flag.PATTERN
                     except RuntimeError:
                         pass
-
-    def get_print_string(self) -> str:
-        """Converts the maze from a list[list[Cell] to a string."""
-        pixels = self.get_maze()
-        colors = {Flag.EMPTY: "  ",
-                  Flag.SOLUTION: "\033[32m██\033[0m",
-                  Flag.PATTERN: "\033[91m██\033[0m",
-                  Flag.WALL: "██"}
-        str_maze = []
-        for row in pixels:
-            str_row = [colors[p.read()] for p in row]
-            str_maze.append(str_row)
-        return "\n".join("".join(x) for x in str_maze)
 
     @property
     def cells(self) -> list[list[Cell]]:
@@ -112,7 +117,7 @@ class Maze():
         """The size of the maze in walkable cells."""
         return (self._width, self._height)
 
-    def get_maze(self) -> list[list[Pixel]]:
+    def _get_maze(self) -> list[list[Pixel]]:
         """
         Return the print 2D list of strings for the maze.
         This refers to the string that draws the maze, not the hexadecimal
@@ -143,7 +148,7 @@ class Maze():
         return grid
 
     @staticmethod
-    def get_maze_hex(cells: list[list[Cell]]) -> str:
+    def _get_maze_hex(cells: list[list[Cell]]) -> str:
         hex_val = "0123456789abcdef"
         maze_hex = ""
         for cell_row in cells:
@@ -152,9 +157,9 @@ class Maze():
             maze_hex += "\n"
         return maze_hex
 
-    def export_maze(self, entry: tuple[int, int], exit: tuple[int, int],
+    def _export_maze(self, entry: tuple[int, int], exit: tuple[int, int],
                     solution: str) -> None:
-        hex_maze = self.get_maze_hex(self._cells)
+        hex_maze = self._get_maze_hex(self._cells)
 
         with open("output_maze.txt", "w") as f:
             f.write(f"{hex_maze}\n")
@@ -165,7 +170,7 @@ class Maze():
                 f.write(f"{solution}")
 
 
-    def get_pixel(self, pos: tuple[int, int]) -> Pixel:
+    def _get_pixel(self, pos: tuple[int, int]) -> Pixel:
         """
         Pos is given as position in the grid, not the cell
         """
@@ -188,17 +193,3 @@ class Maze():
             px.add_flag(self.cells[row][(col - 1) // 2].flag)
             px.add_flag(self.cells[row][(col + 1) // 2].flag)
         return px.read()
-
-    ### --- For testing within the terminal without using curses --- ###
-    def get_print_string(self) -> str:
-        """Converts the maze from a list[list[Pixel] to a string."""
-        pixels = self.get_maze()
-        colors = {Flag.EMPTY: "  ",
-                  Flag.SOLUTION: "\033[32m██\033[0m",
-                  Flag.PATTERN: "\033[91m██\033[0m",
-                  Flag.WALL: "██"}
-        str_maze = []
-        for row in pixels:
-            str_row = [colors[p.read()] for p in row]
-            str_maze.append(str_row)
-        return "\n".join("".join(x) for x in str_maze)
