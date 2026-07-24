@@ -3,5 +3,3 @@ pudb
 mypy
 flake8
 build
-setuptools
-wheel
