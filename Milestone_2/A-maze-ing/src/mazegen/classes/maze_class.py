@@ -46,7 +46,7 @@ class Maze():
         Notes:
             This is used to see the maze within the terminal
         """
-        pixels = self.get_maze()
+        pixels = self._get_maze()
         colors = {Flag.EMPTY: "  ",
                   Flag.SOLUTION: "\033[32m██\033[0m",
                   Flag.PATTERN: "\033[91m██\033[0m",

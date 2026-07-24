@@ -31,6 +31,8 @@ class Maze_Solve_Perfect(Maze_Solve):
         Algorithm to solve a given maze
         Returns the instructions to move from start to end
         """
+        if exit[0] >= maze._width or exit[1] >= maze._height:
+            raise RuntimeError()
         work_maze = deepcopy(maze)
         dead_cells: set[Cell] = set()
         valid_cells: set[Cell] = set()
