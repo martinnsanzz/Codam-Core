@@ -37,9 +37,9 @@ install: $(VENV)
 
 wheel:
 	@echo "${YELLOW}Creating package wheel !!${RESET}"
-	@cd src && ../$(PYTHON) -m build > /dev/null 2>&1
-	@cp src/dist/*.whl .
-	@rm -rf src/dist && rm -rf src/mazegen.egg-info
+	@$(PYTHON) -m build > /dev/null 2>&1
+	@cp dist/*.whl .
+	@rm -rf dist && rm -rf src/mazegen.egg-info
 	@echo "${GREEN}\nSucesfully build mazegen .whl file !!${RESET}"
 
 run: install
@@ -63,7 +63,7 @@ clean:
 	@echo "${RED}Removing 'output_maze.txt' files.${RESET}"
 	@find . -type f -name output_maze.txt -exec rm -rf {} +
 
-fclean: clean clean-build
+fclean: clean
 	@echo "${RED}Removing 'env/' from root.${RESET}"
 	@rm -rf $(VENV)
 

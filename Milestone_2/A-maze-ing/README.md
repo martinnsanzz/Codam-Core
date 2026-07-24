@@ -84,6 +84,7 @@ the ability to show solution paths and modify colors.
 [Pac-man Mazegen](https://shaunlebron.github.io/pacman-mazegen/)
 [Depth First Search](https://medium.com/@nacerkroudir/randomized-depth-first-search-algorithm-for-maze-generation-fb2d83702742)
 [DFS Wiki](https://en.wikipedia.org/wiki/Maze_generation_algorithm)
+[Open-Source Software Licenses](https://license.md/popular-open-source-software-licenses/)
 
 ---
 

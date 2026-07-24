@@ -9,11 +9,13 @@ build-backend = "setuptools.build_meta"
 name = 'mazegen'
 version = '0.0.1'
 description = "A configurable Python maze generator with perfect-maze and visual rendering support."
+requires-python = ">=3.10"
 authors = [
     {name = "Martin", email = "masanz-s@student.codam.nl"},
     {name = "Carlos", email = "cpfister@student.codam.nl"}
 ]
-requires-python = ">=3.10"
+license = "MIT"
+license-files = ["License.md"]
 
 [tool.setuptools.packages.find]
-where = ['.']
+where = ['src']
