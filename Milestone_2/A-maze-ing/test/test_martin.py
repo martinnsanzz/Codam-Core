@@ -1,3 +1,5 @@
+# Run from root like this: python3 -m test.test_martin
+
 from src.mazegen.generator import MazeGenerator
 
 if __name__ == "__main__":
