@@ -3,7 +3,7 @@ from typing import Any, Self
 from random import choice
 
 # Local modules
-from pydantic import BaseModel, model_validator, ValidationError
+from pydantic import BaseModel, model_validator
 
 
 class MazeConfig(BaseModel):
@@ -35,6 +35,7 @@ class MazeConfig(BaseModel):
     seed: int | None
     algorithm: str | None
     display_mode: int | None
+    pattern: str | None
 
     @model_validator(mode='after')
     def validate_entry_exit(self) -> Self:
@@ -54,21 +55,21 @@ class MazeConfig(BaseModel):
         """
         for val in self.entry:
             if val < 0:
-                raise ValidationError(f"Entry can't be negative: {self.entry}")
+                raise ValueError(f"Entry can't be negative: {self.entry}")
 
         for val in self.exit:
             if val < 0:
-                raise ValidationError(f"Exit can't be negative: {self.exit}")
+                raise ValueError(f"Exit can't be negative: {self.exit}")
 
         if self.entry == self.exit:
-            raise ValidationError("Entry and exit can't be the same.")
+            raise ValueError("Entry and exit can't be the same.")
 
         if self.entry[0] > self.width or self.entry[1] > self.height:
-            raise ValidationError("Entry point must be within maze bounds:"
+            raise ValueError("Entry point must be within maze bounds:"
                               f"{self.entry}")
 
         if self.exit[0] >= self.width or self.exit[1] >= self.height:
-            raise ValidationError("Exit point must be within maze bounds:"
+            raise ValueError("Exit point must be within maze bounds:"
                               f"{self.exit}")
 
         return self
@@ -77,7 +78,7 @@ class MazeConfig(BaseModel):
     def validate_maze_dimensions(self) -> Self:
         """Validate maze dimensions."""
         if self.width < 2 or self.height < 2:
-            raise ValidationError("Minimum size of maze 2x2. "
+            raise ValueError("Minimum size of maze 2x2. "
                               "Update width x height.")
 
         return self
@@ -86,9 +87,17 @@ class MazeConfig(BaseModel):
     def validate_algorithm_name(self) -> Self:
         accepted_algorithms = ["kruskal", "dfs"]
 
-        if self.algorithm.lower() not in accepted_algorithms:
-            raise ValidationError("Use a valid algorithm name. Available algorithms "
-                              "shown in config.txt")
+        if self.algorithm.lower() not in accepted_algorithms and self.pattern:
+            raise ValueError("Use a valid algorithm name.")
+        return self
+
+    @model_validator(mode="after")
+    def validate_maze_pattern(self) -> Self:
+        accepted_patterns = ["42", "SQUARE", "STAR"]
+
+        if self.pattern and self.pattern.upper() not in accepted_patterns:
+            raise ValueError("Use a valid pattern name.")
+        self.pattern = self.pattern.upper()
         return self
 
 
@@ -151,6 +160,7 @@ def load_maze_config() -> MazeConfig:
         perfect=config_dict.get("PERFECT", False),
         seed=config_dict.get("SEED", None),
         algorithm=config_dict.get("ALGORITHM", choice(default_algorithms)),
-        display_mode=config_dict.get("DISPLAY_MODE", None)
+        display_mode=config_dict.get("DISPLAY_MODE", None),
+        pattern=config_dict.get("MAZE_PATTERN".upper(), None)
     )
     return maze_config

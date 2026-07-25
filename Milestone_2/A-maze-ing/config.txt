@@ -23,3 +23,5 @@ PERFECT=True
 # ------------ Valid alghorithms ("kruskal", "dfs") ------------ #
 ALGORITHM=dfs
 # DISPLAY_MODE=0
+# ------------ Valid maze patterns ("42", "SQUARE", "STAR") ------------ #
+MAZE_PATTERN=

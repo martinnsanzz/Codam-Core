@@ -36,7 +36,7 @@ def maze_loop(stdscr: curses.window, color_cnt: int, current_color: int | None) 
     stdscr.refresh()
     maze_win = maze_window_obj.maze_win
     maze_gen = MazeGenerator(maze_config.width, maze_config.height, maze_config.algorithm,
-                             maze_config.perfect, maze_config.seed)
+                             maze_config.perfect, maze_config.seed, maze_config.pattern)
     maze = maze_gen.generate()
     solution = ""
 

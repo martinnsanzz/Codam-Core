@@ -26,34 +26,12 @@ class Cell():
         Notes:
             15 represents the 4 bits we need to describe the walls
         """
-        Cell.validate(value)
+        Cell._validate(value)
         self._walls = value
         self._pos = pos
         self._locked = False
         self._flag = Flag.EMPTY
         # self._is_entry_exit: bool = False
-
-
-    def toggle_wall(self, direction: Dir):
-        """Given a direction it opens or closes the associated wall.
-
-        Args:
-            direction (Dir) Direction of the wall from the center of the cell.
-        """
-        if self._locked:
-            raise RuntimeError("Cell is locked")
-        self._walls = self._walls ^ direction.value
-
-    def get_wall(self, direction: Dir) -> bool:
-        """Checks if theres a wall in a given direction.
-
-        Args:
-            direction (Dir) Direction of the wall from the center of the cell.
-
-        Returns:
-            True or False based on the state of the wall in the direction given
-        """
-        return bool(self._walls & direction.value)
 
     @property
     def locked(self) -> bool:
@@ -112,9 +90,30 @@ class Cell():
         Set the flag of this cell to something
         """
         self._flag = flag
+    
+    def toggle_wall(self, direction: Dir):
+        """Given a direction it opens or closes the associated wall.
+
+        Args:
+            direction (Dir) Direction of the wall from the center of the cell.
+        """
+        if self._locked:
+            raise RuntimeError("Cell is locked")
+        self._walls = self._walls ^ direction.value
+
+    def get_wall(self, direction: Dir) -> bool:
+        """Checks if theres a wall in a given direction.
+
+        Args:
+            direction (Dir) Direction of the wall from the center of the cell.
+
+        Returns:
+            True or False based on the state of the wall in the direction given
+        """
+        return bool(self._walls & direction.value)
 
     @staticmethod
-    def validate(value: int) -> None:
+    def _validate(value: int) -> None:
         """Validate walls of a cell. Allowed values are 0-15 ints.
 
         Args:

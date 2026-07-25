@@ -1,3 +1,6 @@
+# Built-in modules
+from typing import Optional
+
 # Local modules
 from .pixel_class import Pixel, Flag
 from .dir_class import Dir
@@ -14,7 +17,8 @@ class Maze():
         _height (int): Height of maze.
         _cells (list[list[Cell]]): A 2D list of the cells from the maze.
     """
-    def __init__(self, width: int, height: int, perfect: bool) -> None:
+    def __init__(self, width: int, height: int, perfect: bool, 
+                 pattern: Optional[str] = None) -> None:
         """Initialise a new maze based on maze config.
 
         Args:
@@ -28,6 +32,7 @@ class Maze():
         self._width = width
         self._height = height
         self._perfect = perfect
+        self._pattern = self.Patterns.get(pattern)
         self._cells : list[list[Cell]] = []
 
         row: list[Cell]
@@ -38,50 +43,6 @@ class Maze():
                 cell = Cell((x, y))
                 row.append(cell)
             self._cells.append(row)
-
-        ### --- For testing within the terminal without using curses --- ###
-    def get_print_string(self) -> str:
-        """Converts the maze from a list[list[Pixel] to a string.
-        
-        Notes:
-            This is used to see the maze within the terminal
-        """
-        pixels = self._get_maze()
-        colors = {Flag.EMPTY: "  ",
-                  Flag.SOLUTION: "\033[32m██\033[0m",
-                  Flag.PATTERN: "\033[91m██\033[0m",
-                  Flag.WALL: "██"}
-        str_maze = []
-        for row in pixels:
-            str_row = [colors[p.read()] for p in row]
-            str_maze.append(str_row)
-        return "\n".join("".join(x) for x in str_maze)
-
-    def _lock_42_cells(self) -> None:
-        """
-        Close and lock all the cells that need to draw 42."""
-        if (self._width < 9) or (self._height < 7):
-            print("Maze is too small for the 42 sign")
-            return
-        centre_x: int = int(self._width / 2)
-        centre_y: int = int(self._height / 2)
-        start_col = centre_x - 3
-        start_row = centre_y - 2
-        cols = [[0, 2, 4, 5, 6],
-                [0, 2, 6],
-                [0, 1, 2, 4, 5, 6],
-                [2, 4],
-                [2, 4, 5, 6]]
-        for row in range(0, 5):
-            for col in range(0, 7):
-                if col in cols[row]:
-                    cell = self.cells[start_row + row][start_col + col]
-                    try:
-                        cell.walls = 15
-                        cell.locked = True
-                        cell.flag = Flag.PATTERN
-                    except RuntimeError:
-                        pass
 
     @property
     def cells(self) -> list[list[Cell]]:
@@ -147,6 +108,48 @@ class Maze():
                         grid[grid_row + r_off][grid_col + c_off].add_flag(wall_flag)
         return grid
 
+    ### --- For testing within the terminal without using curses --- ###
+    def get_print_string(self) -> str:
+        """Converts the maze from a list[list[Pixel] to a string.
+        
+        Notes:
+            This is used to see the maze within the terminal
+        """
+        pixels = self._get_maze()
+        colors = {Flag.EMPTY: "  ",
+                  Flag.SOLUTION: "\033[32m██\033[0m",
+                  Flag.PATTERN: "\033[91m██\033[0m",
+                  Flag.WALL: "██"}
+        str_maze = []
+        for row in pixels:
+            str_row = [colors[p.read()] for p in row]
+            str_maze.append(str_row)
+        return "\n".join("".join(x) for x in str_maze)
+
+    def _lock_pattern(self) -> None:
+        """Close and lock all the cells that need to draw the pattern."""
+        pattern = self._pattern
+
+        if not pattern:
+            return
+
+        pattern_height = len(pattern)
+        pattern_width = max(col for row in pattern for col in row) + 1
+
+        if (self._width < pattern_width) or (self._height < pattern_height):
+            print("Maze is too small for this pattern")
+            return
+
+        start_col = (self._width - pattern_width) // 2
+        start_row = (self._height - pattern_height) // 2
+
+        for row_idx, row in enumerate(pattern):
+            for col in row:
+                cell = self._cells[start_row + row_idx][start_col + col]
+                cell._walls = 15
+                cell._locked = True
+                cell._flag = Flag.PATTERN
+
     @staticmethod
     def _get_maze_hex(cells: list[list[Cell]]) -> str:
         hex_val = "0123456789abcdef"
@@ -193,3 +196,41 @@ class Maze():
             px.add_flag(self.cells[row][(col - 1) // 2].flag)
             px.add_flag(self.cells[row][(col + 1) // 2].flag)
         return px.read()
+
+    class Patterns():
+        NO_PATTERN: Optional[list[list[int]]] = None
+        FORTY_TWO: list[list[int]] = [[0, 2, 4, 5, 6],
+                                    [0, 2, 6],
+                                    [0, 1, 2, 4, 5, 6],
+                                    [2, 4],
+                                    [2, 4, 5, 6]]
+        SQUARE: list[list[int]] = [[0, 1, 2, 3, 4, 5, 6],
+                                [0, 1, 2, 3, 4, 5, 6],
+                                [0, 1, 2, 3, 4, 5, 6],
+                                [0, 1, 2, 3, 4, 5, 6],
+                                [0, 1, 2, 3, 4, 5, 6],
+                                [0, 1, 2, 3, 4, 5, 6],
+                                [0, 1, 2, 3, 4, 5, 6]]
+        STAR: list[list[int]] = [[5],
+                                [4, 5, 6],
+                                [3, 4, 5, 6, 7],
+                                [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                                [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                                [1, 2, 3, 4, 5, 6, 7, 8, 9],
+                                [2, 3, 4, 5, 6, 7, 8],
+                                [2, 3, 4, 5, 6, 7, 8],
+                                [1, 2, 3, 4, 5, 6, 7, 8, 9],
+                                [1, 2, 3, 7, 8, 9],
+                                [2, 8]]
+
+        _lookup: dict[str, list[list[int]]] = {
+            "42": FORTY_TWO,
+            "SQUARE": SQUARE,
+            "STAR": STAR
+        }
+
+        @classmethod
+        def get(cls, name: Optional[str]) -> Optional[list[list[int]]]:
+            if not name:
+                return cls.NO_PATTERN
+            return cls._lookup[name]

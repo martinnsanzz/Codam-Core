@@ -1,5 +1,6 @@
 # Build-in modules
 from random import Random
+from typing import Optional
 
 # Local modules
 from .classes import Maze
@@ -30,7 +31,7 @@ class MazeGenerator():
         with all walls up
     """
     def __init__(self, width: int, height: int, algorithm: str, perfect: bool,
-                 seed: int | None = None) -> None:
+                 seed: Optional[int] = None, pattern: Optional[str] = None) -> None:
         """Initialize generator parameters.
 
         Args:
@@ -47,6 +48,7 @@ class MazeGenerator():
         self._algorithm = algorithm
         self._perfect = perfect
         self._rng = Random(seed)
+        self._pattern = pattern
 
     def generate(self) -> Maze:
         """Generate a maze using the configured algorithm.
@@ -64,7 +66,7 @@ class MazeGenerator():
             raise RuntimeError("Size of maze cant be smaller than 2x2. "
                                "Increase the size of the maze")
         
-        maze = Maze(self._width, self._height, self._perfect)
+        maze = Maze(self._width, self._height, self._perfect, self._pattern)
 
         
         if self._algorithm == "kruskal":

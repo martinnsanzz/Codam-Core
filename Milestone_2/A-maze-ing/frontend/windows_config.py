@@ -7,7 +7,7 @@ from .config_parser import load_maze_config
 
 try:
     maze_config = load_maze_config()
-except ValidationError as e:
+except ValueError as e:
     print(f"\033[91m{str(e.errors()[0]['msg'])}\033[0m")
     quit()
 
