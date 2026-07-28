@@ -1,5 +1,6 @@
 # Built-in modules
 from typing import Optional
+from math import ceil
 
 # Local modules
 from .pixel_class import Pixel, Flag
@@ -16,8 +17,10 @@ class Maze():
         _width (int): Width of maze.
         _height (int): Height of maze.
         _cells (list[list[Cell]]): A 2D list of the cells from the maze.
+        _perfect (bool): If maze needs to be built perfect.
+        _pattern (list[list[int]]): Pattern to use inside the maze
     """
-    def __init__(self, width: int, height: int, perfect: bool, 
+    def __init__(self, width: int, height: int, perfect: bool,
                  pattern: Optional[str] = None) -> None:
         """Initialise a new maze based on maze config.
 
@@ -33,12 +36,11 @@ class Maze():
         self._height = height
         self._perfect = perfect
         self._pattern = self.Patterns.get(pattern)
-        self._cells : list[list[Cell]] = []
+        self._cells: list[list[Cell]] = []
 
-        row: list[Cell]
         cell: Cell
         for x in range(self._height):
-            row: list = []
+            row: list[Cell] = []
             for y in range(self._width):
                 cell = Cell((x, y))
                 row.append(cell)
@@ -54,7 +56,7 @@ class Maze():
         """Set the cells on the maze cells to the given wall value
 
         Args:
-            values (list[list[int]]): 2D array of integer values holding the 
+            values (list[list[int]]): 2D array of integer values holding the
                                       value of the walls
         Raises:
             Error if values are bigger than height or width of maze.
@@ -68,8 +70,8 @@ class Maze():
             if len(row) != self._width:
                 raise RuntimeError("The width of the provided values does"
                                    "not match the width of the maze. "
-                                    f"Given: {len(values)}, "
-                                    f"expected: {self._width}")
+                                   f"Given: {len(values)}, "
+                                   f"expected: {self._width}")
             for x, cell in enumerate(row):
                 cell.walls = values[y][x]
 
@@ -88,10 +90,10 @@ class Maze():
         row_cnt = (self._height * 2) + 1
         grid: list[list[Pixel]] = []
         for _ in range(row_cnt):
-            row = []
+            row_pixel = []
             for __ in range(col_cnt):
-                row.append(Pixel())
-            grid.append(row)
+                row_pixel.append(Pixel())
+            grid.append(row_pixel)
 
         for row, row_l in enumerate(self._cells):
             grid_row = (row * 2) + 1
@@ -105,13 +107,25 @@ class Maze():
                     if flag is Flag.PATTERN:
                         grid[grid_row + r_off][grid_col + c_off].add_flag(flag)
                     else:
-                        grid[grid_row + r_off][grid_col + c_off].add_flag(wall_flag)
+                        grid[grid_row + r_off][grid_col + c_off].\
+                            add_flag(wall_flag)
+        for row in range(2, (self._height * 2), 2):
+            for col in range(2, (self._width * 2), 2):
+                wall_pixels = set()
+                wall_pixels.add(grid[row - 1][col].read())
+                wall_pixels.add(grid[row][col - 1].read())
+                wall_pixels.add(grid[row][col + 1].read())
+                wall_pixels.add(grid[row + 1][col].read())
+                if Flag.SOLUTION in wall_pixels:
+                    wall_pixels.discard(Flag.SOLUTION)
+                    wall_pixels.add(Flag.EMPTY)
+                if len(wall_pixels) == 1:
+                    grid[row][col].add_flag(wall_pixels.pop())
         return grid
 
-    ### --- For testing within the terminal without using curses --- ###
     def get_print_string(self) -> str:
         """Converts the maze from a list[list[Pixel] to a string.
-        
+
         Notes:
             This is used to see the maze within the terminal
         """
@@ -140,8 +154,8 @@ class Maze():
             print("Maze is too small for this pattern")
             return
 
-        start_col = (self._width - pattern_width) // 2
-        start_row = (self._height - pattern_height) // 2
+        start_col = ceil((self._width - pattern_width) / 2)
+        start_row = ceil((self._height - pattern_height) / 2)
 
         for row_idx, row in enumerate(pattern):
             for col in row:
@@ -152,6 +166,10 @@ class Maze():
 
     @staticmethod
     def _get_maze_hex(cells: list[list[Cell]]) -> str:
+        """
+        Converts the 2D list of cells into a representation of the walls
+        in hex-value
+        """
         hex_val = "0123456789abcdef"
         maze_hex = ""
         for cell_row in cells:
@@ -161,19 +179,23 @@ class Maze():
         return maze_hex
 
     def _export_maze(self, entry: tuple[int, int], exit: tuple[int, int],
-                    solution: str) -> None:
+                     solution: str) -> None:
+        """Exports the maze into an output_maze.txt
+
+        It shows the maze in hex form, entry, exit position and if solution
+        the solution string 'NSEEWNS'
+        """
         hex_maze = self._get_maze_hex(self._cells)
 
         with open("output_maze.txt", "w") as f:
             f.write(f"{hex_maze}\n")
             f.write(f"{entry[0]},{entry[1]}\n")
-            f.write(f"{exit[0]},{entry[1]}\n")
+            f.write(f"{exit[0]},{exit[1]}\n")
 
             if solution:
                 f.write(f"{solution}")
 
-
-    def _get_pixel(self, pos: tuple[int, int]) -> Pixel:
+    def _get_pixel(self, pos: tuple[int, int]) -> Flag:
         """
         Pos is given as position in the grid, not the cell
         """
@@ -198,30 +220,33 @@ class Maze():
         return px.read()
 
     class Patterns():
+        """This inner-class contains the available patterns that can be drawn
+            inside the maze
+        """
         NO_PATTERN: Optional[list[list[int]]] = None
         FORTY_TWO: list[list[int]] = [[0, 2, 4, 5, 6],
-                                    [0, 2, 6],
-                                    [0, 1, 2, 4, 5, 6],
-                                    [2, 4],
-                                    [2, 4, 5, 6]]
+                                      [0, 2, 6],
+                                      [0, 1, 2, 4, 5, 6],
+                                      [2, 4],
+                                      [2, 4, 5, 6]]
         SQUARE: list[list[int]] = [[0, 1, 2, 3, 4, 5, 6],
-                                [0, 1, 2, 3, 4, 5, 6],
-                                [0, 1, 2, 3, 4, 5, 6],
-                                [0, 1, 2, 3, 4, 5, 6],
-                                [0, 1, 2, 3, 4, 5, 6],
-                                [0, 1, 2, 3, 4, 5, 6],
-                                [0, 1, 2, 3, 4, 5, 6]]
+                                   [0, 1, 2, 3, 4, 5, 6],
+                                   [0, 1, 2, 3, 4, 5, 6],
+                                   [0, 1, 2, 3, 4, 5, 6],
+                                   [0, 1, 2, 3, 4, 5, 6],
+                                   [0, 1, 2, 3, 4, 5, 6],
+                                   [0, 1, 2, 3, 4, 5, 6]]
         STAR: list[list[int]] = [[5],
-                                [4, 5, 6],
-                                [3, 4, 5, 6, 7],
-                                [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-                                [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-                                [1, 2, 3, 4, 5, 6, 7, 8, 9],
-                                [2, 3, 4, 5, 6, 7, 8],
-                                [2, 3, 4, 5, 6, 7, 8],
-                                [1, 2, 3, 4, 5, 6, 7, 8, 9],
-                                [1, 2, 3, 7, 8, 9],
-                                [2, 8]]
+                                 [4, 5, 6],
+                                 [3, 4, 5, 6, 7],
+                                 [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                                 [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                                 [1, 2, 3, 4, 5, 6, 7, 8, 9],
+                                 [2, 3, 4, 5, 6, 7, 8],
+                                 [2, 3, 4, 5, 6, 7, 8],
+                                 [1, 2, 3, 4, 5, 6, 7, 8, 9],
+                                 [1, 2, 3, 7, 8, 9],
+                                 [2, 8]]
 
         _lookup: dict[str, list[list[int]]] = {
             "42": FORTY_TWO,
@@ -231,6 +256,10 @@ class Maze():
 
         @classmethod
         def get(cls, name: Optional[str]) -> Optional[list[list[int]]]:
+            """
+            Gets the name of the desired pattern and returns the
+            pattern config
+            """
             if not name:
                 return cls.NO_PATTERN
-            return cls._lookup[name]
+            return cls._lookup[name.upper()]

@@ -15,7 +15,7 @@ authors = [
     {name = "Carlos", email = "cpfister@student.codam.nl"}
 ]
 license = "MIT"
-license-files = ["License.md"]
+license-files = ["LICENSE.md"]
 
 [tool.setuptools.packages.find]
 where = ['src']

@@ -3,7 +3,7 @@ from random import Random
 
 # Local modules
 from ..classes import Cell, Dir, Maze
-from .maze_gen import Maze_Gen
+from .maze_gen import Maze_Gen, Anim_func
 
 
 class DFS(Maze_Gen):
@@ -15,7 +15,7 @@ class DFS(Maze_Gen):
     """
     def __init__(self, maze: Maze, rng: Random):
         """Initializes dfs class.
-        
+
         Args:
             maze (Maze): Maze object to modify.
         """
@@ -24,9 +24,9 @@ class DFS(Maze_Gen):
 
     def get_neighbours(self, cell: Cell) -> list[tuple[Dir, Cell]]:
         """Override on the generic get_neighbours method.
-        
-        Adds another filter specific to this algorithm were it doesnt consider 
-        a neighbour if its already within the visited_cells[]. 
+
+        Adds another filter specific to this algorithm were it doesnt consider
+        a neighbour if its already within the visited_cells[].
         Args:
             cell (Cell): Cell to check neighbours from
 
@@ -38,14 +38,14 @@ class DFS(Maze_Gen):
         nbs = [x for x in nbs if not x[1] in self.visited_cells]
         return nbs
 
-    def construct(self) -> None:
+    def construct(self, animation: Anim_func | None = None) -> None:
         """
         Modifies a fresh maze grid using the dfs algorithm.
             1. Selects a random cell of the maze to start from.
             2. Add this cell to the stack[] (for backtracking) and to the
-               visited_cell[].
+                visited_cell[].
             3. While theres cells on the stack keep looping.
-                3a. If cell has neighbours append current_cell to stack and 
+                3a. If cell has neighbours append current_cell to stack and
                     select the next cell. Add next_cell to visited cells and
                     break the walls between the 2 cells.
                 3b. If no neighbours but theres still cells on the stack make
@@ -61,6 +61,8 @@ class DFS(Maze_Gen):
 
         while stack:
             cell_neighbours = self.get_neighbours(current_cell)
+            if animation:
+                super().play_animation(current_cell, animation)
 
             if cell_neighbours:
                 stack.append(current_cell)
@@ -73,4 +75,4 @@ class DFS(Maze_Gen):
                 stack.pop()
 
         if not self._maze._perfect:
-            self.imperfect_maze()
+            self.imperfect_maze(animation)

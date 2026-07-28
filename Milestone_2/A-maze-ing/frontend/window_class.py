@@ -29,8 +29,7 @@ class Window():
         """
         self.stdscr = stdscr
         self.title = config["title"]
-        self.options = config.get("options")
-
+        self.options: list[dict[str, Any]] = config.get("options", [])
 
     def draw_win(self, config: dict[str, Any]) -> curses.window:
         """Draws the menu window at a calculated position
@@ -79,7 +78,8 @@ class MazeWindow:
 
     Attributes:
         stdscr (curses.window): The main terminal window object.
-        opt_win (curses.window): The window displaying the options for the user.
+        opt_win (curses.window): The window displaying the options
+            for the user.
         maze_win (curses.window): The window displaying the maze.
     """
 
@@ -90,8 +90,8 @@ class MazeWindow:
             stdscr (curses.window): The standard curses window object.
         """
         self.stdscr = stdscr
-        self.opt_win: curses.window | None = None
-        self.maze_win: curses.window | None = None
+        self.opt_win: curses.window
+        self.maze_win: curses.window
         self._build_windows()
 
     def _build_windows(self) -> None:
@@ -102,26 +102,28 @@ class MazeWindow:
         configured dimensions fit within the current terminal screen size.
 
         Raises:
-            RuntimeError: If the options menu dimensions exceed the screen height,
-                or if the maze dimensions exceed the screen width. The error
-                message advises reducing the respective dimensions in 'config.txt'.
+            RuntimeError: If the options menu dimensions exceed the screen
+                height, or if the maze dimensions exceed the screen width.
+                The error message advises reducing the respective
+                dimensions in 'config.txt'.
         """
         config_opt = WINDOWS["maze_window"]["sub_options"]
         opt = Window(self.stdscr, config_opt)
         try:
             self.opt_win = opt.draw_win(config_opt)
         except BaseException:
-            raise RuntimeError("Maze option menu outside of screen. Reduce height in 'config.txt'")
+            raise RuntimeError("Reduce height in 'config.txt'")
 
         config_maze = WINDOWS["maze_window"]["sub_maze"]
         maze_menu = Window(self.stdscr, config_maze)
         try:
             self.maze_win = maze_menu.draw_win(config_maze)
         except BaseException:
-            raise RuntimeError("Screen does not fit maze. Reduce width in 'config.txt'")
+            raise RuntimeError("Reduce width in 'config.txt'")
 
     def refresh_all(self) -> None:
         """Refreshes both windows to display updated content"""
+        assert self.maze_win is not None
+        assert self.opt_win is not None
         self.maze_win.refresh()
         self.opt_win.refresh()
-

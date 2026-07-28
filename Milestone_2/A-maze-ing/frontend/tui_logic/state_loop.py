@@ -28,7 +28,7 @@ def start_window(stdscr: curses.window) -> State:
     start_actions = (State.QUIT,
                      State.GEN_MAZE)
     while action not in start_actions:
-        action = State.handle_input(menu_window.getkey())
+        action = State.handle_input(menu_window.getkey(), State.START_WIN)
 
     menu_window.refresh()
     return action
@@ -45,18 +45,18 @@ def main(stdscr: curses.window) -> None:
     Args:
         stdscr: The curses standard screen object.
     """
-    current_color = 0
-
-    colors = (
-        curses.COLOR_BLACK,
-        curses.COLOR_BLUE,
-        curses.COLOR_RED,
+    col_idx = 0
+    col_list = (
         curses.COLOR_WHITE,
+        curses.COLOR_BLACK,
+        curses.COLOR_CYAN,
+        curses.COLOR_RED,
+        curses.COLOR_YELLOW,
+        curses.COLOR_MAGENTA,
         curses.COLOR_GREEN,
-        curses.COLOR_MAGENTA
+        curses.COLOR_BLUE,
     )
-
-    for idx, color in enumerate(colors):
+    for idx, color in enumerate(col_list):
         curses.init_pair(idx + 1, color, curses.COLOR_BLACK)
 
     # Hide the cursor
@@ -69,4 +69,5 @@ def main(stdscr: curses.window) -> None:
             cur_state = start_window(stdscr)
         elif cur_state is State.GEN_MAZE:
             stdscr.clear()
-            cur_state, current_color = maze_loop(stdscr, len(colors), current_color)
+            cur_state, col_tup = maze_loop(stdscr, (col_idx, len(col_list)))
+            col_idx = col_tup[0]

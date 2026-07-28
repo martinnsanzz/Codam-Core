@@ -1,5 +1,5 @@
 # Built-in modules
-from typing import Any, Self
+from typing import Any, Self, Optional
 from random import choice
 
 # Local modules
@@ -32,10 +32,11 @@ class MazeConfig(BaseModel):
     exit: tuple[int, int]
     output_file: str
     perfect: bool
-    seed: int | None
-    algorithm: str | None
-    display_mode: int | None
-    pattern: str | None
+    build_anim: bool
+    build_algorithm: str
+    solve_algorithm: str
+    seed: Optional[int]
+    pattern: Optional[str]
 
     @model_validator(mode='after')
     def validate_entry_exit(self) -> Self:
@@ -66,11 +67,11 @@ class MazeConfig(BaseModel):
 
         if self.entry[0] > self.width or self.entry[1] > self.height:
             raise ValueError("Entry point must be within maze bounds:"
-                              f"{self.entry}")
+                             f"{self.entry}")
 
         if self.exit[0] >= self.width or self.exit[1] >= self.height:
             raise ValueError("Exit point must be within maze bounds:"
-                              f"{self.exit}")
+                             f"{self.exit}")
 
         return self
 
@@ -79,16 +80,17 @@ class MazeConfig(BaseModel):
         """Validate maze dimensions."""
         if self.width < 2 or self.height < 2:
             raise ValueError("Minimum size of maze 2x2. "
-                              "Update width x height.")
+                             "Update width x height.")
 
         return self
-    
+
     @model_validator(mode="after")
-    def validate_algorithm_name(self) -> Self:
+    def validate_build_algorithm(self) -> Self:
         accepted_algorithms = ["kruskal", "dfs"]
 
-        if self.algorithm.lower() not in accepted_algorithms and self.pattern:
-            raise ValueError("Use a valid algorithm name.")
+        if self.build_algorithm.lower() not in accepted_algorithms:
+            raise ValueError("Use a valid build algorithm name.")
+        self.build_algorithm = self.build_algorithm.lower()
         return self
 
     @model_validator(mode="after")
@@ -97,7 +99,19 @@ class MazeConfig(BaseModel):
 
         if self.pattern and self.pattern.upper() not in accepted_patterns:
             raise ValueError("Use a valid pattern name.")
-        self.pattern = self.pattern.upper()
+        if self.pattern:
+            self.pattern = self.pattern.upper()
+        return self
+
+    @model_validator(mode="after")
+    def validate_solve_algorithm(self) -> Self:
+        accepted_algorithms = ["shrink", "find", "search"]
+        self.solve_algorithm = self.solve_algorithm.lower()
+
+        if self.solve_algorithm not in accepted_algorithms:
+            raise ValueError("Use a valid solve algorithm name")
+        if not self.perfect and self.solve_algorithm == "shrink":
+            raise ValueError("Can't use 'shrink' with imperfect maze")
         return self
 
 
@@ -149,7 +163,8 @@ def load_maze_config() -> MazeConfig:
         defualt value
     """
     config_dict = _config_parser("config.txt")
-    default_algorithms = ["kruskal", "dfs"]
+    build_algorithms = ["kruskal", "dfs"]
+    solve_algorithms = ["shrink", "find", "search"]
 
     maze_config: MazeConfig = MazeConfig(
         width=config_dict.get("WIDTH", 20),
@@ -159,8 +174,11 @@ def load_maze_config() -> MazeConfig:
         output_file=config_dict.get("OUTPUT_FILE", "maze.txt"),
         perfect=config_dict.get("PERFECT", False),
         seed=config_dict.get("SEED", None),
-        algorithm=config_dict.get("ALGORITHM", choice(default_algorithms)),
-        display_mode=config_dict.get("DISPLAY_MODE", None),
-        pattern=config_dict.get("MAZE_PATTERN".upper(), None)
+        build_algorithm=config_dict.get("BUILD_ALGORITHM",
+                                        choice(build_algorithms)),
+        solve_algorithm=config_dict.get("SOLVE_ALGORITHM",
+                                        choice(solve_algorithms)),
+        build_anim=config_dict.get("BUILD_ANIM", False),
+        pattern=config_dict.get("MAZE_PATTERN", None)
     )
     return maze_config

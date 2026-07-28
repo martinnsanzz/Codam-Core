@@ -7,8 +7,11 @@ from .config_parser import load_maze_config
 
 try:
     maze_config = load_maze_config()
-except ValueError as e:
+except ValidationError as e:
     print(f"\033[91m{str(e.errors()[0]['msg'])}\033[0m")
+    quit()
+except ValueError as e:
+    print(f"\033[91m{str(e)}\033[0m")
     quit()
 
 # Window configuration map. Each key is a unique window state.

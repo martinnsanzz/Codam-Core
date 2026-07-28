@@ -18,10 +18,24 @@ HEIGHT=30
 ENTRY=0,0
 EXIT=29,29
 OUTPUT_FILE=maze.txt
-PERFECT=True
+PERFECT=False
+BUILD_ANIM=False
 # SEED=0
-# ------------ Valid alghorithms ("kruskal", "dfs") ------------ #
-ALGORITHM=dfs
-# DISPLAY_MODE=0
-# ------------ Valid maze patterns ("42", "SQUARE", "STAR") ------------ #
-MAZE_PATTERN=
+#
+# ------------ Valid build alghorithms ("kruskal", "dfs") ------------ #
+#
+BUILD_ALGORITHM=kruskal
+#
+# ------------ Valid maze patterns ("42", "square", "star") ------------ #
+#
+MAZE_PATTERN=square
+#
+# ------------ Valid solve alghorithms ------------ #
+# When PERFECT == True ("shrink", "find", "search")
+# When PERFECT == False ("find", "search")
+#
+#
+SOLVE_ALGORITHM=search
+#
+#
+#

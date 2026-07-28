@@ -1,6 +1,5 @@
 # Built-in modules
 from enum import Enum
-from typing import Self
 
 
 class Dir(Enum):
@@ -15,7 +14,7 @@ class Dir(Enum):
     W = 0b1000
 
     @staticmethod
-    def reverse(direction: Self) -> dict['Dir', 'Dir']:
+    def reverse(direction: 'Dir') -> 'Dir':
         """
         Given a direction a cell returns the opposite
 
@@ -32,7 +31,7 @@ class Dir(Enum):
         return options[direction]
 
     @staticmethod
-    def offset(direction: Self) -> tuple[int, int]:
+    def offset(direction: 'Dir') -> tuple[int, int]:
         """
         Given a direction returns the coordinates representing it
 
@@ -40,7 +39,8 @@ class Dir(Enum):
             direction (Dir)
 
         Returns:
-            Tuple of 
+            Tuple of x,y coordinates that represent the
+            directional vector from a cell
         """
         offsets = {Dir.N: (-1, 0),
                    Dir.E: (0, 1),

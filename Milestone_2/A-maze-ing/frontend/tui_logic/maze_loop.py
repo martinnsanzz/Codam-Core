@@ -1,5 +1,6 @@
 # Built-in modules
 import curses
+from typing import Any, Callable
 
 # Local modules
 from src.mazegen import MazeGenerator
@@ -9,10 +10,9 @@ from ..window_class import MazeWindow
 from ..state_class import State
 from ..windows_config import WINDOWS
 
-import sys
 
-def maze_loop(stdscr: curses.window, color_cnt: int, current_color: int | None) \
-                -> tuple[State, int | None]:
+def maze_loop(stdscr: curses.window, colors: tuple[int, int]) \
+                -> tuple[State, tuple[int, int]]:
     """Run the maze display and interaction loop until exit or regen.
 
     Loads the maze configuration, builds the maze grid, and repeatedly
@@ -21,8 +21,9 @@ def maze_loop(stdscr: curses.window, color_cnt: int, current_color: int | None) 
 
     Args:
         stdscr (curses.window): The curses standard screen object.
-        current_color (int | None): The active color scheme index, or ``None`` if
-            no color has been set yet (triggers ``change_color()``).
+        current_color (int | None): The active color scheme index, or
+        ``None`` if no color has been set yet (triggers
+        ``change_color()``).
 
     Returns:
         A tuple of ``(action, current_color)`` where ``action`` is the
@@ -30,36 +31,51 @@ def maze_loop(stdscr: curses.window, color_cnt: int, current_color: int | None) 
         ``resize_maze``) and ``current_color`` is the color scheme
         index to carry into the next state.
     """
-    maze_config = load_maze_config()
+    conf = load_maze_config()
     maze_window_obj = MazeWindow(stdscr)
 
     stdscr.refresh()
     maze_win = maze_window_obj.maze_win
-    maze_gen = MazeGenerator(maze_config.width, maze_config.height, maze_config.algorithm,
-                             maze_config.perfect, maze_config.seed, maze_config.pattern)
-    maze = maze_gen.generate()
+
+    solve_anim = make_anim_fun(maze_win, colors)
+    maze_gen = MazeGenerator(conf.width, conf.height, conf.build_algorithm,
+                             conf.solve_algorithm, conf.perfect, conf.seed,
+                             conf.pattern, solve_anim)
+
+    maze = maze_gen.generate(conf.build_anim)
     solution = ""
+    solved = False
+    action = None
 
     while True:
-        draw_maze(maze_win, maze._get_maze(), color_cnt, current_color)
-        maze._export_maze(maze_config.entry, maze_config.exit, solution)
-        
+        curses.flushinp()
+        draw_maze(maze_win, maze._get_maze(), colors, solved)
+        maze._export_maze(conf.entry, conf.exit, solution)
         maze_window_obj.refresh_all()
-        action = State.handle_input(stdscr.getkey())
+        action = State.handle_input(stdscr.getkey(), action)
 
         if action == State.GEN_MAZE:
-            action, maze_config = regen_maze(maze_config)
-            return action, current_color
+            action, conf = regen_maze(conf)
+            return action, colors
         elif action == State.CHANGE_COLOR:
-            current_color = (current_color % color_cnt) + 1
+            colors = ((colors[0] % colors[1]) + 1, colors[1])
         elif action == State.QUIT:
-            return State.QUIT, current_color
+            return State.QUIT, colors
         elif action is State.SOLVE:
-            solution, steps = maze_gen.solve(maze, maze_config.entry, maze_config.exit)
-            draw_solution(maze_win, steps, color_cnt, current_color)
+            if not solved:
+                maze_gen.set_animation(make_anim_fun(maze_win, colors))
+                result = maze_gen.solve(maze, conf.entry, conf.exit)
+                if result is None:
+                    solved = False
+                    continue
+                solution, steps = result
+                draw_solution(maze_win, steps, colors)
+                solved = True
+            else:
+                solved = False
 
 
-def regen_maze(old_config : MazeConfig) -> tuple[State, MazeConfig]:
+def regen_maze(old_config: MazeConfig) -> tuple[State, MazeConfig]:
     """Detect a config change and update window dimensions if needed.
 
     Reloads the maze configuration and compares it against the given
@@ -71,11 +87,26 @@ def regen_maze(old_config : MazeConfig) -> tuple[State, MazeConfig]:
 
     Returns:
         A tuple of ``State.GEN_MAZE`` to generate a new maze and
-        ``new_config`` to get the new configuration of the maze
+        ``conf`` to get the new configuration of the maze
     """
-    new_config = load_maze_config()
+    conf = load_maze_config()
 
-    if (old_config != new_config):
-        WINDOWS["maze_window"]["sub_maze"]["h"] = 2 * new_config.height + 1
-        WINDOWS["maze_window"]["sub_maze"]["w"] = 2 * (2 * new_config.width + 1) + 1
-    return State.GEN_MAZE, new_config
+    if (old_config != conf):
+        WINDOWS["maze_window"]["sub_maze"]["h"] = 2 * conf.height + 1
+        WINDOWS["maze_window"]["sub_maze"]["w"] = 2 * (2 * conf.width + 1) + 1
+    return State.GEN_MAZE, conf
+
+
+def make_anim_fun(maze_win: curses.window,
+                  colors: tuple[int, int]) -> Callable[[Any, bool], None]:
+    """Creates animation function"""
+    def animation_expression(grid: Any, show_path: bool) -> None:
+        return draw_maze(maze_win, grid, colors, show_path)
+    return animation_expression
+
+# def make_anim_fun(maze_win: curses.window,
+#                   colors: tuple[int, int]) -> Callable[[Any, bool], None]:
+#     """Creates animation function"""
+#     def animation_expression(grid: Any, show_path: bool) -> None:
+#         return draw_maze(maze_win, grid, colors, show_path)
+#     return animation_expression

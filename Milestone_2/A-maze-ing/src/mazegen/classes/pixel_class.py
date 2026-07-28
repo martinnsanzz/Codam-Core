@@ -1,6 +1,7 @@
 # Build-in modules
 from enum import Enum, auto
 
+
 class Flag(Enum):
     """
     Enum that represents what a pixel should be drawn as.
@@ -10,34 +11,51 @@ class Flag(Enum):
     PATTERN: A cell or a wall that is part of a pattern
     WALL: A wall that is not part of a solution or pattern
     """
+    WALL = auto()
     EMPTY = auto()
     SOLUTION = auto()
     PATTERN = auto()
-    WALL = auto()
+    FOCUS = auto()
+    EXIT = auto()
+    ENTRY = auto()
+
 
 class Pixel():
     """
     Class to represent a pixel.
     This is different from the Cell class in that a cell
     represents only a path, whereas the pixel includes
-    any walls surrounding that path.
+    any cells or walls.
+    It simply stores Influence of cells which are then resolved
+    using the read() method.
     """
     def __init__(self) -> None:
-        self._flags: list[Flag] = []
+        """Initialises an emtpty pixel with no flags"""
+        self._flags: set[Flag] = set()
 
     def add_flag(self, flag: Flag) -> None:
-        self._flags.append(flag)
+        """Adds a flag to the pixels list of flags"""
+        self._flags.add(flag)
 
     def read(self) -> Flag:
+        """
+        Resolve the flags on the pixel.
+        This will make sure that a pixel that is influenced by
+        two special cells inherits their status
+        (eg. the opened wall between two solution cells becomes a solution)
+
+        Returns:
+            The resolved flag of the pixel.
+        """
         if len(self._flags) == 0:
             return Flag.WALL
-        elif len(self._flags) == 1 or len(set(self._flags)) == 1:
-            return self._flags[0]
-        elif self._flags.count(Flag.SOLUTION) >= 2:
-            return Flag.SOLUTION
-        elif self._flags.count(Flag.PATTERN) >= 2:
-            return Flag.PATTERN
-        elif Flag.SOLUTION in self._flags and Flag.EMPTY in self._flags:
+        elif len(self._flags) == 1:
+            for flag in self._flags:
+                return flag
+        elif Flag.EMPTY in self._flags:
             return Flag.EMPTY
-        else:
-            return Flag.WALL
+        elif Flag.SOLUTION in self._flags:
+            return Flag.SOLUTION
+        elif Flag.FOCUS in self._flags:
+            return Flag.FOCUS
+        return Flag.WALL

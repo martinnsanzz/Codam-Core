@@ -25,14 +25,14 @@ DEBUGGER = pdb
 $(VENV):
 	@echo "${YELLOW}Creating virtual environment...${RESET}"
 	@python3 -m venv $(VENV)
-	
+
 	@echo "${CYAN}	RUN 'source ./env/bin/activate \
 	('activate.fish' if using fish)${RESET}"
 
 install: $(VENV)
 	@echo "${YELLOW}Installing dependencies...${RESET}"
 	@$(PIP) install -q -r requirements.txt > /dev/null 2>&1
-	
+
 	@echo "${GREEN}Everything installed ${RESET}"
 
 wheel:
@@ -50,16 +50,16 @@ debug: $(VENV) install
 	@echo "${PURPLE}Running $(PROG) in debug mode with $(DEBUGGER)...${RESET}"
 	@$(PYTHON) -m $(DEBUGGER) $(PROG) $(CONFIG) 2>/dev/null
 
-clean: 
+clean:
 	@echo "${RED}Removing '.mypy_cache' folders.${RESET}"
 	@find . -type d -name .mypy_cache -exec rm -rf {} +
 
 	@echo "${RED}Removing '__pycache__' folders.${RESET}"
 	@find . -type d -name __pycache__ -exec rm -rf {} +
-	
+
 	@echo "${RED}Removing '.pyc' files.${RESET}"
 	@find . -type d -name *.pyc -exec rm -rf {} +
-	
+
 	@echo "${RED}Removing 'output_maze.txt' files.${RESET}"
 	@find . -type f -name output_maze.txt -exec rm -rf {} +
 
@@ -73,18 +73,20 @@ fclean: clean
 lint:
 	@echo "${YELLOW}Running flake8...${RESET}"
 	-@flake8 . --exclude=env && echo "${GREEN}✓ flake8 passed${RESET}" || true
-	
+
 	@echo "${YELLOW}\nRunning mypy...${RESET}"
 	-@mypy . --warn-return-any --warn-unused-ignores \
 	--ignore-missing-imports --disallow-untyped-defs \
-	--check-untyped-defs && echo "${GREEN}✓ mypy passed${RESET}" || true
+	--check-untyped-defs --explicit-package-bases && \
+	echo "${GREEN}✓ mypy passed${RESET}" || true
 
 lint-strict:
 	@echo "${YELLOW}Running flake8...${RESET}"
 	@flake8 . --exclude=env && echo "${GREEN}✓ flake8 passed${RESET}" || true
-	
+
 	@echo "${YELLOW}Running mypy --strict...${RESET}"
-	@mypy . --strict && echo "${GREEN}✓ mypy --strict passed${RESET}"|| true
+	@mypy . --strict --explicit-package-bases && \
+	echo "${GREEN}✓ mypy --strict passed${RESET}"|| true
 
 help:
 	@echo "${BOLD}Available targets:${RESET}"
@@ -95,5 +97,6 @@ help:
 	@echo "${CYAN}  make lint-strict${RESET} - Run flake8 and mypy --strict"
 	@echo "${CYAN}  make clean${RESET}      - Remove cache folders"
 	@echo "${CYAN}  make fclean${RESET}     - Remove venv and cache"
+	@echo "${CYAN}  make wheel${RESET}     - Builds .whl from src/mazegen package"
 
-.PHONY: install wheel run debug clean fclean lint lint-strict help 
+.PHONY: install wheel run debug clean wheel fclean lint lint-strict help
