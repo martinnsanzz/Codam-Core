@@ -180,11 +180,37 @@ Once installed, `mazegen` behaves like any standard Python package and can be im
 
 ```python
 from mazegen import MazeGenerator
+mg = MazeGenerator(width = 10,
+                   height = 10,
+                   build_algorithm = "dfs",     # or "kruskal"
+                   solve_algorithm = "find",    # or "search", "shrink"
+                   perfect = True,
+                   seed = None,
+                   pattern = "42",              # or "square", "star", ""
+                   animation = None)
+maze = mg.generate()
+solution, steps = mg.solve(maze, (0,0), (9,9))  # (0,0) entry; (9,9) exit
+print(solution)                                 # Print the moves (eg. SEES)
+print(maze.get_print_string())                  # Print the maze to screen
 ```
 
+or ommiting the optional parameters:
+```python
+mg = MazeGenerator(width = 10,
+                   height = 10,
+                   build_algorithm = "dfs",
+                   solve_algorithm = "find",
+                   perfect = True)
+maze = mg.generate()
+solution, steps = mg.solve(maze, (0,0), (9,9))  # (0,0) entry; (9,9) exit
+print(solution)                                 # Print the moves (eg. SEES)
+print(maze.get_print_string())                  # Print the maze to screen
+```
+
+
 This module is build to be used on terminal. With the MazeGenerator instance you're able to
-generate() and solve() a maze_grid as long as the correct parameters are passed. Use docstrings
-for guidance.
+generate() and solve() a maze_grid as long as the correct parameters are passed. Use docstrings for more detailed guidance.
+
 
 ---
 

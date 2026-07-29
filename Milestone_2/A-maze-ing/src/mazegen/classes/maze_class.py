@@ -82,9 +82,9 @@ class Maze():
 
     def _get_maze(self) -> list[list[Pixel]]:
         """
-        Return the print 2D list of strings for the maze.
-        This refers to the string that draws the maze, not the hexadecimal
-        representation
+        Return the print 2D list of Pixels for the maze.
+        These represent not just cells, but also walls and
+        serve as basis for visual interpretation
         """
         col_cnt = (self._width * 2) + 1
         row_cnt = (self._height * 2) + 1
@@ -121,6 +121,12 @@ class Maze():
                     wall_pixels.add(Flag.EMPTY)
                 if len(wall_pixels) == 1:
                     grid[row][col].add_flag(wall_pixels.pop())
+        for i in range(row_cnt - 1):
+            grid[i][0].add_flag(Flag.WALL)
+            grid[i][col_cnt - 1].add_flag(Flag.WALL)
+            if i == 0 or i == (row_cnt - 1):
+                for j in range(0, col_cnt - 1):
+                    grid[i][j].add_flag(Flag.WALL)
         return grid
 
     def get_print_string(self) -> str:
@@ -133,7 +139,10 @@ class Maze():
         colors = {Flag.EMPTY: "  ",
                   Flag.SOLUTION: "\033[32m██\033[0m",
                   Flag.PATTERN: "\033[91m██\033[0m",
-                  Flag.WALL: "██"}
+                  Flag.WALL: "██",
+                  Flag.ENTRY: "\033[36m██\033[0m",
+                  Flag.EXIT: "\033[35m██\033[0m",
+                  }
         str_maze = []
         for row in pixels:
             str_row = [colors[p.read()] for p in row]
@@ -150,7 +159,8 @@ class Maze():
         pattern_height = len(pattern)
         pattern_width = max(col for row in pattern for col in row) + 1
 
-        if (self._width < pattern_width) or (self._height < pattern_height):
+        if (self._width < pattern_width + 2) \
+                or (self._height < pattern_height + 1):
             print("Maze is too small for this pattern")
             return
 
@@ -246,7 +256,8 @@ class Maze():
                                  [2, 3, 4, 5, 6, 7, 8],
                                  [1, 2, 3, 4, 5, 6, 7, 8, 9],
                                  [1, 2, 3, 7, 8, 9],
-                                 [2, 8]]
+                                 [2, 8],
+                                 []]
 
         _lookup: dict[str, list[list[int]]] = {
             "42": FORTY_TWO,

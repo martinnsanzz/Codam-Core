@@ -114,13 +114,13 @@ class MazeGenerator():
         """
         self._animation = animation
 
-    def solve(self, maze_grid: Maze, entry: tuple[int, int],
+    def solve(self, maze: Maze, entry: tuple[int, int],
               exit: tuple[int, int]) \
             -> tuple[str, list[tuple[int, int]]]:
         """Solve a maze between two points.
 
         Args:
-            maze_grid: Maze grid to solve.
+            maze: Maze to solve.
             entry: (row, col) coordinate of the starting cell. Min value (0, 0)
             exit: (row, col) coordinate of the target cell.
                   Max value (width - 1, height - 1)
@@ -149,7 +149,7 @@ class MazeGenerator():
 
         try:
             if self._solver:
-                self._solver.solve(maze_grid, entry, exit)
+                self._solver.solve(maze, entry, exit)
                 self._solver.animate(self._animation)
                 return self._solver.solution, self._solver.steps
         except BaseException as e:

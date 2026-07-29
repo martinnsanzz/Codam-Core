@@ -13,29 +13,29 @@
 # PERFECT       Is the maze perfect?            PERFECT=True
 #
 # Additional keys could be (e.g., seed, alghorithm, display mode)
-WIDTH=30
-HEIGHT=30
+WIDTH=20
+HEIGHT=20
 ENTRY=0,0
-EXIT=29,29
+EXIT=19,19
 OUTPUT_FILE=maze.txt
-PERFECT=False
+PERFECT=True
 BUILD_ANIM=False
 # SEED=0
 #
 # ------------ Valid build alghorithms ("kruskal", "dfs") ------------ #
 #
-BUILD_ALGORITHM=kruskal
+BUILD_ALGORITHM=dfs
 #
 # ------------ Valid maze patterns ("42", "square", "star") ------------ #
 #
-MAZE_PATTERN=square
+MAZE_PATTERN=42
 #
 # ------------ Valid solve alghorithms ------------ #
 # When PERFECT == True ("shrink", "find", "search")
 # When PERFECT == False ("find", "search")
 #
 #
-SOLVE_ALGORITHM=search
+SOLVE_ALGORITHM=find
 #
 #
 #
