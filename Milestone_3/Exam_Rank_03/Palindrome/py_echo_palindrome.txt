@@ -1,0 +1,37 @@
+    "py_echo_validator": {
+        "level": 2,
+        "subject": """\
+Assignment name  : py_echo_validator
+Expected files   : py_echo_validator.py
+Allowed functions: None
+--------------------------------------------------------------------------------
+
+Write a function that checks if a string is a palindrome,
+ignoring spaces and case.
+
+Your function must be declared as follows:
+
+    def echo_validator(text: str) -> bool:
+
+Examples:
+    echo_validator("racecar")                    -> True
+    echo_validator("A man a plan a canal Panama")-> True
+    echo_validator("race a car")                 -> False
+    echo_validator("Was it a car or a cat I saw")-> True
+    echo_validator("hello")                      -> False
+    echo_validator("Madam Im Adam")              -> True
+    echo_validator("")                           -> False
+""",
+        "function": "echo_validator",
+        "tests": [
+            (["racecar"],                      True),
+            (["A man a plan a canal Panama"],  True),
+            (["race a car"],                   False),
+            (["Was it a car or a cat I saw"],  True),
+            (["hello"],                        False),
+            (["Madam Im Adam"],                True),
+            ([""],                             False),
+            (["a"],                            True),
+            (["ab"],                           False),
+        ],
+    },
