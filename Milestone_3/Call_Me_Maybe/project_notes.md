@@ -97,3 +97,5 @@ Common applications include:
 
 [Constrained Decoding](https://www.aidancooper.co.uk/constrained-decoding/)
 [Implementing Constrained Decoding](https://medium.com/@albersj66/part-6-implementing-constrained-decoding-for-phi-3-vision-2c72a1be6a17)
+
+### Qwen / Qwen3-0.6B
