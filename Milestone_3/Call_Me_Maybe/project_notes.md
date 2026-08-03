@@ -52,8 +52,8 @@ The specific tokenization method varies by LLM. Common tokenization methods incl
 [Understand Tokens](https://learn.microsoft.com/en-us/dotnet/ai/conceptual/understanding-tokens)
 
 ### Function Calling
-Function calling is the ability to reliably connect LLMs to external tools to enable effective
-tool usage and interaction with external APIs.
+Function calling is the ability to reliably connect LLMs to external tools to enable
+effective tool usage and interaction with external APIs.
 
 LLMs like GPT-4 and GPT-3.5 have been fine-tuned to detect when a function needs to be called
 and then output *JSON* containing arguments to call the function. The functions that are being
