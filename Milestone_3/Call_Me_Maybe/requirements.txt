@@ -1,5 +1,0 @@
-pydantic
-numpy
-mypy
-flake8
-uv

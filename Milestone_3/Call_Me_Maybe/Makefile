@@ -1,38 +1,65 @@
 .ONESHELL:
 
-.DEFAULT_GOAL := install
+.DEFAULT_GOAL := help
 
-#COLORS
-GREEN = \033[1;92m
-RED = \033[1;91m
-YELLOW = \033[1;93m
-RESET = \033[0m
-PURPLE = \033[95m
-BLUE = \033[94m
-CYAN = \033[96m
-BOLD = \033[1m
-UNDERLINE = \033[4m
+# ------------------ Colors ------------------ #
+GREEN				:= \033[1;92m
+RED					:= \033[1;91m
+YELLOW				:= \033[1;93m
+RESET				:= \033[0m
+PURPLE				:= \033[95m
+BLUE				:= \033[94m
+CYAN				:= \033[96m
+BOLD				:= \033[1m
+UNDERLINE			:= \033[4m
 
-VENV = env
-PYTHON = $(VENV)/bin/python
-PIP = $(VENV)/bin/pip
+# ------------------ Paths  ------------------ #
+FUNC_DEF			:= data/input/functions_definition.json
+INPUT				:= data/input/function_calling_tests.json
+OUTPUT				:= data/output/function_calls.json
+
+# ------------------ Tools  ------------------ #
+VENV				:= .venv
+UV					:= ${VENV}/bin/uv
+RUN_COMM			:= ${UV} run python
+
+MYPY_FLAGS			:= . --warn-return-any --warn-unused-ignores \
+						--ignore-missing-imports --disallow-untyped-defs \
+						--check-untyped-defs --explicit-package-bases
+
+MYPY_STRICT_FLAGS	:= . --strict --explicit-package-bases
+
+STD_ARGS			:= --functions_definition ${FUNC_DEF} \
+					   --input ${INPUT} \
+					   --output ${OUTPUT}
 
 $(VENV):
 	@echo "${YELLOW}Creating virtual environment...${RESET}"
-	@python3 -m venv $(VENV)
+	@uv venv  --prompt Call_Me_Maybe > /dev/null 2>&1
 
 	@echo "${CYAN}	RUN 'source ./env/bin/activate \
 	('activate.fish' if using fish)${RESET}"
 
+# ------------------ Commands ------------------ #
+help:
+	@echo "${BOLD}Available commands:${RESET}"
+	@echo "${CYAN}  make install${RESET}     - Create venv and install dependencies with uv"
+	@echo "${CYAN}  make run${RESET}        - Run the program"
+	@echo "${CYAN}  make debug${RESET}      - Run with debugger (pdb by default)"
+	@echo "${CYAN}  make lint${RESET}       - Run flake8 and mypy"
+	@echo "${CYAN}  make lint-strict${RESET} - Run flake8 and mypy --strict"
+	@echo "${CYAN}  make clean${RESET}      - Remove cache folders"
+	@echo "${CYAN}  make fclean${RESET}     - Remove venv and cache"
+
 install: $(VENV)
 	@echo "${YELLOW}Installing dependencies...${RESET}"
-	@$(PIP) install -q -r requirements.txt > /dev/null 2>&1
+	@${UV} sync --link-mode=copy
 
-	@echo "${GREEN}Everything installed ${RESET}"
+	@echo "${GREEN}\nEverything installed ${RESET}"
 
 run: install
-	@echo "${GREEN}\nRunning $(PROG) !!${RESET}"
-	@$(PYTHON) $(PROG) $(CONFIG)
+	@echo "${GREEN}\nRunning... !!${RESET}"
+	@ ${RUN_COMM} -m src ${STD_ARGS}
 
 # debug: $(VENV) install
 # 	@echo "${PURPLE}Running $(PROG) in debug mode with $(DEBUGGER)...${RESET}"
@@ -46,12 +73,10 @@ clean:
 	@find . -type d -name __pycache__ -exec rm -rf {} +
 
 	@echo "${RED}Removing '.pyc' files.${RESET}"
-	@find . -type d -name *.pyc -exec rm -rf {} +
+	@find . -type f -name "*.pyc" -exec rm -rf {} +
 
 fclean: clean
-	@echo "${YELLOW}Exiting env..."
-	@$(VENV) deactivate
-	@echo "${RED}Removing 'env/' from root.${RESET}"
+	@echo "${RED}Removing '.venv'.${RESET}"
 	@rm -rf $(VENV)
 
 
@@ -59,30 +84,16 @@ fclean: clean
 
 lint:
 	@echo "${YELLOW}Running flake8...${RESET}"
-	-@flake8 . --exclude=env && echo "${GREEN}✓ flake8 passed${RESET}" || true
+	-@flake8 . && echo "${GREEN}✓ flake8 passed${RESET}" || true
 
 	@echo "${YELLOW}\nRunning mypy...${RESET}"
-	-@mypy . --warn-return-any --warn-unused-ignores \
-	--ignore-missing-imports --disallow-untyped-defs \
-	--check-untyped-defs --explicit-package-bases && \
-	echo "${GREEN}✓ mypy passed${RESET}" || true
+	-@mypy ${MYPY_FLAGS} && echo "${GREEN}✓ mypy passed${RESET}" || true
 
 lint-strict:
 	@echo "${YELLOW}Running flake8...${RESET}"
-	@flake8 . --exclude=env && echo "${GREEN}✓ flake8 passed${RESET}" || true
+	@flake8 . && echo "${GREEN}✓ flake8 passed${RESET}" || true
 
 	@echo "${YELLOW}Running mypy --strict...${RESET}"
-	@mypy . --strict --explicit-package-bases && \
-	echo "${GREEN}✓ mypy --strict passed${RESET}"|| true
-
-help:
-	@echo "${BOLD}Available targets:${RESET}"
-	@echo "${CYAN}  make install${RESET}     - Create venv and install dependencies"
-	@echo "${CYAN}  make run${RESET}        - Run the program"
-	@echo "${CYAN}  make debug${RESET}      - Run with debugger (pdb by default)"
-	@echo "${CYAN}  make lint${RESET}       - Run flake8 and mypy"
-	@echo "${CYAN}  make lint-strict${RESET} - Run flake8 and mypy --strict"
-	@echo "${CYAN}  make clean${RESET}      - Remove cache folders"
-	@echo "${CYAN}  make fclean${RESET}     - Remove venv and cache"
+	@mypy ${MYPY_STRICT_FLAGS} && echo "${GREEN}✓ mypy --strict passed${RESET}"|| true
 
 .PHONY: install wheel run debug clean fclean lint lint-strict help deactivate_env
