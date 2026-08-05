@@ -3,7 +3,8 @@ import argparse
 from pathlib import Path
 
 # Local Modules
-from .loader import load_functions, load_prompts
+from .loader import load_json
+from .test import testing
 
 def args_parser() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
@@ -29,8 +30,9 @@ def args_parser() -> argparse.Namespace:
 def _main() -> None:
     try:
         args = args_parser()
-        prompts = load_prompts(args.input)
-        functions = load_functions(args.functions_definition)
-        print(args)
+        prompts = load_json(args.input)
+        functions = load_json(args.functions_definition)
+
+        testing(prompts, functions)
     except argparse.ArgumentError as e:
-        print(f"\033[91mIncorrect Argument on command line:\n   - {e}\033[0m")
+        print(f"\033[91mIncorrect argument on command line:\n   - {e}\033[0m")

@@ -13,6 +13,7 @@ authors = [
 dependencies = [
     "numpy>=2.5.1",
     "pydantic>=2.13.4",
+    "llm_sdk",
 ]
 
 [dependency-groups]
@@ -35,3 +36,9 @@ exclude = [
     ".venv/",
     "llm_sdk/"
 ]
+
+[tool.uv.workspace]
+members = ["llm_sdk"]
+
+[tool.uv.sources]
+llm-sdk = { workspace = true }

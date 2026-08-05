@@ -8,7 +8,7 @@
 
 ## Description
 
-**Call-Me-Maybe** 
+**Call-Me-Maybe**
 
 ---
 
@@ -25,6 +25,7 @@ This is a list of multiple resources use through out the life-cycle of the proje
 [Function calling with LLMs](https://www.promptingguide.ai/applications/function_calling)
 [Understand Tokens](https://learn.microsoft.com/en-us/dotnet/ai/conceptual/understanding-tokens)
 [LLMs -WIKI](https://en.wikipedia.org/wiki/Large_language_model)
+[How do LLMs work](https://medium.com/data-science-at-microsoft/how-large-language-models-work-91c362f5b78f)
 
 ### VENV
 [UV and Environments](https://docs.astral.sh/uv/pip/environments/)
