@@ -27,6 +27,7 @@ This is a list of multiple resources use through out the life-cycle of the proje
 [LLMs -WIKI](https://en.wikipedia.org/wiki/Large_language_model)
 [How do LLMs work](https://medium.com/data-science-at-microsoft/how-large-language-models-work-91c362f5b78f)
 [Structured Output from LLMs](https://www.youtube.com/watch?v=xpvFinvqRCA)
+[Qwen Model](https://huggingface.co/Qwen/Qwen3-0.6B)
 
 ### VENV
 [UV and Environments](https://docs.astral.sh/uv/pip/environments/)
@@ -36,6 +37,10 @@ This is a list of multiple resources use through out the life-cycle of the proje
 [Argparse library](https://docs.python.org/3/library/argparse.html)
 [Argparse tutorial](https://www.youtube.com/watch?v=tirLko5urBo)
 [Working with JSON data in Python](https://realpython.com/python-json/)
+[Using Qwen in Python](https://qwen.readthedocs.io/en/stable/getting_started/quickstart.html)
+[Pytorch Doc](https://pytorch.org/)
+[Regular Expressions in Python](https://www.youtube.com/watch?v=wnuBwl2ekmo)
+[Python RegEx](https://www.w3schools.com/python/python_regex.asp)
 
 ---
 

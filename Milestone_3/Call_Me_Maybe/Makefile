@@ -53,7 +53,7 @@ help:
 
 install: $(VENV)
 	@echo "${YELLOW}Installing dependencies...${RESET}"
-	uv sync --link-mode=copy
+	@uv sync --link-mode=copy
 
 	@echo "${GREEN}\nEverything installed ${RESET}"
 
