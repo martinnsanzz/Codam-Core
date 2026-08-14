@@ -13,7 +13,7 @@ def run_pipeline(prompts: list[Prompt],
                  functions: list[dict[str, str]]) -> None:
     small_llm = Small_LLM_Model()
 
-    for i, prompt_obj in enumerate(prompts[:1]):
+    for i, prompt_obj in enumerate(prompts): # prompts[:1]
         answer = small_llm_answer(small_llm, prompt_obj.prompt)
         print(f"PROMPT NUMBER {i}")
         print(f"Prompt: {prompt_obj.prompt}", end="\n\n")
@@ -23,7 +23,7 @@ def run_pipeline(prompts: list[Prompt],
 
 def small_llm_answer(small_llm: Small_LLM_Model, prompt: str) -> str:
     tokenization = small_llm.encode(prompt).tolist()[0]
-    
+
     for _ in range(0, MAX_TOKENS):
         logits = small_llm.get_logits_from_input_ids(tokenization)
         np_lst = np.array(logits)
