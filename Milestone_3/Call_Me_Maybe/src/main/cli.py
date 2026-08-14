@@ -6,7 +6,6 @@ from pathlib import Path
 from .loader import load_json
 from .classes import Prompt
 from .runner import run_pipeline
-from llm_sdk import Small_LLM_Model
 
 def args_parser() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
@@ -30,8 +29,6 @@ def args_parser() -> argparse.Namespace:
     return args
 
 def _main() -> None:
-    small_llm = Small_LLM_Model()
-
     try:
         args = args_parser()
         raw_prompt = load_json(args.input)
@@ -40,7 +37,7 @@ def _main() -> None:
         prompts: list[Prompt] = []
         for item in raw_prompt:
             prompts.append(Prompt(prompt=item["prompt"]))
-        run_pipeline(small_llm, prompts, functions_definition)
+        run_pipeline(prompts, functions_definition)
 
     except argparse.ArgumentError as e:
         print(f"\033[91mIncorrect argument on command line:\n   - {e}\033[0m")
