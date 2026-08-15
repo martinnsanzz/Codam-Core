@@ -16,7 +16,8 @@ UNDERLINE			:= \033[4m
 # ------------------ Paths  ------------------ #
 FUNC_DEF			:= data/input/functions_definition.json
 INPUT				:= data/input/function_calling_tests.json
-OUTPUT				:= data/output/function_calls.json
+OUTPUT				:= data/output/function_calling_results.json
+TEST				:= data/test/prompt_test.json
 
 # ------------------ Tools  ------------------ #
 VENV				:= .venv
@@ -29,6 +30,8 @@ MYPY_FLAGS			:= . --warn-return-any --warn-unused-ignores \
 
 MYPY_STRICT_FLAGS	:= . --strict --explicit-package-bases
 
+TEST_ARG			:= --functions_definition ${FUNC_DEF} \
+					   --test ${TEST}
 STD_ARGS			:= --functions_definition ${FUNC_DEF} \
 					   --input ${INPUT} \
 					   --output ${OUTPUT}
@@ -45,6 +48,7 @@ help:
 	@echo "${BOLD}Available commands:${RESET}"
 	@echo "${CYAN}  make install${RESET}     - Create venv and install dependencies with uv"
 	@echo "${CYAN}  make run${RESET}        - Run the program"
+	@echo "${CYAN}  make test${RESET}        - Run the program with test .json file path"
 	@echo "${CYAN}  make debug${RESET}      - Run with debugger (pdb by default)"
 	@echo "${CYAN}  make lint${RESET}       - Run flake8 and mypy"
 	@echo "${CYAN}  make lint-strict${RESET} - Run flake8 and mypy --strict"
@@ -64,6 +68,10 @@ run: install
 # debug: $(VENV) install
 # 	@echo "${PURPLE}Running $(PROG) in debug mode with $(DEBUGGER)...${RESET}"
 # 	@$(PYTHON) -m pdb $(PROG) $(CONFIG) 2>/dev/null
+
+test: install
+	@echo "${GREEN}\nRunning with test file... !!${RESET}"
+	@ ${RUN_COMM} -m src ${TEST_ARG}
 
 clean:
 	@echo "${RED}Removing '.mypy_cache' folders.${RESET}"
@@ -96,4 +104,4 @@ lint-strict:
 	@echo "${YELLOW}Running mypy --strict...${RESET}"
 	@mypy ${MYPY_STRICT_FLAGS} && echo "${GREEN}✓ mypy --strict passed${RESET}"|| true
 
-.PHONY: install wheel run debug clean fclean lint lint-strict help deactivate_env
+.PHONY: install wheel run test debug clean fclean lint lint-strict help
