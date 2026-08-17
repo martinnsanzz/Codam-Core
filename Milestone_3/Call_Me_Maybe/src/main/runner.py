@@ -8,8 +8,8 @@ from llm_sdk import Small_LLM_Model
 
 MAX_TOKENS = 50
 
-def run_pipeline(prompts: list[Prompt],
-                 functions: list[dict[str, str]]) -> None:
+
+def run_pipeline(prompts: list[Prompt]) -> None:
     small_llm = Small_LLM_Model()
 
     for i, prompt_obj in enumerate(prompts): # prompts[:1]

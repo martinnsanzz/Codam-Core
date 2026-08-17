@@ -1,12 +1,13 @@
 # Built-in Modules
 import argparse
 from pathlib import Path
+import re
 
 # Local Modules
-from .loader import load_json
-from .classes import Prompt
+from .loader import load_json, check_prompt_json, build_function_lookup
 from .runner import run_pipeline
 from .utils import CustomError
+from .schema import check_regex
 
 def args_parser() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
@@ -35,27 +36,22 @@ def args_parser() -> argparse.Namespace:
 def _main() -> None:
     try:
         args = args_parser()
-        raw_prompt = load_json(args.test) if args.test else load_json(args.input)
-        functions_definition = load_json(args.functions_definition)
-        prompts: list[Prompt] = []
+        prompt_json = load_json(args.test) if args.test else load_json(args.input)
+        functions_json = load_json(args.functions_definition)
 
-        if not raw_prompt:
-            raise CustomError("No prompt found. Add a prompt to '.json file'")
-        print(functions_definition)
-        if isinstance(raw_prompt, list):
-            for item in raw_prompt:
-                if not item["prompt"]:
-                    raise CustomError("Empty prompt found, fix this !!")
-                prompts.append(Prompt(prompt=item["prompt"]))
-        else:
-            if not raw_prompt["prompt"]:
-                raise CustomError("Empty prompt found, fix this !!")
-            prompts.append(Prompt(prompt=raw_prompt["prompt"]))
+        prompts = check_prompt_json(prompt_json)
+        functions_lookup = build_function_lookup(functions_json)
 
-        run_pipeline(prompts, functions_definition)
+        regex = check_regex("string")
+        print(regex.pattern)
+        print(re.match(regex, '"hello"'))
+        # run_pipeline(prompts)
     except argparse.ArgumentError as e:
         print(f"\033[91mIncorrect argument on command line:\n   - {e}\033[0m")
+        quit()
     except KeyError :
         print(f"\033[91mExpected key in '.json file': 'prompt'\033[0m")
+        quit()
     except CustomError as e:
         print(f"\033[91mERROR:\n   - {e}\033[0m")
+        quit()
