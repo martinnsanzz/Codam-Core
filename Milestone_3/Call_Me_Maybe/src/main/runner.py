@@ -1,6 +1,8 @@
 # Built-in Modules
-import numpy as np
 from random import choice
+
+# Installed modules
+import numpy as np
 
 # Local Modules
 from .classes import Prompt
