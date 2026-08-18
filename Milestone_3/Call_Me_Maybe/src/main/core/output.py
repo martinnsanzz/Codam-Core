@@ -1,13 +1,9 @@
 # Built-in modules
 from json import dump, loads
-from typing import Any
 from pathlib import Path
 
-# Local modules
 
-
-def write_output(output_file: Path, llm_output: str) -> None:
-    json_content = loads(llm_output)
-
+def write_output(output_file: Path, llm_output: list[str]) -> None:
     with open(output_file, 'w') as f:
-        dump(json_content, fp=f, indent=4)
+        llm_formated = [loads(obj) for obj in llm_output]
+        dump(llm_formated, fp=f, indent=4)

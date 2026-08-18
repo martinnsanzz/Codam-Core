@@ -14,11 +14,13 @@ from .core.runner import test_decoding
 def _main() -> None:
     try:
         args = args_parser()
-        # engine = setup_engine(args)
+        engine = setup_engine(args)
 
-        test_decoding()
+        test = engine.test()
+        print(test)
+        # test_decoding()
         # test = '{"name": "fn_add_numbers", "parameters": {"a": 2.0, "b": 3.0}}'
-        # write_output(args.output, test)
+        write_output(args.output, test)
 
     except ArgumentError as e:
         print(f"\033[91mIncorrect argument on command line:\n   - {e}\033[0m")

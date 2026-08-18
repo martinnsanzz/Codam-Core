@@ -1,5 +1,6 @@
 # Built-in modules
 from typing import Any, Optional, TypeAlias
+from json import dumps
 
 # Installed modules
 from pydantic import BaseModel, Field
@@ -29,3 +30,10 @@ class Prompt(BaseModel):
             f"<|im_start|>user\n{self.prompt}<|im_end|>\n"
             f"<|im_start|>assistant\n"
         )
+
+    def get_output(self, function_lookup: FunctionLookup) -> str:
+        prompt_str = f'"prompt": "{self.prompt}",'
+        name_str = f'"name": "{self.name}",'
+        parameters_str = f'"parameters": {dumps(self.parameters)}'
+
+        return "{" + prompt_str + name_str + parameters_str + "}"
