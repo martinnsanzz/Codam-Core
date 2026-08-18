@@ -28,6 +28,7 @@ This is a list of multiple resources use through out the life-cycle of the proje
 [How do LLMs work](https://medium.com/data-science-at-microsoft/how-large-language-models-work-91c362f5b78f)
 [Structured Output from LLMs](https://www.youtube.com/watch?v=xpvFinvqRCA)
 [Qwen Model](https://huggingface.co/Qwen/Qwen3-0.6B)
+[Qwen Docs](https://qwen.readthedocs.io/en/latest/getting_started/concepts.html)
 [How Constrained Decoding Works](https://medium.com/@sebuzdugan/make-invalid-json-impossible-how-constrained-decoding-actually-works-5a512106396a)
 
 ### VENV

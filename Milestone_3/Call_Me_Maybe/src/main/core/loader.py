@@ -4,7 +4,7 @@ from json import loads, JSONDecodeError
 from typing import Any
 
 # Local modules
-from .exceptions import CustomError
+from ..exceptions import CustomError
 
 
 def load_json(json_file: Path) -> list[dict[str, Any]]:

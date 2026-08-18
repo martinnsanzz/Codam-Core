@@ -23,6 +23,7 @@ TEST				:= data/test/prompt_test.json
 VENV				:= .venv
 UV					:= ${VENV}/bin/uv
 RUN_COMM			:= ${UV} run python
+DEBUGGER			:= pdb
 
 MYPY_FLAGS			:= . --warn-return-any --warn-unused-ignores \
 						--ignore-missing-imports --disallow-untyped-defs \
@@ -65,9 +66,9 @@ run: install
 	@echo "${GREEN}\nRunning... !!${RESET}"
 	@ ${RUN_COMM} -m src ${STD_ARGS}
 
-# debug: $(VENV) install
-# 	@echo "${PURPLE}Running $(PROG) in debug mode with $(DEBUGGER)...${RESET}"
-# 	@$(PYTHON) -m pdb $(PROG) $(CONFIG) 2>/dev/null
+debug: $(VENV) install
+	@echo "${PURPLE}Running in debug mode with $(DEBUGGER)...${RESET}"
+	@$(RUN_COMM) -m $(DEBUGGER) -m src $(TEST_ARG)
 
 test: install
 	@echo "${GREEN}\nRunning with test file... !!${RESET}"

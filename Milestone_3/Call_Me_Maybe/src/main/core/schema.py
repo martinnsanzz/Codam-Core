@@ -1,16 +1,16 @@
 # Built-in modules
 from typing import Pattern, TypeAlias, Any
-from re import compile
+from re import compile, fullmatch
 
 # Local Modules
-from .exceptions import CustomError
+from ..exceptions import CustomError
 
 FunctionsList: TypeAlias = list[dict[str, Any]]
 FunctionLookup: TypeAlias = dict[str, dict[str, Any]]
 
 
 STRING_PATTERN = r'^"(?:[^"\\\x00-\x1f]|\\[nrtbf"\\/]|\\u[0-9a-fA-F]{4})*"$'
-NUMBER_PATTERN = r'^-?\d+(\.\d+)?([eE][+-]?\d+)?$'
+NUMBER_PATTERN = r'^-?\d+(\.\d+)?$'
 
 
 def build_function_lookup(functions_json: FunctionsList) -> FunctionLookup:
@@ -46,9 +46,5 @@ def check_regex(value: str) -> Pattern[str]:
             raise CustomError(f"Invalid value. Accepted values {accepted_values}")
 
 
-def partial_regex_validation():
-    pass
-
-
-def full_regex_validation():
-    pass
+def full_regex_validation(total_str: str, regex: Pattern) -> bool:
+    return bool(fullmatch(regex, total_str))
