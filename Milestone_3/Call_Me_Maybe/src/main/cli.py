@@ -2,6 +2,7 @@
 from argparse import Namespace, ArgumentParser, ArgumentError
 from pathlib import Path
 import time
+
 # Local Modules
 from llm_sdk import Small_LLM_Model
 from .classes import Prompt
@@ -13,14 +14,14 @@ from .core import load_json, build_function_lookup, Engine, write_output, Custom
 def _main() -> None:
     try:
         # test()
-        # start = time.time()
+        start = time.time()
         args = args_parser()
         engine = setup_engine(args)
         llm_output = engine.prompt_loop()
 
         write_output(args.output, llm_output)
-        # end = time.time()
-        # print(f"\nTotal runtime of program: {end - start}")
+        end = time.time()
+        print(f"\nTotal runtime of program: {end - start}")
     except ArgumentError as e:
         print(f"\033[91mIncorrect argument on command line:\n   - {e}\033[0m")
         quit()

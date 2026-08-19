@@ -3,7 +3,7 @@ from enum import Enum, auto
 from typing import Optional
 from json import loads
 from re import compile, Pattern, match
-from random import choice
+import time
 
 # Installed modules
 from pydantic import BaseModel, Field, ConfigDict
@@ -106,7 +106,10 @@ class Engine(BaseModel):
 
             while state_machine.current_state != GenerationState.END:
                 if state_machine.current_state == GenerationState.FUNC:
+                    start = time.time()
                     self.llm_get_function(id_to_token, prompt_obj)
+                    end = time.time()
+                    print(f"Total function time: {end - start}")
                 elif state_machine.current_state == GenerationState.PARAM:
                     self.llm_get_param(id_to_token, prompt_obj)
                 state_machine.get_state()
@@ -119,11 +122,10 @@ class Engine(BaseModel):
         """Decode tokens until a valid function name is assembled.
 
         Repeatedly masks the model's logits to only the token IDs whose
-        string is a valid name character (per ``VALID_NAME_CHARS``) and
-        whose accumulated text is a prefix of a known function name,
-        picks the highest-scoring allowed token, and appends it. Sets
-        ``prompt_obj.name`` once the accumulated text exactly matches an
-        entry in ``functions_lookup``.
+        string is a valid name character and whose accumulated text is
+        a prefix of a known function name, picks the highest-scoring 
+        allowed token, and appends it. Sets ``prompt_obj.name`` once the 
+        accumulated text exactly matches an entry in ``functions_lookup``.
 
         Args:
             id_to_token: Mapping from vocabulary token ID to token string.
@@ -131,7 +133,9 @@ class Engine(BaseModel):
                 in place once decoding completes.
         """
         function_names = list(self.functions_lookup.keys())
-        candidates = self.filter_id_to_token(id_to_token, VALID_FUNC_CHARS)
+
+        tokenize_funcs = self.small_llm.encode(''.join(function_names)).tolist()[0]
+        candidates = {id: str for id, str in id_to_token.items() if id in tokenize_funcs}
 
         prompt_text = prompt_obj.build_prompt(
             "func",
@@ -150,11 +154,7 @@ class Engine(BaseModel):
                 total = accumulated + candidate
                 if any(name.startswith(total) for name in function_names):
                     np_array[token_id] = logits[token_id]
-            # print(np_array[np_array != -np.inf])
-            # legal_ids = np.where(np_array != -np.inf)[0]
-            # for token_id in legal_ids:
-            #     print(self.small_llm.decode([token_id]))
-            #     print(token_id, np_array[token_id])
+
             best_id = int(np.argmax(np_array))
             best_str = id_to_token.get(best_id, "")
 
@@ -172,18 +172,18 @@ class Engine(BaseModel):
 
         for param_name, param_info in function_param.items():
             param_type = param_info["type"]
-            regex_to_use = VALID_NUM_CHARS if param_type == "number" else VALID_STR_CHARS
-
+    
             prompt_text = prompt_obj.build_prompt(
                 "param",
                 chosen_function_name=prompt_obj.name,
                 param_spec=f"{param_name}: {param_type}",
             )
 
-            candidates = self.filter_id_to_token(id_to_token, regex_to_use)
+            candidates = self.filter_id_to_token(id_to_token, param_type)
             print(candidates)
+            quit()
             tokenization = self.small_llm.encode(prompt_text).tolist()[0]
-            accumulated = ""
+            accumulated = '"' if param_type == "string" else ""
 
             while True:
                 logits = self.small_llm.get_logits_from_input_ids(tokenization)
@@ -191,28 +191,28 @@ class Engine(BaseModel):
                 np_array[:] = -np.inf
 
                 for token_id in candidates.keys():
-                    np_array[token_id] = logits[token_id]
-
-                # sorted_indices = np_array.argsort()[-5:]
-                # top = {}
-                # for i in sorted_indices.tolist():
-                #     top.update({i: logits[i]})
-                # best_id = choice(list(top.keys()))
+                        np_array[token_id] = logits[token_id]
 
                 best_id = int(np.argmax(np_array))
                 best_str = id_to_token.get(best_id, "")
+                print(best_str)
 
                 accumulated += best_str
                 tokenization.append(best_id)
 
                 full_regex = NUMBER_PATTERN if param_type == "number" else STRING_PATTERN
-                if match(full_regex, accumulated) and any(c.isdigit() for c in accumulated):
-                    prompt_obj.parameters[param_name] = accumulated
+                is_complete = match(full_regex, accumulated)
+
+                if param_type == "number":
+                    is_complete = is_complete and any(c.isdigit() for c in accumulated)
+
+                if is_complete:
+                    value = accumulated.strip('"') if param_type == "string" else accumulated
+                    prompt_obj.parameters[param_name] = value
                     break
 
-    @staticmethod
-    def filter_id_to_token(id_to_token: dict[int, str],
-                           pattern: Pattern) -> dict[int, str]:
+    def filter_id_to_token(self, id_to_token: dict[int, str],
+                           type: str) -> dict[int, str]:
         """Keep only vocabulary entries whose token string matches a pattern.
 
         Args:
@@ -223,12 +223,15 @@ class Engine(BaseModel):
             dict[int, str]: Subset of ``id_to_token`` whose values are
             non-empty and match ``pattern``.
         """
-        filtered_id_to_token = {}
+        pattern = VALID_NUM_CHARS if type == "number" else VALID_STR_CHARS
+
+        filtered = {}
 
         for token_id, token_str in id_to_token.items():
             if token_str and pattern.match(token_str):
-                filtered_id_to_token.update({token_id: token_str})
-        return filtered_id_to_token
+                filtered.update({token_id: token_str})
+
+        return filtered
 
     @staticmethod
     def check_regex(value: str) -> Pattern[str]:
