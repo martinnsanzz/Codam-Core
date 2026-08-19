@@ -2,7 +2,7 @@
 from enum import Enum, auto
 from typing import Optional
 from json import loads
-from re import compile, Pattern, match
+from re import compile, Pattern, match, findall
 import time
 
 # Installed modules
@@ -20,8 +20,12 @@ VALID_FUNC_CHARS = compile(r'^[a-z0-9_]+$')
 VALID_NUM_CHARS = compile(r'^-?\d*\.?\d*$')
 VALID_STR_CHARS = compile(r'^[\x20-\x7e]+$')
 
-STRING_PATTERN = compile(r'^"(?:[^"\\\x00-\x1f]|\\[nrtbf"\\/]|\\u[0-9a-fA-F]{4})*"$')
+STRING_PATTERN = compile(r'^(?:[^"\\\x00-\x1f]|\\[nrtbf"\\/]|\\u[0-9a-fA-F]{4})*$')
 NUMBER_PATTERN = compile(r'^-?\d+(\.\d+)?$')
+
+QUOTED_PHRASE = compile(r'["\']([^"\']*)["\']')
+DBL_QUOTED_PHRASE = compile(r'"([^"]*)"')
+SGL_QUOTED_PHRASE = compile(r"'([^']*)'")
 
 
 class GenerationState(Enum):
@@ -169,6 +173,7 @@ class Engine(BaseModel):
                       prompt_obj: Prompt) -> None:
         # prompt_obj.parameters = {"a": "h", "b": "f"}
         function_param = self.functions_lookup[prompt_obj.name]["parameters"]
+        words_prompt = self.divide_prompt(prompt_obj.prompt)
 
         for param_name, param_info in function_param.items():
             param_type = param_info["type"]
@@ -180,17 +185,19 @@ class Engine(BaseModel):
             )
 
             candidates = self.filter_id_to_token(id_to_token, param_type)
-            print(candidates)
-            quit()
+
             tokenization = self.small_llm.encode(prompt_text).tolist()[0]
-            accumulated = '"' if param_type == "string" else ""
+            accumulated = ""
 
             while True:
+
                 logits = self.small_llm.get_logits_from_input_ids(tokenization)
                 np_array = np.array(logits)
                 np_array[:] = -np.inf
 
-                for token_id in candidates.keys():
+                for token_id, candidate in candidates.items():
+                    total = accumulated + candidate
+                    if any(name.startswith(total) for name in words_prompt):
                         np_array[token_id] = logits[token_id]
 
                 best_id = int(np.argmax(np_array))
@@ -200,15 +207,9 @@ class Engine(BaseModel):
                 accumulated += best_str
                 tokenization.append(best_id)
 
-                full_regex = NUMBER_PATTERN if param_type == "number" else STRING_PATTERN
-                is_complete = match(full_regex, accumulated)
-
-                if param_type == "number":
-                    is_complete = is_complete and any(c.isdigit() for c in accumulated)
-
-                if is_complete:
-                    value = accumulated.strip('"') if param_type == "string" else accumulated
-                    prompt_obj.parameters[param_name] = value
+                if accumulated in words_prompt:
+                    words_prompt.remove(accumulated)
+                    prompt_obj.parameters[param_name] = accumulated
                     break
 
     def filter_id_to_token(self, id_to_token: dict[int, str],
@@ -234,10 +235,33 @@ class Engine(BaseModel):
         return filtered
 
     @staticmethod
-    def check_regex(value: str) -> Pattern[str]:
+    def divide_prompt(prompt: str) -> list[str]:
+        words_in_prompt = []
+
+        if '"' in prompt or "'" in prompt:
+            dbl_extracted = DBL_QUOTED_PHRASE.findall(prompt)
+            sing_extracted = SGL_QUOTED_PHRASE.findall(prompt)
+            remaining = QUOTED_PHRASE.sub("", prompt).split()
+
+            if dbl_extracted:
+                for quote in dbl_extracted:
+                    words_in_prompt.append('"' + quote + '"')
+
+            if sing_extracted:
+                for quote in sing_extracted:
+                    words_in_prompt.append("'" + quote + "'")
+
+            for word in remaining:
+                words_in_prompt.append(word)
+
+            return words_in_prompt
+        return prompt.split()
+
+    @staticmethod
+    def check_regex(type: str) -> Pattern[str]:
         accepted_values = ["string", "number"]
 
-        match value:
+        match type:
             case "string":
                 return compile(STRING_PATTERN)
             case "number":
