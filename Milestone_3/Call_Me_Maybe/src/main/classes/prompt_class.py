@@ -11,11 +11,11 @@ class Prompt(BaseModel):
     name: Optional[str] = Field(default="")
     parameters: Optional[dict[str, Any]] = Field(default={})
 
-    def build_prompt(self, state: str,
+    def sys_prompt(self, state: str,
                      function_names: Optional[str] = "",
+                     fn_description: Optional[str] = "",
                      chosen_function_name: Optional[str] = "",
                      param_spec: Optional[dict[str, Any]] = None) -> str:
-
         system_content_func = (
             "You are a function-selection system. Given a user request, respond with "
             "only the name of the single most suitable function from the list below. "
@@ -29,6 +29,7 @@ class Prompt(BaseModel):
             "by the function below. Extract the correct values for each parameter from "
             "the user's request, matching the required type exactly.\n\n"
             f"Function: {chosen_function_name}\n"
+            f"Function description: {fn_description}"
             f"Parameters required: {param_spec}\n\n"
             "Do not include any explanation, reasoning, or extra text — output only the "
             "parameter values."

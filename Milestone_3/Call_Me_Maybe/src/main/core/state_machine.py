@@ -141,7 +141,7 @@ class Engine(BaseModel):
         tokenize_funcs = self.small_llm.encode(''.join(function_names)).tolist()[0]
         candidates = {id: str for id, str in id_to_token.items() if id in tokenize_funcs}
 
-        prompt_text = prompt_obj.build_prompt(
+        prompt_text = prompt_obj.sys_prompt(
             "func",
             function_names='|'.join(function_names)
         )
@@ -178,9 +178,10 @@ class Engine(BaseModel):
         for param_name, param_info in function_param.items():
             param_type = param_info["type"]
     
-            prompt_text = prompt_obj.build_prompt(
+            prompt_text = prompt_obj.sys_prompt(
                 "param",
                 chosen_function_name=prompt_obj.name,
+                fn_description=self.functions_lookup[prompt_obj.name]["description"],
                 param_spec=f"{param_name}: {param_type}",
             )
 
@@ -202,7 +203,6 @@ class Engine(BaseModel):
 
                 best_id = int(np.argmax(np_array))
                 best_str = id_to_token.get(best_id, "")
-                print(best_str)
 
                 accumulated += best_str
                 tokenization.append(best_id)
@@ -256,15 +256,3 @@ class Engine(BaseModel):
 
             return words_in_prompt
         return prompt.split()
-
-    @staticmethod
-    def check_regex(type: str) -> Pattern[str]:
-        accepted_values = ["string", "number"]
-
-        match type:
-            case "string":
-                return compile(STRING_PATTERN)
-            case "number":
-                return compile(NUMBER_PATTERN)
-            case _:
-                raise CustomError(f"Invalid value. Accepted values {accepted_values}")

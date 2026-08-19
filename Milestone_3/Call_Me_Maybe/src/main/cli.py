@@ -81,7 +81,6 @@ def setup_engine(args: Namespace) -> Engine:
     prompts: list[Prompt] = []
     for item in prompt_json:
         prompt = Prompt(prompt=item["prompt"].rstrip("?."))
-        prompt.build_prompt(functions_lookup)
 
         prompts.append(prompt)
 
