@@ -1,27 +1,26 @@
 # Built-in Modules
 from argparse import Namespace, ArgumentParser, ArgumentError
 from pathlib import Path
-
+import time
 # Local Modules
-from .exceptions import CustomError
-from .classes import Prompt
-from .core import load_json, build_function_lookup, Engine, write_output
 from llm_sdk import Small_LLM_Model
+from .classes import Prompt
+from .core import load_json, build_function_lookup, Engine, write_output, CustomError
 
-from .core.runner import test_decoding
+
 
 
 def _main() -> None:
     try:
+        # test()
+        # start = time.time()
         args = args_parser()
         engine = setup_engine(args)
+        llm_output = engine.prompt_loop()
 
-        test = engine.test()
-        print(test)
-        # test_decoding()
-        # test = '{"name": "fn_add_numbers", "parameters": {"a": 2.0, "b": 3.0}}'
-        write_output(args.output, test)
-
+        write_output(args.output, llm_output)
+        # end = time.time()
+        # print(f"\nTotal runtime of program: {end - start}")
     except ArgumentError as e:
         print(f"\033[91mIncorrect argument on command line:\n   - {e}\033[0m")
         quit()
@@ -31,6 +30,18 @@ def _main() -> None:
     except CustomError as e:
         print(f"\033[91mERROR:\n   - {e}\033[0m")
         quit()
+
+def test():
+    num = "5.0"
+    print(num.isdigit())
+    # small_llm = Small_LLM_Model()
+
+    # prompt = "2.hello0"
+    # tokeniazer = small_llm.encode(prompt).tolist()[0]
+
+    # print(tokeniazer)
+    # for token in tokeniazer:
+    #     print(f"Token '{token}': '{small_llm.decode([token])}'")
 
 
 def args_parser() -> Namespace:
