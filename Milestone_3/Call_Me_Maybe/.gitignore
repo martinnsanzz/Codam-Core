@@ -9,3 +9,6 @@ __pycache__
 
 # Virtual Environment
 .venv
+
+# Random stuff
+test.txt
