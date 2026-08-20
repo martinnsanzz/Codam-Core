@@ -11,6 +11,18 @@ FunctionLookup: TypeAlias = dict[str, dict[str, Any]]
 
 
 def load_json(json_file: Path) -> list[dict[str, Any]]:
+    """Load and parse a JSON file into a list of dictionaries.
+
+    Args:
+        json_file (Path): Path to the JSON file to load.
+
+    Returns:
+        list[dict[str, Any]]: The parsed JSON content.
+
+    Raises:
+        CustomError: If the file is empty, does not exist, or contains
+            malformed JSON.
+    """
     try:
         with open(json_file) as f:
             raw_content = f.read()
@@ -25,12 +37,34 @@ def load_json(json_file: Path) -> list[dict[str, Any]]:
 
 
 def build_function_lookup(functions_json: FunctionsList) -> FunctionLookup:
+    """Build and validate a name-keyed lookup table of function definitions."""
     function_lookup = {func["name"]: func for func in functions_json}
 
     return validate_functions(function_lookup)
 
 
 def validate_functions(functions_lookup: FunctionLookup) -> FunctionLookup:
+    """Validate that all parameter and return types are accepted types.
+
+    Checks every function definition in ``functions_lookup`` and
+    ensures each parameter's ``"type"`` and the function's
+    ``"returns"["type"]`` are one of ``"string"`` or ``"number"``.
+
+    Args:
+        functions_lookup (FunctionLookup): Mapping of function name to
+            its definition dict, each expected to contain
+            ``"parameters"`` (mapping of param name to a dict with a
+            ``"type"`` key) and ``"returns"`` (a dict with a
+            ``"type"`` key).
+
+    Returns:
+        FunctionLookup: The same ``functions_lookup``, unchanged, if
+            all types are valid.
+
+    Raises:
+        CustomError: If any parameter type or return type is not in
+            ``["string", "number"]``.
+    """
     accepted_types = ["string", "number"]
 
     for item in functions_lookup:

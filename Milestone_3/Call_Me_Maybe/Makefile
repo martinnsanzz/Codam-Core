@@ -36,6 +36,10 @@ TEST_ARG			:= --functions_definition ${FUNC_DEF} \
 STD_ARGS			:= --functions_definition ${FUNC_DEF} \
 					   --input ${INPUT} \
 					   --output ${OUTPUT}
+VISUAL_ARGS			:= --functions_definition ${FUNC_DEF} \
+					   --input ${INPUT} \
+					   --output ${OUTPUT} \
+					   --visual_mode True
 
 $(VENV):
 	@echo "${YELLOW}Creating virtual environment...${RESET}"
@@ -74,6 +78,10 @@ test: install
 	@echo "${GREEN}\nRunning with test file... !!${RESET}"
 	@ ${RUN_COMM} -m src ${TEST_ARG}
 
+visual: install
+	@echo "${GREEN}\nRunning in visual mode... !!${RESET}"
+	@ ${RUN_COMM} -m src ${VISUAL_ARGS}
+
 clean:
 	@echo "${RED}Removing '.mypy_cache' folders.${RESET}"
 	@find . -type d -name .mypy_cache -exec rm -rf {} +
@@ -105,4 +113,4 @@ lint-strict:
 	@echo "${YELLOW}Running mypy --strict...${RESET}"
 	@mypy ${MYPY_STRICT_FLAGS} && echo "${GREEN}✓ mypy --strict passed${RESET}"|| true
 
-.PHONY: install wheel run test debug clean fclean lint lint-strict help
+.PHONY: install wheel run test visual debug clean fclean lint lint-strict help

@@ -1,12 +1,27 @@
 # Built-in modules
-from typing import Any, Optional
+from typing import Any, Optional, TypeAlias
 from json import dumps
 
 # Installed modules
 from pydantic import BaseModel, Field
 
+FunctionLookup: TypeAlias = dict[str, dict[str, Any]]
+
 
 class Prompt(BaseModel):
+    """Represent a single user prompt and its function-calling state.
+
+    Holds the raw prompt text plus the (optionally) selected function
+    name and extracted parameters, and builds the chat-formatted
+    system/user prompts sent to the LLM at each stage.
+
+    Attributes:
+        prompt (str): The raw user prompt text.
+        name (Optional[str]): Name of the function selected for this
+            prompt.
+        parameters (Optional[dict[str, Any]]): Extracted parameter
+            values for the selected function.
+    """
     prompt: str = Field(default="")
     name: Optional[str] = Field(default="")
     parameters: Optional[dict[str, Any]] = Field(default={})
@@ -14,8 +29,9 @@ class Prompt(BaseModel):
     def sys_prompt(self, state: str,
                      function_names: Optional[str] = "",
                      fn_description: Optional[str] = "",
-                     chosen_function_name: Optional[str] = "",
                      param_spec: Optional[dict[str, Any]] = None) -> str:
+        """Build a chat-formatted prompt for the current pipeline stage."""
+        
         system_content_func = (
             "You are a function-selection system. Given a user request, respond with "
             "only the name of the single most suitable function from the list below. "
@@ -28,8 +44,8 @@ class Prompt(BaseModel):
             "You are a parameter-extraction system. The user's request will be handled "
             "by the function below. Extract the correct values for each parameter from "
             "the user's request, matching the required type exactly.\n\n"
-            f"Function: {chosen_function_name}\n"
-            f"Function description: {fn_description}"
+            f"Function: {self.name}\n"
+            f"Function description: {fn_description}\n"
             f"Parameters required: {param_spec}\n\n"
             "Do not include any explanation, reasoning, or extra text — output only the "
             "parameter values."
@@ -43,6 +59,12 @@ class Prompt(BaseModel):
         )
 
     def get_output(self) -> str:
+        """Serialize the prompt's result fields to a JSON object string.
+
+        Manually builds a JSON string containing ``prompt``, ``name``,
+        and ``parameters``, each individually JSON-encoded via
+        ``dumps``.
+        """
         prompt_str = f'"prompt": {dumps(self.prompt)}, '
         func_str = f'"name": {dumps(self.name)}, '
         param_str = f'"parameters": {dumps(self.parameters)}'

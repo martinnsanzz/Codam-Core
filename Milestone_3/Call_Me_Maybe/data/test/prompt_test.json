@@ -1,5 +1,8 @@
 [
     {
-    "prompt": "Greet john"
+    "prompt": "Reverse the string 'hello'"
+    },
+    {
+    "prompt": "Reverse the string 'world'"
     }
 ]
