@@ -39,7 +39,11 @@ exclude = [
 ]
 
 [tool.uv.workspace]
-members = ["llm_sdk"]
+members = [
+    "llm_sdk",
+    "moulinette",
+]
 
 [tool.uv.sources]
 llm-sdk = { workspace = true }
+moulinette = { workspace = true }

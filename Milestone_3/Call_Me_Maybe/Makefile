@@ -55,6 +55,7 @@ help:
 	@echo "${CYAN}  make run${RESET}        - Run the program"
 	@echo "${CYAN}  make test${RESET}        - Run the program with test .json file path"
 	@echo "${CYAN}  make debug${RESET}      - Run with debugger (pdb by default)"
+	@echo "${CYAN}  make visual${RESET}      - Run the program showing each step"
 	@echo "${CYAN}  make lint${RESET}       - Run flake8 and mypy"
 	@echo "${CYAN}  make lint-strict${RESET} - Run flake8 and mypy --strict"
 	@echo "${CYAN}  make clean${RESET}      - Remove cache folders"
