@@ -110,6 +110,11 @@ class Engine(BaseModel):
         self.id_to_token = {token_id: token_str for token_str,
                             token_id in vocab_dict.items()}
 
+        self.id_to_token = {
+            token_id: token_str.replace('\u0120', ' ')
+            for token_str, token_id in vocab_dict.items()
+        }
+
     def prompt_loop(self) -> list[str]:
         """Resolve each prompt's function name and parameters via decoding.
 
@@ -249,7 +254,7 @@ class Engine(BaseModel):
         candidates = self.filter_id_to_token(id_to_token, param_type)
         tokenization = self.small_llm.encode(prompt_text).tolist()[0]
         accumulated = ""
-
+        print(words_prompt)
         while True:
             logits = self.small_llm.get_logits_from_input_ids(tokenization)
             np_array = np.array(logits)
@@ -257,7 +262,16 @@ class Engine(BaseModel):
 
             for token_id, candidate in candidates.items():
                 total = accumulated + candidate
-                if any(name.startswith(total) for name in words_prompt):
+                if any(name.startswith("'") for name in words_prompt) and \
+                    not accumulated.startswith("'") and candidate == "'":
+                    np_array[token_id] = np.inf
+                    break
+                elif any(name.startswith('"') for name in words_prompt) and \
+                    not accumulated.startswith('"') and candidate == '"':
+                    print("Inside")
+                    np_array[token_id] = np.inf
+                    break
+                elif any(name.startswith(total) for name in words_prompt):
                     # print(f"Token_id {token_id} -> Candidate: {candidate} -> Logits: {logits[token_id]}")
                     np_array[token_id] = logits[token_id]
             
@@ -305,8 +319,10 @@ class Engine(BaseModel):
             words_in_prompt = []
 
             dbl_extracted = DBL_QUOTED_PHRASE.findall(prompt)
-            sing_extracted = SGL_QUOTED_PHRASE.findall(prompt)
-            remaining = QUOTED_PHRASE.sub("", prompt).split()
+            after_dbl = DBL_QUOTED_PHRASE.sub("", prompt)
+
+            sing_extracted = SGL_QUOTED_PHRASE.findall(after_dbl)
+            remaining = SGL_QUOTED_PHRASE.sub("", after_dbl).split()
 
             if dbl_extracted:
                 for quote in dbl_extracted:
@@ -318,6 +334,8 @@ class Engine(BaseModel):
 
             for word in remaining:
                 words_in_prompt.append(word)
+
+            return words_in_prompt
 
             # for quote in dbl_extracted:
             #     words_in_prompt.append('"' + quote + '"')

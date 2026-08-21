@@ -33,14 +33,14 @@
         "prompt": "Reverse the string 'hello'",
         "name": "fn_reverse_string",
         "parameters": {
-            "s": "Reverse"
+            "s": "hello"
         }
     },
     {
         "prompt": "Reverse the string 'world'",
         "name": "fn_reverse_string",
         "parameters": {
-            "s": "Reverse"
+            "s": "world"
         }
     },
     {
@@ -61,27 +61,27 @@
         "prompt": "Replace all numbers in \"Hello 34 I'm 233 years old\" with NUMBERS",
         "name": "fn_substitute_string_with_regex",
         "parameters": {
-            "source_string": "with",
-            "regex": "old",
-            "replacement": "m"
+            "source_string": "Hello 34 I'm 233 years old",
+            "regex": "with",
+            "replacement": "NUMBERS"
         }
     },
     {
         "prompt": "Replace all vowels in 'Programming is fun' with asterisks",
         "name": "fn_substitute_string_with_regex",
         "parameters": {
-            "source_string": "with",
-            "regex": "asterisks",
-            "replacement": "all"
+            "source_string": "Programming is fun",
+            "regex": "with",
+            "replacement": "asterisks"
         }
     },
     {
         "prompt": "Substitute the word 'cat' with 'dog' in 'The cat sat on the mat with another cat'",
         "name": "fn_substitute_string_with_regex",
         "parameters": {
-            "source_string": "with",
-            "regex": "Substitute",
-            "replacement": "word"
+            "source_string": "cat",
+            "regex": "The cat sat on the mat with another cat",
+            "replacement": "dog"
         }
     }
 ]
