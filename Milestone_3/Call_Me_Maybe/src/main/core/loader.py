@@ -65,7 +65,7 @@ def validate_functions(functions_lookup: FunctionLookup) -> FunctionLookup:
         CustomError: If any parameter type or return type is not in
             ``["string", "number"]``.
     """
-    accepted_types = ["string", "number"]
+    accepted_types = ["string", "number", "integer", "boolean"]
 
     for item in functions_lookup:
         for param in functions_lookup[item]["parameters"]:

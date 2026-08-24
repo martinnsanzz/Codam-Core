@@ -28,10 +28,11 @@ class Prompt(BaseModel):
 
     def sys_prompt(self, state: str,
                      function_names: Optional[str] = "",
-                     fn_description: Optional[str] = "",
-                     param_spec: Optional[dict[str, Any]] = None) -> str:
+                     param_spec: Optional[str] = None,
+                     param_position: int = 0) -> str:
         """Build a chat-formatted prompt for the current pipeline stage."""
-        
+        ordinal = {1: "FIRST", 2: "SECOND", 3: "THIRD"}.get(param_position, f"{param_position}th")
+
         system_content_func = (
             "You are a function-selection system. Given a user request, respond with "
             "only the name of the single most suitable function from the list below. "
@@ -39,23 +40,23 @@ class Prompt(BaseModel):
             "the function name exactly as written.\n\n"
             "Available functions:\n"
             f"{function_names}"
+            "Use 'None' if you consider the prompt doesnt match any available functions"
         )
         system_content_param = (
-            "You are a parameter-extraction system. The user's request will be handled "
-            "by the function below. Extract the correct values for each parameter from "
-            "the user's request, matching the required type exactly.\n\n"
-            f"Function: {self.name}\n"
-            f"Function description: {fn_description}\n"
-            f"Parameters required: {param_spec}\n\n"
-            "Do not include any explanation, reasoning, or extra text — output only the "
-            "parameter values."
+        "You are a parameter-extraction system. ..."
+        f"Parameters required: {param_spec}\n"
+        f"Extract the {ordinal} relevant value in the user request "
+        "for this parameter, matching the required type exactly.\n"
+        "Do not include any explanation, reasoning, or extra text — "
+        "output only the parameter value."
         )
         system_content = system_content_func if state == "func" else system_content_param
 
         return (
             f"<|im_start|>system\n{system_content}<|im_end|>\n"
             f"<|im_start|>user\n{self.prompt}<|im_end|>\n"
-            f"<|im_start|>assistant\n"
+            f"<|im_start|>assistant"
+            "<think>\n\n</think>\n"
         )
 
     def get_output(self) -> str:

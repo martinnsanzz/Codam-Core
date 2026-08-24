@@ -15,8 +15,14 @@ UNDERLINE			:= \033[4m
 
 # ------------------ Paths  ------------------ #
 FUNC_DEF			:= data/input/functions_definition.json
+MOULINETTE_FUNC_DEF	:= moulinette/data/input/functions_definition.json
+
 INPUT				:= data/input/function_calling_tests.json
+MOULINETTE_INPUT	:= moulinette/data/input/function_calling_tests.json
+
 OUTPUT				:= data/output/function_calling_results.json
+MOULINETTE_OUTPUT	:= ../data/output/function_calling_results.json
+
 TEST				:= data/test/prompt_test.json
 
 # ------------------ Tools  ------------------ #
@@ -35,6 +41,9 @@ TEST_ARG			:= --functions_definition ${FUNC_DEF} \
 					   --test ${TEST}
 STD_ARGS			:= --functions_definition ${FUNC_DEF} \
 					   --input ${INPUT} \
+					   --output ${OUTPUT}
+MOULINETTE_STD_ARGS	:= --functions_definition ${MOULINETTE_FUNC_DEF} \
+					   --input ${MOULINETTE_INPUT} \
 					   --output ${OUTPUT}
 VISUAL_ARGS			:= --functions_definition ${FUNC_DEF} \
 					   --input ${INPUT} \
@@ -63,7 +72,7 @@ help:
 
 install: $(VENV)
 	@echo "${YELLOW}Installing dependencies...${RESET}"
-	@uv sync --link-mode=copy
+	@uv sync --link-mode=copy 2>/dev/null
 
 	@echo "${GREEN}\nEverything installed ${RESET}"
 
@@ -82,6 +91,18 @@ test: install
 visual: install
 	@echo "${GREEN}\nRunning in visual mode... !!${RESET}"
 	@ ${RUN_COMM} -m src ${VISUAL_ARGS}
+
+moulinette: install
+	@echo "${GREEN}\nCreating moulinette test files... !!${RESET}"
+	@(cd moulinette && uv sync --link-mode=copy 2>/dev/null \
+		uv run python -m moulinette prepare_exercises --set private)
+
+	@echo "${GREEN}\nRunning Call_Me_Maybe with moulinette test files... !!${RESET}"
+	@$(RUN_COMM) -m src $(MOULINETTE_STD_ARGS)
+
+	@echo "${GREEN}\nChecking answers with moulinette... !!${RESET}"
+	@(cd moulinette && uv run python -m moulinette grade_student_answers \
+		$(MOULINETTE_OUTPUT) --set private)
 
 clean:
 	@echo "${RED}Removing '.mypy_cache' folders.${RESET}"
@@ -114,4 +135,4 @@ lint-strict:
 	@echo "${YELLOW}Running mypy --strict...${RESET}"
 	@mypy ${MYPY_STRICT_FLAGS} && echo "${GREEN}✓ mypy --strict passed${RESET}"|| true
 
-.PHONY: install wheel run test visual debug clean fclean lint lint-strict help
+.PHONY: install wheel run test visual moulinette debug clean fclean lint lint-strict help
