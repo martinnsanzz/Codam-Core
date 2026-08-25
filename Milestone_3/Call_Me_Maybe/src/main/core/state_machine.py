@@ -98,6 +98,8 @@ class Engine(BaseModel):
         Returns:
             list[str]: The rendered output of every prompt, in order.
         """
+        errors_lst = (GenerationTimeoutError, CustomError, TimeoutError,
+                      RuntimeError, TypeError)
         llm_output = []
         i = 0
         error_log = 0
@@ -118,7 +120,7 @@ class Engine(BaseModel):
                         self.llm_get_param(self.id_to_token, prompt_obj)
 
                     state = self.get_state(prompt_obj)
-            except (GenerationTimeoutError, CustomError)as e:
+            except errors_lst as e:
                 error_log += 1
                 error_msg = e
 

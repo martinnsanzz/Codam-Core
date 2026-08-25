@@ -43,15 +43,14 @@ class Prompt(BaseModel):
             "Use 'None' if you consider the prompt doesnt match any available functions"
         )
         system_content_param = (
-        "You are a parameter-extraction system. ..."
-        f"Parameters required: {param_spec}\n"
+        "You are a parameter-extraction system."
         f"Extract the {ordinal} relevant value in the user request "
-        "for this parameter, matching the required type exactly.\n"
+        "for this parameter, matching the required type exactly.\n\n"
+        f"Parameter required - {param_spec}\n\n"
         "Do not include any explanation, reasoning, or extra text — "
         "output only the parameter value."
         )
         system_content = system_content_func if state == "func" else system_content_param
-
         return (
             f"<|im_start|>system\n{system_content}<|im_end|>\n"
             f"<|im_start|>user\n{self.prompt}<|im_end|>\n"
