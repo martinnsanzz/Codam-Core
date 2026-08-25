@@ -1,87 +1,87 @@
 [
     {
-        "prompt": "What is the sum of 2 and 3?",
-        "name": "fn_add_numbers",
+        "prompt": "What is the product of 3 and 5 false?",
+        "name": "fn_multiply_numbers",
         "parameters": {
-            "a": 2,
-            "b": 3
+            "a": true,
+            "b": 3.0
         }
     },
     {
-        "prompt": "What is the sum of 265 and 345?",
-        "name": "fn_add_numbers",
+        "prompt": "What is the product of 12 and 4?",
+        "name": "fn_multiply_numbers",
         "parameters": {
-            "a": 265,
-            "b": 345
+            "a": true,
+            "b": 4.0
         }
     },
     {
-        "prompt": "Greet shrek",
-        "name": "fn_greet",
+        "prompt": "Is 4 an even number?",
+        "name": "fn_is_even",
         "parameters": {
-            "name": "Hello"
+            "n": 4
         }
     },
     {
-        "prompt": "Greet john",
-        "name": "fn_greet",
+        "prompt": "Is 7 an even number?",
+        "name": "fn_is_even",
         "parameters": {
-            "name": "Hello"
+            "n": 7
         }
     },
     {
-        "prompt": "Reverse the string 'hello'",
-        "name": "fn_reverse_string",
+        "prompt": "Calculate compound interest on 1234567.89 at 0.0375 rate for 23 years",
+        "name": "fn_calculate_compound_interest",
         "parameters": {
-            "s": "Hello"
+            "principal": 1234567.89,
+            "rate": 0.0375,
+            "years": 23
         }
     },
     {
-        "prompt": "Reverse the string 'world'",
-        "name": "fn_reverse_string",
+        "prompt": "Execute SQL query 'SELECT * FROM users' on the production database",
+        "name": "fn_execute_sql_query",
         "parameters": {
-            "s": "Hello"
+            "query": "Hello",
+            "database": "Hello"
         }
     },
     {
-        "prompt": "What is the square root of 16?",
-        "name": "fn_get_square_root",
+        "prompt": "Run the query 'INSERT INTO logs VALUES (1, 2, 3)' on the system database",
+        "name": "fn_execute_sql_query",
         "parameters": {
-            "a": 16.0
+            "query": "Hello",
+            "database": "Hello"
         }
     },
     {
-        "prompt": "Calculate the square root of 144",
-        "name": "fn_get_square_root",
+        "prompt": "Read the file at /home/user/data.json with utf-8 encoding",
+        "name": "fn_read_file",
         "parameters": {
-            "a": 144.0
+            "path": "Hello",
+            "encoding": "Hello"
         }
     },
     {
-        "prompt": "Replace all numbers in \"Hello 34 I'm 233 years old\" with NUMBERS",
-        "name": "fn_substitute_string_with_regex",
+        "prompt": "Read C:\\Users\\john\\config.ini with latin-1 encoding",
+        "name": "fn_read_file",
         "parameters": {
-            "source_string": "Hello",
-            "regex": "Hello",
-            "replacement": "Hello"
+            "path": "Hello",
+            "encoding": "Hello"
         }
     },
     {
-        "prompt": "Replace all vowels in 'Programming is fun' with asterisks",
-        "name": "fn_substitute_string_with_regex",
+        "prompt": "Format template: Hello {user}'s profile!",
+        "name": "fn_format_template",
         "parameters": {
-            "source_string": "Hello",
-            "regex": "Hello",
-            "replacement": "Hello"
+            "template": "Hello"
         }
     },
     {
-        "prompt": "Substitute the word 'cat' with 'dog' in 'The cat sat on the mat with another cat'",
-        "name": "fn_substitute_string_with_regex",
+        "prompt": "Format template: Say \"hello\" to {name}",
+        "name": "fn_format_template",
         "parameters": {
-            "source_string": "Hello",
-            "regex": "Hello",
-            "replacement": "Hello"
+            "template": "Hello"
         }
     }
 ]

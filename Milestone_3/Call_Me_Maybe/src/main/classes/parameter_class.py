@@ -11,6 +11,8 @@ import numpy as np
 from .states import NumState, StrState, get_num_state
 from .prompt_class import Prompt
 
+VALID_BOOLEAN = ["true", "false"]
+
 MAX_DECODE_NUM = 15
 MAX_DECODE_STR = 40
 MAX_DECODE_BOOL = 6
@@ -148,11 +150,66 @@ class Parameter(BaseModel):
     
         return float(accumulated) if self.param_type == "number" else int(accumulated)
 
-    def get_string(self, candidates: dict[int, str], prompt_text:str) -> str:
+    def get_string(self, candidates: dict[int, str], system_prompt:str) -> str:
         return "Hello"
 
-    def get_boolean(self, candidates: dict[int, str], prompt_text:str) -> bool:
-        return True
+    def get_boolean(self, candidates: dict[int, str], system_prompt:str) -> bool:
+        """Decode a boolean parameter token-by-token with logit masking.
+
+        At each step, masks out every candidate token whose accumulation
+        onto the current partial value is not a prefix of ``True`` or
+        ``False``, then greedily selects the highest-logit remaining
+        candidate. Decoding stops once `accumulated` matches an entry in
+        `VALID_BOOLEAN`.
+
+        Args:
+            candidates: Mapping from candidate next-token id to its string
+                form, as offered by the decoder for the current step.
+            system_prompt: Text encoded via `self.small_llm.encode` to seed
+                the token-id sequence passed to `get_logits_from_input_ids`.
+
+        Returns:
+            bool: The decoded boolean value.
+
+        Raises:
+            RuntimeError: If no candidate token keeps `accumulated`
+                consistent with either boolean literal.
+            TimeoutError: If decoding exceeds `MAX_DECODE_BOOL` steps.
+        """
+        accumulated = ""
+        step_count = 0
+
+        tokenization = self.small_llm.encode(system_prompt).tolist()[0]
+
+        while accumulated not in VALID_BOOLEAN:
+            logits = self.small_llm.get_logits_from_input_ids(tokenization)
+            np_array = np.array(logits)
+            np_array[:] = -np.inf
+
+            for token_id, candidate in candidates.items():
+                total = accumulated + candidate
+                if any(valid.startswith(total) for valid in VALID_BOOLEAN):
+                    np_array[token_id] = logits[token_id]
+
+            if np.all(np.isneginf(np_array)):
+                raise RuntimeError(
+                    f"No valid candidate for {self.param_name!r} "
+                    f"(type={self.param_type}); accumulated={accumulated!r}"
+                )
+
+            best_id = int(np.argmax(np_array))
+            best_str = self.id_to_token.get(best_id, "")
+            accumulated += best_str
+
+            tokenization.append(best_id)
+
+            step_count += 1
+            if step_count == MAX_DECODE_BOOL:
+                raise TimeoutError(
+                    f"Exceeded {MAX_DECODE_NUM} steps for {self.param_name!r}; "
+                    f"accumulated={accumulated!r}")
+    
+        return bool(accumulated)
 
     def extract_nums_from_prompt(self, prompt: str, param_type: str) -> list[str]:
         """Extract candidate numeric substrings from a prompt.
