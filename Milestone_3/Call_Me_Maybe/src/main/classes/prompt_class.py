@@ -32,6 +32,7 @@ class Prompt(BaseModel):
                      param_position: int = 0) -> str:
         """Build a chat-formatted prompt for the current pipeline stage."""
         ordinal = {1: "FIRST", 2: "SECOND", 3: "THIRD"}.get(param_position, f"{param_position}th")
+        extracted_val = [param for param in self.parameters.values()]
 
         system_content_func = (
             "You are a function-selection system. Given a user request, respond with "
@@ -43,19 +44,20 @@ class Prompt(BaseModel):
             "Use 'None' if you consider the prompt doesnt match any available functions"
         )
         system_content_param = (
-            "You are a parameter-extraction system."
-            f"Parameters required: {param_spec}\n"
+            "You are a parameter-extraction system. Do not include any "
+            "explanation, reasoning, or extra text. Output only the parameter value.\n"
             f"Extract the {ordinal} relevant value in the user request "
-            "for this parameter, matching the required type exactly.\n"
-            "Do not include any explanation, reasoning, or extra text — "
-            "output only the parameter value."
+            f"for this parameter '{param_spec}', matching the required type exactly.\n\n"
+            "Already extracted values from prompt: "
+            f"{extracted_val if self.parameters else "None. "}"
+            f"{f"\nDO NOT EXTRACT AGAIN {extracted_val}" if extracted_val else ""}"
+            f"Parameter required - {param_spec} = \n"
         )
         system_content = system_content_func if state == "func" else system_content_param
         return (
             f"<|im_start|>system\n{system_content}<|im_end|>\n"
             f"<|im_start|>user\n{self.prompt}<|im_end|>\n"
-            f"<|im_start|>assistant"
-            "<think>\n\n</think>\n"
+            "<|im_start|>assistant"
         )
 
     def get_output(self) -> str:

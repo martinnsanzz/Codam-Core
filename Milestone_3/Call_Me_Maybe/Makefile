@@ -87,15 +87,14 @@ debug: $(VENV) install
 
 test: install
 	@echo "${GREEN}\nRunning with test file... !!${RESET}"
-	@ ${RUN_COMM} -m src ${TEST_ARG}
+	@ ${RUN_COMM} -m src ${TEST_ARG} --visual_mode True
 
 visual: install
 	@echo "${GREEN}\nRunning in visual mode... !!${RESET}"
 	@ ${RUN_COMM} -m src ${VISUAL_ARGS}
 
-moulinette: install
+moulinette:
 	@echo "${GREEN}\nCreating moulinette test files... !!${RESET}"
-	@(cd moulinette && uv sync --link-mode=copy 2>/dev/null)
 	@(cd moulinette && uv run python -m moulinette prepare_exercises --set private)
 
 	@echo "${GREEN}\nRunning Call_Me_Maybe with moulinette test files... !!${RESET}"

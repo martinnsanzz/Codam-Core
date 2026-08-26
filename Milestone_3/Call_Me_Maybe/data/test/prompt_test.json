@@ -1,17 +1,8 @@
 [
-    {
-    "prompt": "What is the product of 3 and 5?"
+  {
+    "prompt": "Format template: Hello {user}'s profile!"
   },
   {
-    "prompt": "What is the product of 12 and 4?"
-  },
-  {
-    "prompt": "Is 4 an even number?"
-  },
-  {
-    "prompt": "Is 7 an even number?"
-  },
-  {
-    "prompt": "Calculate compound interest on 1234567.89 at 0.0375 rate for 23 years"
+    "prompt": "Format template: Say \"hello\" to {name}"
   }
 ]

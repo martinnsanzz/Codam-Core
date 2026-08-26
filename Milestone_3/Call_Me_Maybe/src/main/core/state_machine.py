@@ -99,17 +99,18 @@ class Engine(BaseModel):
             start = time.time()
             state = self.get_state(prompt_obj)
 
+            if not prompt_obj.prompt:
+                raise CustomError(f"Prompt {i} is empty !!")
+
+            while state != GenerationState.END:
+                if state == GenerationState.FUNC:
+                    self.llm_get_function(self.id_to_token, prompt_obj)
+                elif state == GenerationState.PARAM:
+                    self.llm_get_param(self.id_to_token, prompt_obj)
+
+                state = self.get_state(prompt_obj)
             try:
-                if not prompt_obj.prompt:
-                    raise CustomError(f"Prompt {i} is empty !!")
-
-                while state != GenerationState.END:
-                    if state == GenerationState.FUNC:
-                        self.llm_get_function(self.id_to_token, prompt_obj)
-                    elif state == GenerationState.PARAM:
-                        self.llm_get_param(self.id_to_token, prompt_obj)
-
-                    state = self.get_state(prompt_obj)
+                pass
             except errors_lst as e:
                 error_log += 1
                 error_msg = e

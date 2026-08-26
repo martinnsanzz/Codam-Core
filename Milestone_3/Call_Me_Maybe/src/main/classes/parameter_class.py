@@ -8,10 +8,11 @@ from llm_sdk import Small_LLM_Model
 import numpy as np
 
 # Local modules
-from .states import NumState, StrState, get_num_state
+from .states import NumState, StrState, get_num_state, get_str_state
 from .prompt_class import Prompt
 
 VALID_BOOLEAN = ["true", "false"]
+QUOTES = ["'", '"']
 
 MAX_DECODE_NUM = 15
 MAX_DECODE_STR = 40
@@ -147,14 +148,52 @@ class Parameter(BaseModel):
                 raise TimeoutError(
                     f"Exceeded {MAX_DECODE_NUM} steps for {self.param_name!r}; "
                     f"accumulated={accumulated!r}")
-    
+
         return float(accumulated) if self.param_type == "number" else int(accumulated)
 
-    def get_string(self, candidates: dict[int, str], prompt_text:str) -> str:
-        
-        return "Hello"
+    def get_string(self, candidates: dict[int, str], system_prompt: str) -> str:
+        state = StrState.NOT_FINISHED
+        accumulated = ""
+        step_count = 0
 
-    def get_boolean(self, candidates: dict[int, str], system_prompt:str) -> bool:
+        prompt = self.prompt_obj.prompt
+        tokenization = self.small_llm.encode(system_prompt).tolist()[0]
+        words_in_prompt = self.extract_words_from_prompt(prompt)
+        print(words_in_prompt)
+
+        while state != StrState.FINISHED:
+            logits = self.small_llm.get_logits_from_input_ids(tokenization)
+            np_array = np.array(logits)
+            np_array[:] = -np.inf
+
+            for token_id, candidate in candidates.items():
+                total = accumulated + candidate
+                if any(name.startswith(total) for name in words_in_prompt):
+                    np_array[token_id] = logits[token_id]
+
+            if np.all(np.isneginf(np_array)):
+                raise RuntimeError(
+                    f"No valid candidate for {self.param_name!r} "
+                    f"(type={self.param_type}); accumulated={accumulated!r}"
+                )
+
+            best_id = int(np.argmax(np_array))
+            best_str = self.id_to_token.get(best_id, "")
+            accumulated += best_str
+
+            tokenization.append(best_id)
+
+            state = get_str_state(accumulated, words_in_prompt)
+
+            step_count += 1
+            if step_count == MAX_DECODE_STR:
+                raise TimeoutError(
+                    f"Exceeded {MAX_DECODE_NUM} steps for {self.param_name!r}; "
+                    f"accumulated={accumulated!r}")
+
+        return accumulated.strip("'\"")
+
+    def get_boolean(self, candidates: dict[int, str], system_prompt: str) -> bool:
         """Decode a boolean parameter token-by-token with logit masking.
 
         At each step, masks out every candidate token whose accumulation
@@ -238,12 +277,11 @@ class Parameter(BaseModel):
         nums = number_pattern.findall(prompt)
 
         used_values = {float(v) for v in parameters.values()
-                    if isinstance(v, (int, float))}
+                       if isinstance(v, (int, float))}
 
         remaining = [n for n in nums if float(n) not in used_values]
 
         if param_type == "integer":
-            # Integers can only come from numbers with no decimal point
             return [n for n in remaining if "." not in n]
 
         decimals = [n for n in remaining if "." in n]
@@ -252,3 +290,71 @@ class Parameter(BaseModel):
         if decimals and param_type == "number":
             return decimals
         return list({str(float(n)) for n in whole})
+
+    def extract_words_from_prompt(self, prompt: str) -> list[str]:
+        parameters = self.prompt_obj.parameters.values()
+
+        dbl_quoted_pattern = compile(r'"[^"]*"')
+        sgl_quoted_pattern = compile(r"'[^']*'")
+
+        dbl_quoted = dbl_quoted_pattern.findall(prompt)
+        sgl_quoted = sgl_quoted_pattern.findall(prompt)
+
+        extracted_vals = [val for val in parameters if isinstance(val, str)]
+
+        if (dbl_quoted or sgl_quoted) and ":" not in prompt:
+            total = dbl_quoted + sgl_quoted
+
+            remaining = [sub for sub in total if sub.strip("'\"") not in extracted_vals]
+            if remaining:
+                return remaining
+        elif ":" in prompt:
+            return [prompt.split(": ")[1]]
+
+        clean_prompt = prompt
+        for extracted in extracted_vals:
+            clean_prompt = clean_prompt.replace(f'"{extracted}"', "")
+            clean_prompt = clean_prompt.replace(f"'{extracted}'", "")
+            clean_prompt = clean_prompt.replace(extracted, "")
+        return [w for w in clean_prompt.split() if w]
+
+        # words_in_prompt: list[str] = []
+        # word = ""
+        # in_quotes = False
+        # in_colon = False
+        # current_quote = ""
+
+        # for i, c in enumerate(prompt):
+        #     if in_colon:
+        #         word += c
+        #     elif in_quotes:
+        #         word += c
+        #         if c == current_quote:
+        #             in_quotes = False
+        #             words_in_prompt.append(word)
+        #             word = ""
+        #     elif c in QUOTES:
+        #         if word:
+        #             words_in_prompt.append(word)
+        #             word = ""
+        #         in_quotes = True
+        #         current_quote = c
+        #         word += c
+        #     elif c == ":" and prompt[i + 1] == " ":
+        #         if word:
+        #             words_in_prompt.append(word)
+        #             word = ""
+        #         in_colon = True
+        #     elif c.isspace():
+        #         if word:
+        #             words_in_prompt.append(word)
+        #             word = ""
+        #     else:
+        #         word += c
+
+        # if word:
+        #     words_in_prompt.append(word.strip(".?"))
+
+        # remaining = [word for word in words_in_prompt if word.strip("'\"") not
+        #              in extracted_vals]
+        # return remaining

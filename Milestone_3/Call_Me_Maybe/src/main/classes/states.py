@@ -18,8 +18,8 @@ class NumState(Enum):
 
 
 class StrState(Enum):
-    OPEN = auto()
-    CLOSED = auto()
+    NOT_FINISHED = auto()
+    FINISHED = auto()
 
 
 def get_num_state(num: str, prompt: str, param_type: str) -> NumState:
@@ -76,8 +76,8 @@ def get_num_state(num: str, prompt: str, param_type: str) -> NumState:
         return NumState.INT_DIGITS
 
 
-def str_state(text: str) -> StrState:
-    if match(STRING_PATTERN, text):
-        return StrState.CLOSED
+def get_str_state(param: str, available_word: list[str]) -> StrState:
+    if param in available_word:
+        return StrState.FINISHED
     else:
-        return StrState.OPEN
+        return StrState.NOT_FINISHED
