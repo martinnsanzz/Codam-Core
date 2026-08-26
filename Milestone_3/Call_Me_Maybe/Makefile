@@ -44,7 +44,8 @@ STD_ARGS			:= --functions_definition ${FUNC_DEF} \
 					   --output ${OUTPUT}
 MOULINETTE_STD_ARGS	:= --functions_definition ${MOULINETTE_FUNC_DEF} \
 					   --input ${MOULINETTE_INPUT} \
-					   --output ${OUTPUT}
+					   --output ${OUTPUT} \
+					   --visual_mode True
 VISUAL_ARGS			:= --functions_definition ${FUNC_DEF} \
 					   --input ${INPUT} \
 					   --output ${OUTPUT} \
@@ -94,8 +95,8 @@ visual: install
 
 moulinette: install
 	@echo "${GREEN}\nCreating moulinette test files... !!${RESET}"
-	@(cd moulinette && uv sync --link-mode=copy 2>/dev/null \
-		uv run python -m moulinette prepare_exercises --set private)
+	@(cd moulinette && uv sync --link-mode=copy 2>/dev/null)
+	@(cd moulinette && uv run python -m moulinette prepare_exercises --set private)
 
 	@echo "${GREEN}\nRunning Call_Me_Maybe with moulinette test files... !!${RESET}"
 	@$(RUN_COMM) -m src $(MOULINETTE_STD_ARGS)

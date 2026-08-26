@@ -51,7 +51,6 @@ class Prompt(BaseModel):
             "output only the parameter value."
         )
         system_content = system_content_func if state == "func" else system_content_param
-
         return (
             f"<|im_start|>system\n{system_content}<|im_end|>\n"
             f"<|im_start|>user\n{self.prompt}<|im_end|>\n"

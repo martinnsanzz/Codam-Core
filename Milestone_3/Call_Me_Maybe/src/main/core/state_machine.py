@@ -1,6 +1,6 @@
 # Built-in modules
 from enum import Enum, auto
-from typing import Optional, Any
+from typing import Any
 from json import loads
 import time
 from re import compile
@@ -15,16 +15,6 @@ from .loader import FunctionLookup
 from .exceptions import GenerationTimeoutError, CustomError
 from ..classes import Prompt, Parameter
 from ..visual import display_title, display_prompt_info, display_total_info
-
-
-VALID_FUNC_CHARS    = compile(r'^[a-z0-9_]+$')
-VALID_NUM_CHARS     = compile(r'^-?\d*\.?\d*$')
-VALID_STR_CHARS     = compile(r'^[\x20-\x7e]+$')
-
-STRING_PATTERN      = compile(r'^(?:[^"\\\x00-\x1f]|\\[nrtbf"\\/]|\\u[0-9a-fA-F]{4})*$')
-NUMBER_PATTERN      = compile(r'^-?\d+(\.\d+)?$')
-
-MAX_DECODE_STEPS    = 20
 
 
 class GenerationState(Enum):
@@ -98,6 +88,8 @@ class Engine(BaseModel):
         Returns:
             list[str]: The rendered output of every prompt, in order.
         """
+        errors_lst = (GenerationTimeoutError, CustomError, TimeoutError,
+                      RuntimeError, TypeError)
         llm_output = []
         i = 0
         error_log = 0
@@ -118,7 +110,7 @@ class Engine(BaseModel):
                         self.llm_get_param(self.id_to_token, prompt_obj)
 
                     state = self.get_state(prompt_obj)
-            except (GenerationTimeoutError, CustomError)as e:
+            except errors_lst as e:
                 error_log += 1
                 error_msg = e
 
@@ -215,7 +207,7 @@ class Engine(BaseModel):
             case "number":
                 pattern = compile(r'^-?\d*\.?\d*$')
             case "boolean":
-                pattern = compile(r'^[TrueFals]+$')
+                pattern = compile(r'^[truefals]+$')
 
         filtered = {}
 

@@ -1,5 +1,3 @@
-# Prompts
-
 [
   {
     "prompt": "What is the sum of 2 and 3?"
@@ -35,8 +33,6 @@
     "prompt": "Substitute the word 'cat' with 'dog' in 'The cat sat on the mat with another cat'"
   }
 ]
-
-# Functions
 
 [
   {
