@@ -96,6 +96,7 @@ class Parameter(BaseModel):
         return float(accumulated) if self.param_type == "number" else int(accumulated)
 
     def get_string(self, candidates: dict[int, str], prompt_text:str) -> str:
+        
         return "Hello"
 
     def get_boolean(self, candidates: dict[int, str], prompt_text:str) -> bool:

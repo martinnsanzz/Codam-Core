@@ -74,6 +74,7 @@ def validate_functions(functions_lookup: FunctionLookup) -> FunctionLookup:
                 raise CustomError(f"Wrong parameter type: '{var_type}'."
                                   f" Accepted types {accepted_types}")
         if functions_lookup[item]["returns"]["type"] not in accepted_types:
-            raise CustomError(f"Wrong return type: '{var_type}'."
+            return_type =  functions_lookup[item]["returns"]["type"]
+            raise CustomError(f"Wrong return type: '{return_type}'."
                               f" Accepted types {accepted_types}")
     return functions_lookup
