@@ -33,7 +33,7 @@ def load_json(json_file: Path) -> list[dict[str, Any]]:
     except FileNotFoundError as e:
         raise CustomError(f"File not found: {e}") from e
     except JSONDecodeError as e:
-         raise CustomError(f"Wrong JSON format in {json_file}: {e}") from e
+        raise CustomError(f"Wrong JSON format in {json_file}: {e}") from e
 
 
 def build_function_lookup(functions_json: FunctionsList) -> FunctionLookup:
@@ -74,7 +74,7 @@ def validate_functions(functions_lookup: FunctionLookup) -> FunctionLookup:
                 raise CustomError(f"Wrong parameter type: '{var_type}'."
                                   f" Accepted types {accepted_types}")
         if functions_lookup[item]["returns"]["type"] not in accepted_types:
-            return_type =  functions_lookup[item]["returns"]["type"]
+            return_type = functions_lookup[item]["returns"]["type"]
             raise CustomError(f"Wrong return type: '{return_type}'."
                               f" Accepted types {accepted_types}")
     return functions_lookup

@@ -30,6 +30,6 @@
     "prompt": "Replace all vowels in 'Programming is fun' with asterisks"
   },
   {
-    "prompt": "Substitute the word 'cat' with 'dog' in 'The cat sat on the mat with another cat'"
+    "prompt": "Substitute the word 'cat' with 'dog' 50 in 'The cat sat on the mat with another cat'"
   }
 ]

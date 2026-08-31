@@ -1,6 +1,6 @@
 # Built-in modules
-from typing import Self, Callable, Optional
-from re import compile, match
+from typing import Self, Callable, Any
+from re import compile
 
 # Installed modules
 from pydantic import BaseModel, ConfigDict, model_validator
@@ -42,7 +42,7 @@ class Parameter(BaseModel):
     param_name: str
     param_type: str
     id_to_token: dict[int, str]
-    small_llm: Optional[Small_LLM_Model]
+    small_llm: Small_LLM_Model
 
     @model_validator(mode="after")
     def check_type(self) -> Self:
@@ -64,7 +64,7 @@ class Parameter(BaseModel):
         return self
 
     def get_param(self, candidates: dict[int, str],
-                  system_prompt: str) -> int | float | str | bool:
+                  system_prompt: str) -> Any:
         """Dispatch parameter extraction to the type-specific decoder.
 
         Args:
@@ -77,7 +77,7 @@ class Parameter(BaseModel):
             int | float | str | bool: The decoded value, typed according
             to `self.param_type`.
         """
-        type_to_func: dict[Callable] = {
+        type_to_func: dict[str, Callable[[dict[int, Any], str], Any]] = {
                 "number": self.get_number,
                 "integer": self.get_number,
                 "string": self.get_string,
@@ -86,29 +86,34 @@ class Parameter(BaseModel):
 
         return type_to_func[self.param_type](candidates, system_prompt)
 
-    def get_number(self, candidates: dict[int, str], system_prompt:str) -> float | int:
-        """Decode a numeric parameter token-by-token with logit masking.
+    def get_number(self, candidates: dict[int, str],
+                   system_prompt: str) -> float | int:
+        """Decode a "number" or "integer" parameter via greedy decoding.
 
-        At each step, masks out every candidate token whose accumulation
-        onto the current partial value is not a prefix of some number
-        found in `self.prompt_obj.prompt`, then greedily selects the
-        highest-logit remaining candidate. Decoding stops when the
-        accumulated string reaches `NumState.DONE`.
+        At each step, masks the model's logits so that only tokens which
+        would extend `accumulated` into a prefix of some numeric string
+        found in the prompt (via `extract_nums_from_prompt`) survive,
+        then greedily appends the highest-scoring surviving token until
+        `get_num_state` reports `NumState.DONE`.
 
         Args:
-            candidates: Mapping from candidate next-token id to its string
-                form, as offered by the decoder for the current step.
-            system_prompt: Text encoded via `self.small_llm.encode` to seed
-                the token-id sequence passed to `get_logits_from_input_ids`.
+            candidates: Mapping from candidate next-token id to its
+                string form, as offered by the decoder for the current
+                step.
+            system_prompt: The system prompt text supplied to the LLM for
+                this decoding step.
 
         Returns:
-            float: The decoded value as a ``float`` when `self.param_type`
-            is "number" or an ``int`` when `self.param_type` is "integer",
+            float | int: The decoded value as a ``float`` when
+            `self.param_type` is "number", or as an ``int`` when
+            `self.param_type` is "integer".
 
         Raises:
-            RuntimeError: If no candidate token keeps `accumulated`
-                consistent with any number extracted from the prompt.
-            TimeoutError: If decoding exceeds `MAX_DECODE_NUM` steps.
+            RuntimeError: If every candidate is masked to ``-inf`` at some
+                step (no candidate extends toward any number in the
+                prompt).
+            TimeoutError: If decoding does not reach `NumState.DONE`
+                within `MAX_DECODE_NUM` steps.
         """
         state = NumState.START
         accumulated = ""
@@ -146,12 +151,42 @@ class Parameter(BaseModel):
             step_count += 1
             if step_count == MAX_DECODE_NUM:
                 raise TimeoutError(
-                    f"Exceeded {MAX_DECODE_NUM} steps for {self.param_name!r}; "
+                    f"Exceeded {MAX_DECODE_NUM} steps "
+                    f"for {self.param_name!r}; "
                     f"accumulated={accumulated!r}")
 
-        return float(accumulated) if self.param_type == "number" else int(accumulated)
+        return float(accumulated) if self.param_type == "number" \
+            else int(accumulated)
 
-    def get_string(self, candidates: dict[int, str], system_prompt: str) -> str:
+    def get_string(self, candidates: dict[int, str],
+                   system_prompt: str) -> str:
+        """Decode a "string" parameter via greedy prefix-masked decoding.
+
+        At each step, masks the model's logits so that only tokens which
+        would extend `accumulated` into a prefix of some candidate word
+        or phrase found in the prompt (via `extract_words_from_prompt`)
+        survive, then greedily appends the highest-scoring surviving
+        token until `get_str_state` reports `StrState.FINISHED`. The
+        result has any surrounding single or double quotes stripped.
+
+        Args:
+            candidates: Mapping from candidate next-token id to its
+                string form, as offered by the decoder for the current
+                step.
+            system_prompt: The system prompt text supplied to the LLM for
+                this decoding step.
+
+        Returns:
+            str: The decoded string value, with surrounding quotes
+            stripped.
+
+        Raises:
+            RuntimeError: If every candidate is masked to ``-inf`` at some
+                step (no candidate extends toward any word in the
+                prompt).
+            TimeoutError: If decoding does not reach `StrState.FINISHED`
+                within `MAX_DECODE_STR` steps.
+        """
         state = StrState.NOT_FINISHED
         accumulated = ""
         step_count = 0
@@ -159,7 +194,6 @@ class Parameter(BaseModel):
         prompt = self.prompt_obj.prompt
         tokenization = self.small_llm.encode(system_prompt).tolist()[0]
         words_in_prompt = self.extract_words_from_prompt(prompt)
-        print(words_in_prompt)
 
         while state != StrState.FINISHED:
             logits = self.small_llm.get_logits_from_input_ids(tokenization)
@@ -188,33 +222,37 @@ class Parameter(BaseModel):
             step_count += 1
             if step_count == MAX_DECODE_STR:
                 raise TimeoutError(
-                    f"Exceeded {MAX_DECODE_NUM} steps for {self.param_name!r}; "
+                    f"Exceeded {MAX_DECODE_STR} steps "
+                    f"for {self.param_name!r}; "
                     f"accumulated={accumulated!r}")
 
         return accumulated.strip("'\"")
 
-    def get_boolean(self, candidates: dict[int, str], system_prompt: str) -> bool:
-        """Decode a boolean parameter token-by-token with logit masking.
+    def get_boolean(self, candidates: dict[int, str],
+                    system_prompt: str) -> bool:
+        """Decode a "boolean" parameter via greedy prefix-masked decoding.
 
-        At each step, masks out every candidate token whose accumulation
-        onto the current partial value is not a prefix of ``True`` or
-        ``False``, then greedily selects the highest-logit remaining
-        candidate. Decoding stops once `accumulated` matches an entry in
-        `VALID_BOOLEAN`.
+        At each step, masks the model's logits so that only tokens which
+        would extend `accumulated` into a prefix of ``"true"`` or
+        ``"false"`` (`VALID_BOOLEAN`) survive, then greedily appends the
+        highest-scoring surviving token until `accumulated` exactly
+        matches one of `VALID_BOOLEAN`.
 
         Args:
-            candidates: Mapping from candidate next-token id to its string
-                form, as offered by the decoder for the current step.
-            system_prompt: Text encoded via `self.small_llm.encode` to seed
-                the token-id sequence passed to `get_logits_from_input_ids`.
+            candidates: Mapping from candidate next-token id to its
+                string form, as offered by the decoder for the current
+                step.
+            system_prompt: The system prompt text supplied to the LLM for
+                this decoding step.
 
         Returns:
             bool: The decoded boolean value.
 
         Raises:
-            RuntimeError: If no candidate token keeps `accumulated`
-                consistent with either boolean literal.
-            TimeoutError: If decoding exceeds `MAX_DECODE_BOOL` steps.
+            RuntimeError: If every candidate is masked to ``-inf`` at some
+                step (no candidate extends toward "true" or "false").
+            TimeoutError: If `accumulated` does not match a value in
+                `VALID_BOOLEAN` within `MAX_DECODE_BOOL` steps.
         """
         accumulated = ""
         step_count = 0
@@ -246,39 +284,43 @@ class Parameter(BaseModel):
             step_count += 1
             if step_count == MAX_DECODE_BOOL:
                 raise TimeoutError(
-                    f"Exceeded {MAX_DECODE_NUM} steps for {self.param_name!r}; "
+                    f"Exceeded {MAX_DECODE_BOOL} steps "
+                    f"for {self.param_name!r}; "
                     f"accumulated={accumulated!r}")
-    
-        return bool(accumulated)
+        if accumulated == "false":
+            return False
+        return True
 
-    def extract_nums_from_prompt(self, prompt: str, param_type: str) -> list[str]:
-        """Extract candidate numeric substrings from a prompt.
+    def extract_nums_from_prompt(self, prompt: str,
+                                 param_type: str) -> list[str]:
+        """Extract candidate numeric substrings from the prompt.
 
-        Finds all integer/decimal substrings in `prompt`, excludes values
-        already consumed by other resolved parameters in
-        `self.prompt_obj.parameters`, and filters the remainder by
-        `param_type`: for "integer", only whole numbers are kept; for
-        "number", decimal-point numbers are preferred over whole numbers
-        when both are present.
+        Finds all integer/decimal substrings in `prompt` via regex, then
+        excludes any whose `float` value already matches a resolved
+        numeric parameter on `self.prompt_obj.parameters`. For
+        `param_type` "integer", only whole-number candidates are
+        returned. For "number", decimal candidates are returned when
+        present; otherwise whole numbers are returned, each normalized
+        to its `float`-string form and deduplicated.
 
         Args:
-            prompt: The source prompt text to scan for numbers.
-            param_type: Either "integer" or "number"; determines the
-                filtering rule applied to the extracted numbers.
+            prompt: The source prompt text to search for numeric
+                substrings.
+            param_type: Either "number" or "integer"; selects which
+                subset of extracted numbers is returned.
 
         Returns:
-            list[str]: For "integer", the remaining whole-number strings
-            with no decimal point. For "number", the remaining decimal
-            strings if any exist, otherwise the remaining whole numbers
-            deduplicated and normalized via `float()`/`str()`.
+            list[str]: Candidate numeric substrings from `prompt`,
+            filtered and normalized according to `param_type`.
         """
         parameters = self.prompt_obj.parameters
         number_pattern = compile(r'-?\d+(?:\.\d+)?')
         nums = number_pattern.findall(prompt)
 
-        used_values = {float(v) for v in parameters.values()
-                       if isinstance(v, (int, float))}
-
+        used_values: Any = {}
+        if parameters:
+            used_values = {float(v) for v in parameters.values()
+                           if isinstance(v, (int, float))}
         remaining = [n for n in nums if float(n) not in used_values]
 
         if param_type == "integer":
@@ -292,7 +334,29 @@ class Parameter(BaseModel):
         return list({str(float(n)) for n in whole})
 
     def extract_words_from_prompt(self, prompt: str) -> list[str]:
-        parameters = self.prompt_obj.parameters.values()
+        """Extract candidate string values from the prompt.
+
+        Prefers quoted substrings (single- or double-quoted) when
+        present and `prompt` contains no colon, excluding any quoted
+        span whose stripped content matches an already-resolved string
+        parameter value. If `prompt` contains ``": "``, falls back to
+        everything after the first occurrence of that separator.
+        Otherwise, strips out already-resolved string parameter values
+        (bare or quoted) from `prompt` and returns the remaining
+        whitespace-separated tokens.
+
+        Args:
+            prompt: The source prompt text to extract string candidates
+                from.
+
+        Returns:
+            list[str]: Candidate string values extracted from `prompt`.
+        """
+        parameters = self.prompt_obj.parameters
+        used_values: Any = {}
+
+        if parameters:
+            used_values = parameters.values()
 
         dbl_quoted_pattern = compile(r'"[^"]*"')
         sgl_quoted_pattern = compile(r"'[^']*'")
@@ -300,15 +364,16 @@ class Parameter(BaseModel):
         dbl_quoted = dbl_quoted_pattern.findall(prompt)
         sgl_quoted = sgl_quoted_pattern.findall(prompt)
 
-        extracted_vals = [val for val in parameters if isinstance(val, str)]
+        extracted_vals = [val for val in used_values if isinstance(val, str)]
 
         if (dbl_quoted or sgl_quoted) and ":" not in prompt:
             total = dbl_quoted + sgl_quoted
 
-            remaining = [sub for sub in total if sub.strip("'\"") not in extracted_vals]
+            remaining = [sub for sub in total if sub.strip("'\"")
+                         not in extracted_vals]
             if remaining:
                 return remaining
-        elif ":" in prompt:
+        elif ": " in prompt:
             return [prompt.split(": ")[1]]
 
         clean_prompt = prompt
@@ -317,44 +382,3 @@ class Parameter(BaseModel):
             clean_prompt = clean_prompt.replace(f"'{extracted}'", "")
             clean_prompt = clean_prompt.replace(extracted, "")
         return [w for w in clean_prompt.split() if w]
-
-        # words_in_prompt: list[str] = []
-        # word = ""
-        # in_quotes = False
-        # in_colon = False
-        # current_quote = ""
-
-        # for i, c in enumerate(prompt):
-        #     if in_colon:
-        #         word += c
-        #     elif in_quotes:
-        #         word += c
-        #         if c == current_quote:
-        #             in_quotes = False
-        #             words_in_prompt.append(word)
-        #             word = ""
-        #     elif c in QUOTES:
-        #         if word:
-        #             words_in_prompt.append(word)
-        #             word = ""
-        #         in_quotes = True
-        #         current_quote = c
-        #         word += c
-        #     elif c == ":" and prompt[i + 1] == " ":
-        #         if word:
-        #             words_in_prompt.append(word)
-        #             word = ""
-        #         in_colon = True
-        #     elif c.isspace():
-        #         if word:
-        #             words_in_prompt.append(word)
-        #             word = ""
-        #     else:
-        #         word += c
-
-        # if word:
-        #     words_in_prompt.append(word.strip(".?"))
-
-        # remaining = [word for word in words_in_prompt if word.strip("'\"") not
-        #              in extracted_vals]
-        # return remaining

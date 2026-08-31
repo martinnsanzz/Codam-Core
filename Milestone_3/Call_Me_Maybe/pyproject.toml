@@ -29,13 +29,19 @@ dev = [
 [tool.mypy]
 exclude = [
     '^llm_sdk/',
-    '^.venv'
+    '^.venv',
+    "moulinette"
 ]
+
+[[tool.mypy.overrides]]
+module = "llm_sdk.*"
+ignore_errors = true
 
 [tool.flake8]
 exclude = [
     ".venv/",
-    "llm_sdk/"
+    "llm_sdk/",
+    "moulinette"
 ]
 
 [tool.uv.workspace]

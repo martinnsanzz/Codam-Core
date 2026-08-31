@@ -1,17 +1,14 @@
 # Built-in Modules
 from argparse import Namespace, ArgumentParser, ArgumentError
 from pathlib import Path
-import time
 import os
 
 # Local Modules
 """This makes all loading bars not show on terminal"""
 os.environ["HF_HUB_DISABLE_PROGRESS_BARS"] = "1"
-from llm_sdk import Small_LLM_Model
-
-from .classes import Prompt
-from .core import load_json, build_function_lookup, Engine, write_output, CustomError
-
+from llm_sdk import Small_LLM_Model # noqa
+from .classes import Prompt # noqa
+from .core import load_json, build_function_lookup, Engine, write_output, CustomError # noqa
 
 
 def _main() -> None:
@@ -33,8 +30,8 @@ def _main() -> None:
     except ArgumentError as e:
         print(f"\033[91mIncorrect argument on command line:\n   - {e}\033[0m")
         quit()
-    except KeyError :
-        print(f"\033[91mExpected key in '.json file': 'prompt'\033[0m")
+    except KeyError:
+        print("\033[91mExpected key in '.json file': 'prompt'\033[0m")
         quit()
     except CustomError as e:
         print(f"\033[91mERROR:\n   - {e}\033[0m")
@@ -73,9 +70,10 @@ def args_parser() -> Namespace:
 
     if argv:
         raise ArgumentError(None,
-                                "Correct usage: src [--functi"
-                                "ons_definition <FUNCTIONS_DEFINITION>] "
-                                "[--input <INPUT>] [--output <OUTPUT>]")
+                            "Correct usage: src [--functi"
+                            "ons_definition <FUNCTIONS_DEFINITION>] "
+                            "[--input <INPUT>] [--output <OUTPUT>]"
+                            )
     return args
 
 

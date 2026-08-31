@@ -2,13 +2,15 @@
 from enum import Enum, auto
 from re import match, compile
 
-STRING_PATTERN  = compile(r'^"(?:[^"\\\x00-\x1f]|\\[nrtbf"\\/]|\\u[0-9a-fA-F]{4})*"$')
-NUMBER_PATTERN  = compile(r'^-?\d+\.\d+$')
+STRING_PATTERN = compile(r'^"(?:[^"\\\x00-\x1f]|\\ \
+                         [nrtbf"\\/]|\\u[0-9a-fA-F]{4})*"$')
+NUMBER_PATTERN = compile(r'^-?\d+\.\d+$')
 INTEGER_PATTERN = compile(r'^-?\d+$')
 VALID_BOOLEAN = [True, False]
 
 
 class NumState(Enum):
+    """Represents the state of the generated number"""
     START = auto()
     IN_MINUS = auto()
     IN_DOT = auto()
@@ -18,6 +20,7 @@ class NumState(Enum):
 
 
 class StrState(Enum):
+    """Represents the state of the generated string"""
     NOT_FINISHED = auto()
     FINISHED = auto()
 
@@ -77,6 +80,17 @@ def get_num_state(num: str, prompt: str, param_type: str) -> NumState:
 
 
 def get_str_state(param: str, available_word: list[str]) -> StrState:
+    """Determine whether a candidate string value has been fully matched.
+
+    Args:
+        param: The accumulated candidate string decoded so far.
+        available_word: The pool of extracted candidate words/phrases
+            to check `param` against.
+
+    Returns:
+        StrState: `StrState.FINISHED` if `param` is present in
+        `available_word`; otherwise `StrState.NOT_FINISHED`.
+    """
     if param in available_word:
         return StrState.FINISHED
     else:

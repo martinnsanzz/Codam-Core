@@ -93,27 +93,26 @@ class Engine(BaseModel):
         llm_output = []
         i = 0
         error_log = 0
-        total_time = 0
+        total_time = 0.0
         for prompt_obj in self.prompts:
             error_msg = ""
             start = time.time()
             state = self.get_state(prompt_obj)
 
-            if not prompt_obj.prompt:
-                raise CustomError(f"Prompt {i} is empty !!")
-
-            while state != GenerationState.END:
-                if state == GenerationState.FUNC:
-                    self.llm_get_function(self.id_to_token, prompt_obj)
-                elif state == GenerationState.PARAM:
-                    self.llm_get_param(self.id_to_token, prompt_obj)
-
-                state = self.get_state(prompt_obj)
             try:
-                pass
+                if not prompt_obj.prompt:
+                    raise CustomError(f"Prompt {i} is empty !!")
+
+                while state != GenerationState.END:
+                    if state == GenerationState.FUNC:
+                        self.llm_get_function(self.id_to_token, prompt_obj)
+                    elif state == GenerationState.PARAM:
+                        self.llm_get_param(self.id_to_token, prompt_obj)
+
+                    state = self.get_state(prompt_obj)
             except errors_lst as e:
                 error_log += 1
-                error_msg = e
+                error_msg = str(e)
 
             llm_output.append(prompt_obj.get_output())
             end = time.time()
@@ -132,8 +131,8 @@ class Engine(BaseModel):
 
         Repeatedly masks the model's logits to only the token IDs whose
         string is a valid name character and whose accumulated text is
-        a prefix of a known function name, picks the highest-scoring 
-        allowed token, and appends it. Sets ``prompt_obj.name`` once the 
+        a prefix of a known function name, picks the highest-scoring
+        allowed token, and appends it. Sets ``prompt_obj.name`` once the
         accumulated text exactly matches an entry in ``functions_lookup``.
 
         Args:
@@ -143,8 +142,10 @@ class Engine(BaseModel):
         """
         function_names = list(self.functions_lookup.keys())
 
-        tokenize_funcs = self.small_llm.encode(''.join(function_names)).tolist()[0]
-        candidates = {id: str for id, str in id_to_token.items() if id in tokenize_funcs}
+        tokenize_funcs = self.small_llm.encode(''.join(
+            function_names)).tolist()[0]
+        candidates = {id: str for id, str in id_to_token.items() if id
+                      in tokenize_funcs}
 
         prompt_text = prompt_obj.sys_prompt(
             "func",
@@ -175,12 +176,35 @@ class Engine(BaseModel):
 
     def llm_get_param(self, id_to_token: dict[int, str],
                       prompt_obj: Prompt) -> None:
-        function_param = self.functions_lookup[prompt_obj.name]["parameters"]
+        """Decode all parameters for a function call and store them on
+        the prompt.
 
-        for i, (param_name, param_info) in enumerate(function_param.items(), start=1):
+        Looks up the parameter spec for `prompt_obj.name` in
+        `self.functions_lookup`, then decodes each parameter in order via a
+        `Parameter` instance, writing each result into
+        `prompt_obj.parameters` keyed by parameter name.
+
+        Args:
+            id_to_token: Mapping from vocabulary token id to its string
+                form, passed through to `filter_id_to_token` to build
+                per-type candidate sets.
+            prompt_obj: The `Prompt` instance identifying the target
+                function (`prompt_obj.name`) and accumulating decoded
+                parameter values in `prompt_obj.parameters`.
+
+        Returns:
+            None: Populates `prompt_obj.parameters` in place.
+        """
+        name = prompt_obj.name
+
+        if name:
+            function_param = self.functions_lookup[name]["parameters"]
+
+        for i, (param_name, param_info) in enumerate(
+                function_param.items(), start=1):
             param_type = param_info["type"]
             candidates = self.filter_id_to_token(id_to_token, param_type)
-
+            print(len(candidates))
             system_prompt = prompt_obj.sys_prompt(
                 "param",
                 param_spec=f"{param_name}: {param_type}",
@@ -194,12 +218,14 @@ class Engine(BaseModel):
                 id_to_token=self.id_to_token,
                 small_llm=self.small_llm)
 
-            prompt_obj.parameters[param_name] = param.get_param(candidates, system_prompt)
+            prompt_obj.parameters[param_name] = param.get_param(
+                candidates, system_prompt)
 
     @staticmethod
     def filter_id_to_token(id_to_token: dict[int, str],
                            type: str) -> dict[int, str]:
-        """Keep only vocabulary entries whose token string matches a pattern."""
+        """Keep only vocabulary entries whose token
+        string matches a pattern."""
         match type:
             case "string":
                 pattern = compile(r'^[\x20-\x7e]+$')
@@ -220,6 +246,8 @@ class Engine(BaseModel):
 
     @staticmethod
     def get_state(prompt: Prompt) -> GenerationState:
+        """Returns the state of the current 'Prompt' object based on the
+        arguments of the object"""
         if not prompt.name:
             return GenerationState.FUNC
         elif not prompt.parameters:

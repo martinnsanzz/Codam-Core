@@ -1,16 +1,10 @@
 [
     {
-        "prompt": "Format template: Hello {user}'s profile!",
-        "name": "fn_format_template",
+        "prompt": "Substitute the word 'cat' with 'dog' in 'The cat sat on the mat with another cat'",
+        "name": "fn_substitute_string_with_regex",
         "parameters": {
-            "template": "Hello {user}'s profile!"
-        }
-    },
-    {
-        "prompt": "Format template: Say \"hello\" to {name}",
-        "name": "fn_format_template",
-        "parameters": {
-            "template": "Say \"hello\" to {name}"
+            "source_string": "dog",
+            "regex": "The cat sat on the mat with another cat"
         }
     }
 ]
