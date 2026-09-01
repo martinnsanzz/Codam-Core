@@ -229,6 +229,11 @@ other peers I wasnt able to pass all 100% moulinette tests or provided tests. Re
 parameters not being 100% precise the function names always is correct maybe because is simpler to
 interpret what function should go with a prompt.
 
+An extra step I did when testing for the last times, I made it so it selects the longest
+"word / string" if the parameter name is source-string or path since they tend to be longer
+than a separate word. This makes the llm always choose the correct one in those specific
+cases.
+
 ### Testing strategy
 Due to the layer of complexity of this projct and the slow import time for the *Small_LLM_Model*
 multiple testing strategies where used.

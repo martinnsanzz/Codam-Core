@@ -193,7 +193,11 @@ class Parameter(BaseModel):
 
         prompt = self.prompt_obj.prompt
         tokenization = self.small_llm.encode(system_prompt).tolist()[0]
-        words_in_prompt = self.extract_words_from_prompt(prompt)
+
+        if self.param_name in ["source_string", "path"]:
+            words_in_prompt = self.extract_words_from_prompt(prompt, True)
+        else:
+            words_in_prompt = self.extract_words_from_prompt(prompt)
 
         while state != StrState.FINISHED:
             logits = self.small_llm.get_logits_from_input_ids(tokenization)
@@ -333,7 +337,8 @@ class Parameter(BaseModel):
             return decimals
         return list({str(float(n)) for n in whole})
 
-    def extract_words_from_prompt(self, prompt: str) -> list[str]:
+    def extract_words_from_prompt(self, prompt: str,
+                                  special_str: bool = False) -> list[str]:
         """Extract candidate string values from the prompt.
 
         Prefers quoted substrings (single- or double-quoted) when
@@ -371,6 +376,8 @@ class Parameter(BaseModel):
 
             remaining = [sub for sub in total if sub.strip("'\"")
                          not in extracted_vals]
+            if special_str and remaining:
+                return [max(remaining, key=len)]
             if remaining:
                 return remaining
         elif ": " in prompt:
@@ -381,4 +388,7 @@ class Parameter(BaseModel):
             clean_prompt = clean_prompt.replace(f'"{extracted}"', "")
             clean_prompt = clean_prompt.replace(f"'{extracted}'", "")
             clean_prompt = clean_prompt.replace(extracted, "")
+
+        if special_str:
+            return [max(clean_prompt.split(), key=len)]
         return [w for w in clean_prompt.split() if w]
