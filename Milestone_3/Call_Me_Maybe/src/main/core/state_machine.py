@@ -204,7 +204,7 @@ class Engine(BaseModel):
                 function_param.items(), start=1):
             param_type = param_info["type"]
             candidates = self.filter_id_to_token(id_to_token, param_type)
-            print(len(candidates))
+
             system_prompt = prompt_obj.sys_prompt(
                 "param",
                 param_spec=f"{param_name}: {param_type}",

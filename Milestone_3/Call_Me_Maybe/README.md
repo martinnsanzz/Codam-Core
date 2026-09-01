@@ -1,4 +1,4 @@
-*This project has been created as part of the 42 curriculum by masanz-s and cpfister*
+*This project has been created as part of the 42 curriculum by masanz-s*
 
 [Martin GitHub](https://github.com/martinnsanzz)
 
@@ -141,7 +141,29 @@ numbers. For long prompts like regex or paths the llm only sometimes puts the pa
 correct place but is always 100% correct type.
 
 ### Design decisions
+An important implementation for this project in order to reduce the amount of small_llm
+instances was to instantiate one small_llm class once in the main file `cli.py` and pass
+it to the `Engine` and use it accross all prompts. This made the code quite faster since 
+creating a new llm instance every time I had to use it lets say per `Prompt` object would
+make the program run slower since it needs to load many parameters and it uses many heavy
+libraries like `Transformers` or `Torch`.
 
+Another design that help me out in the late stages of the project was the `Parameter` class
+which helped isolating each parameter type in a separate function and redirect the type I
+wanted based on one condition. This made testing and finding errors easier since they
+were now all separated in different functions.
+
+The states for numbers and strings I thought it was gonna be more helpfull to do certain
+things based on where I was in the accumulated token but I dont think its being as usefull
+since I only check if its *DONE* to break the loop but I base this on a condition if
+the accumulated tokens so far match a word in the prompt.
+
+The split prompt logic was very usefull but was very likely to cause errors and had many
+edge cases depending if it was a string / number / integer. Overall I think it made the llm
+answer more precisely since I only pass the allowed words that can be used at that specific
+moment removing the already used ones which works perfect for numbers but for strings is
+more likely to cause mistakes since the choosing of the correct parameter for each case is
+up to intuition.
 
 ### Performance analysis
 As explained in the algorithm explanation performance varies based on the available vocab which
@@ -180,7 +202,32 @@ program not running for missing dependencies. A solution for this would be to pu
 Also speed on running this program is based on the computers CPU generation and architecture.
 
 ### Challenges faced
+During the development of this project many challenges where faced, specially when dealing with the
+constrained decoding. Initially I wasn't passing a system prompt which resulted in the llm talking
+non-sense constantly and not printing what I wanted, showing some weird patterns such as repeating
+the prompt over an over. 
 
+This made me discover *llm commands* such as:
+- `<|im_start|>system...<|im_end|>` -> For system commands
+- `<|im_start|>user...<|im_end|>` -> For the actual user prompt
+- `<|im_start|>assitant` -> What the assystant needs to write down
+- \<think>...\</think> -> To avoid initial random text of the llm
+
+This helped me get more clear and more accurate results (Not 100% correct all of the time)
+
+The biggest challenge faced that I couldn't overcome 100% was the llm choosing the correct
+parameter from the prompt at the required moment. Example would be that for source string instead of 
+choosing the string of the prompt in `' '` when there's multiple quoted words, the llm choose a random 
+quoted word which I think is the limitation of the context. Or when needing to choose a path it chooses
+a random word regardless of passing in the system prompt examples of how a path should look like. 
+With my implementation I always provide the quoted words/strings first as the available words to 
+choose from but is up to the llm and the context to decide which is not always 100% right when many are
+available. 
+
+Regardless of changing the prompt, avoiding the `think / nothink` command or providing examples like
+other peers I wasnt able to pass all 100% moulinette tests or provided tests. Regardless of the
+parameters not being 100% precise the function names always is correct maybe because is simpler to
+interpret what function should go with a prompt.
 
 ### Testing strategy
 Due to the layer of complexity of this projct and the slow import time for the *Small_LLM_Model*
@@ -204,22 +251,14 @@ Install dependencies and run against the default input files:
 
 ```bash
 make install
-make run
+make run # or make visual for step-by-step output
 ```
-
-Run with the visual, step-by-step output enabled:
-
-```bash
-make visual
-```
-
 
 Run against a custom set of files directly:
 
 ```bash
 uv run python -m src --functions_definition data/input/functions_definition.json --input data/input/function_calling_tests.json --output data/output/function_calling_results.json
 ```
-
 
 Given the input:
 
@@ -288,30 +327,29 @@ The program produces:
 This is a list of multiple resources use through out the life-cycle of the project
 
 ### LLM
-[Constrained Decoding](https://www.aidancooper.co.uk/constrained-decoding/)
-[Implementing Constrained Decoding](https://medium.com/@albersj66/part-6-implementing-constrained-decoding-for-phi-3-vision-2c72a1be6a17)
-[Function calling with LLMs](https://www.promptingguide.ai/applications/function_calling)
-[Understand Tokens](https://learn.microsoft.com/en-us/dotnet/ai/conceptual/understanding-tokens)
-[LLMs -WIKI](https://en.wikipedia.org/wiki/Large_language_model)
-[How do LLMs work](https://medium.com/data-science-at-microsoft/how-large-language-models-work-91c362f5b78f)
-[Structured Output from LLMs](https://www.youtube.com/watch?v=xpvFinvqRCA)
-[Qwen Model](https://huggingface.co/Qwen/Qwen3-0.6B)
-[Qwen Docs](https://qwen.readthedocs.io/en/latest/getting_started/concepts.html)
-[How Constrained Decoding Works](https://medium.com/@sebuzdugan/make-invalid-json-impossible-how-constrained-decoding-actually-works-5a512106396a)
+- [Constrained Decoding](https://www.aidancooper.co.uk/constrained-decoding/)
+- [Implementing Constrained Decoding](https://medium.com/@albersj66/part-6-implementing-constrained-decoding-for-phi-3-vision-2c72a1be6a17)
+- [Function calling with LLMs](https://www.promptingguide.ai/applications/function_calling)
+- [Understand Tokens](https://learn.microsoft.com/en-us/dotnet/ai/conceptual/understanding-tokens)
+- [LLMs -WIKI](https://en.wikipedia.org/wiki/Large_language_model)
+- [How do LLMs work](https://medium.com/data-science-at-microsoft/how-large-language-models-work-91c362f5b78f)
+- [Structured Output from LLMs](https://www.youtube.com/watch?v=xpvFinvqRCA)
+- [Qwen Model](https://huggingface.co/Qwen/Qwen3-0.6B)
+- [Qwen Docs](https://qwen.readthedocs.io/en/latest/getting_started/concepts.html)
+- [How Constrained Decoding Works](https://medium.com/@sebuzdugan/make-invalid-json-impossible-how-constrained-decoding-actually-works-5a512106396a)
 
 ### VENV
-[UV and Environments](https://docs.astral.sh/uv/pip/environments/)
-[WIriting your pyproject.toml](https://packaging.python.org/en/latest/guides/writing-pyproject-toml/)
+- [UV and Environments](https://docs.astral.sh/uv/pip/environments/)
+- [Writing your pyproject.toml](https://packaging.python.org/en/latest/guides/writing-pyproject-toml/)
 
 ### Python Specifics
-[Argparse library](https://docs.python.org/3/library/argparse.html)
-[Argparse tutorial](https://www.youtube.com/watch?v=tirLko5urBo)
-[Working with JSON data in Python](https://realpython.com/python-json/)
-[Using Qwen in Python](https://qwen.readthedocs.io/en/stable/getting_started/quickstart.html)
-[Pytorch Doc](https://pytorch.org/)
-[Regular Expressions in Python](https://www.youtube.com/watch?v=wnuBwl2ekmo)
-[Python RegEx](https://www.w3schools.com/python/python_regex.asp)
-
+- [Argparse library](https://docs.python.org/3/library/argparse.html)
+- [Argparse tutorial](https://www.youtube.com/watch?v=tirLko5urBo)
+- [Working with JSON data in Python](https://realpython.com/python-json/)
+- [Using Qwen in Python](https://qwen.readthedocs.io/en/stable/getting_started/quickstart.html)
+- [Pytorch Doc](https://pytorch.org/)
+- [Regular Expressions in Python](https://www.youtube.com/watch?v=wnuBwl2ekmo)
+- [Python RegEx](https://www.w3schools.com/python/python_regex.asp)
 
 ---
 
@@ -327,5 +365,8 @@ This is a list of multiple resources use through out the life-cycle of the proje
 - Writting accurate docstrings
 - Suggesting best way of organizing the files and functions within them for clarity and
 readability
+
+This README.md file was done by **human fingers, sweat and tears**. No AI wrote a single
+line of text :)
 
 ---

@@ -1,8 +1,0 @@
-[
-    {
-    "prompt": "Format template: Hello {user}'s profile!"
-  },
-  {
-    "prompt": "Format template: Say \"hello\" to {name}"
-  }
-]
