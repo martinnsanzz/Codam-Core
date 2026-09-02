@@ -20,10 +20,13 @@ MOULINETTE_FUNC_DEF	:= moulinette/data/input/functions_definition.json
 INPUT				:= data/input/function_calling_tests.json
 MOULINETTE_INPUT	:= moulinette/data/input/function_calling_tests.json
 
+OUTPUT_DIR			:= data/output
 OUTPUT				:= data/output/function_calling_results.json
 MOULINETTE_OUTPUT	:= ../data/output/function_calling_results.json
 
+TEST_DIR			:= data/test
 TEST				:= data/test/prompt_test.json
+
 
 # ------------------ Tools  ------------------ #
 VENV				:= .venv
@@ -58,6 +61,14 @@ $(VENV):
 	@echo "${CYAN}	RUN 'source ./env/bin/activate \
 	('activate.fish' if using fish)${RESET}"
 
+$(OUTPUT_DIR):
+	@mkdir -p $(OUTPUT_DIR)
+	@touch $(OUTPUT)
+
+$(TEST_DIR):
+	@mkdir -p $(TEST_DIR)
+	@touch $(TEST)
+
 # ------------------ Commands ------------------ #
 help:
 	@echo "${BOLD}Available commands:${RESET}"
@@ -78,7 +89,7 @@ install: $(VENV)
 
 	@echo "${GREEN}\nEverything installed ${RESET}"
 
-run: install
+run: install $(OUTPUT_DIR)
 	@echo "${GREEN}\nRunning... !!${RESET}"
 	@ ${RUN_COMM} -m src ${STD_ARGS}
 
@@ -86,15 +97,15 @@ debug: $(VENV) install
 	@echo "${PURPLE}Running in debug mode with $(DEBUGGER)...${RESET}"
 	@$(RUN_COMM) -m $(DEBUGGER) -m src $(TEST_ARG)
 
-test: install
+test: install $(TEST_DIR) $(OUTPUT_DIR)
 	@echo "${GREEN}\nRunning with test file... !!${RESET}"
 	@ ${RUN_COMM} -m src ${TEST_ARG} --visual_mode True
 
-visual: install
+visual: install $(OUTPUT_DIR)
 	@echo "${GREEN}\nRunning in visual mode... !!${RESET}"
 	@ ${RUN_COMM} -m src ${VISUAL_ARGS}
 
-moulinette:
+moulinette: $(OUTPUT_DIR)
 	@echo "${GREEN}\nCreating moulinette test files... !!${RESET}"
 	@(cd moulinette && uv run python -m moulinette prepare_exercises --set private)
 
@@ -114,6 +125,10 @@ clean:
 
 	@echo "${RED}Removing '.pyc' files.${RESET}"
 	@find . -type f -name "*.pyc" -exec rm -rf {} +
+
+	@echo "${RED}Removing test and output folders.${RESET}"
+	@rm -rf $(OUTPUT_DIR)
+	@rm -rf $(TEST_DIR)
 
 fclean: clean
 	@echo "${RED}Removing '.venv'.${RESET}"

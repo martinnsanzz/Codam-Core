@@ -13,3 +13,5 @@ __pycache__
 # Random stuff
 test.txt
 moulinette
+data/output
+data/test

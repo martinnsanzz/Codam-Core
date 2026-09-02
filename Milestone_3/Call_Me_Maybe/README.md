@@ -108,7 +108,8 @@ masking the vocabs that match the regex of the asked type, based on json types.
 ```
 
 This reduces the 150k available vocab words to:
-- number / integer -> 13
+- number -> 13
+- integer -> 10
 - string -> 90913
 - boolean -> 846
 
@@ -182,7 +183,8 @@ gets masked based on the type we are trying to get.
 ```
 
 This reduces the 150k available vocab words to:
-- number / integer -> 13
+- number -> 13
+- integers -> 10
 - string -> 90913
 - boolean -> 846
 

@@ -64,7 +64,6 @@ class Prompt(BaseModel):
                else ""}"
             f"\nParameter required - {param_spec} = \n"
         )
-
         system_content = system_content_func if state == "func" \
             else system_content_param
         return (
