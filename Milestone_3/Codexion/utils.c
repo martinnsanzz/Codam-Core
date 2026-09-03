@@ -6,57 +6,81 @@
 /*   By: masanz-s <masanz-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 12:47:15 by masanz-s          #+#    #+#             */
-/*   Updated: 2026/09/02 13:37:57 by masanz-s         ###   ########.fr       */
+/*   Updated: 2026/09/03 16:09:29 by masanz-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
-#include <string.h>
-#include <unistd.h>
 
-int		ft_strcmp(const char *s1, const char *s2)
+int	ft_strcmp(const char *s1, const char *s2)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    while (s1[i] != '\0')
-    {
-        if (s1[i] > s2[i])
-            print()
-            return s2[i] - s1[i];
-        else if (s1[i] < s2[i])
-            return s2[i] - s1[i];
-        i++;
-    }
-    return 0;
+	i = 0;
+	while (s1[i] != '\0' || s2[i] != '\0')
+	{
+		if (s1[i] != s2[i])
+			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+		i++;
+	}
+	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
 
 size_t	ft_strlen(const char *s)
 {
-    size_t len;
+	size_t	len;
 
-    len = 0;
-    while(s[len] != '\0')
-        len++;
-    return len;
+	len = 0;
+	while (s[len] != '\0')
+		len++;
+	return (len);
 }
 
-int		ft_atoi(const char *nptr)
+int	ft_atoi(const char *nptr)
 {
-    return 0;
+	int	num;
+	int	sign;
+
+	num = 0;
+	sign = 1;
+	while (*nptr == ' ' || (*nptr >= 9 && *nptr <= 13))
+		nptr++;
+	if (*nptr == '+' || *nptr == '-')
+	{
+		if (*nptr == '-')
+			sign = -1;
+		nptr++;
+	}
+	while (*nptr >= '0' && *nptr <= '9')
+	{
+		num = num * 10 + (*nptr - '0');
+		nptr++;
+	}
+	return (num * sign);
 }
 
 void	*ft_memset(void *s, int c, size_t n)
 {
-    return s;
+	unsigned char	c_char;
+	unsigned char	*ptr;
+
+	c_char = (unsigned char)c;
+	ptr = (unsigned char *)s;
+	while (n--)
+		*ptr++ = c_char;
+	return (s);
 }
 
-#include <stdio.h>
+int	ft_isnumber(char *s)
+{
+	int i;
 
-int main(void){
-    const char *s1 = "Helloe";
-    const char *s2 = "Hellow";
-
-    printf("%d\n", strcmp(s1, s2));
-    printf("%d\n", ft_strcmp(s1, s2));
+	i = 0;
+	while (s[i] != '\0')
+	{
+		if (!(s[i] >= '0' && s[i] <= '9'))
+			return (0);
+		i++;
+	}
+	return (1);
 }

@@ -28,7 +28,9 @@ DEBUGEXEC			:= a.out.debug
 OBJS_DIR			:= objs
 OBJS_DIR_DEBUG		:= objs_debug
 
-SRCS				:= codexion.c
+SRCS				:= codexion.c \
+						utils.c
+
 OBJS				:= $(SRCS:%.c=$(OBJS_DIR)/%.o)
 OBJS_DEBUG			:= $(SRCS:%.c=$(OBJS_DIR_DEBUG)/%.o)
 
@@ -63,6 +65,16 @@ help:
 	@echo "${CYAN}  make clean${RESET}      - Remove cache folders"
 	@echo "${CYAN}  make fclean${RESET}     - Remove venv and cache"
 
+help-run:
+	@echo "${CYAN}To run the program the following arguments must be passed:${RESET}\n"
+
+	@echo "${BOLD}./codexion 'number_of_coders' 'time_to_burnout (in milliseconds)' \
+'time_to_compile (in milliseconds)' 'time_to_debug (in milliseconds)' \
+'time_to_refactor (in milliseconds)' 'number_of_compiles_required' \
+'dongle_cooldown (in milliseconds)' 'scheduler (fifo or edf)'${RESET}\n"
+
+	@echo "${YELLOW} For more information go to subject.pdf page 8."
+
 all: $(NAME)
 	@echo "${GREEN}Program is compiled and ready to use !! $(DEBUGGER)...${RESET}"
 	@echo "${BOLD}	Run ./$(NAME) $(DEBUGGER)...${RESET}"
@@ -87,4 +99,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all debuf clean fclean re
+.PHONY: help help-run all debuf clean fclean re

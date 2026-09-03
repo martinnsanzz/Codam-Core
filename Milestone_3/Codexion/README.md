@@ -26,7 +26,7 @@
 This is a list of multiple resources use through out the life-cycle of the project
 
 ### C Specifics
-
+[Error Handling in C](https://www.geeksforgeeks.org/c/error-handling-in-c/)
 
 ### Extra
 - [The Dining Philosophers Problem](https://pages.mtu.edu/~shene/NSF-3/e-Book/MUTEX/TM-example-philos-1.html)
