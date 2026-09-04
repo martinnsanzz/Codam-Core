@@ -84,10 +84,10 @@ debug: $(DEBUGEXEC)
 
 clean:
 	@echo "${RED}Removing '$(OBJS_DIR)' folder.${RESET}"
-	$(RM) $(OBJS_DIR)
+	@$(RM) $(OBJS_DIR)
 
 	@echo "${RED}Removing '$(OBJS_DIR_DEBUG)' folder.${RESET}"
-	$(RM) $(OBJS_DIR_DEBUG)
+	@$(RM) $(OBJS_DIR_DEBUG)
 
 
 fclean: clean
@@ -95,7 +95,7 @@ fclean: clean
 	@$(RM) $(NAME)
 
 	@echo "${RED}Removing '$(DEBUGEXEC)' file.${RESET}"
-	$(RM) $(DEBUGEXEC)
+	@$(RM) $(DEBUGEXEC)
 
 re: fclean all
 

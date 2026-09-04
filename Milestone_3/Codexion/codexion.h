@@ -19,7 +19,9 @@
 # include <stdio.h>
 # include <sys/time.h>
 # include <pthread.h>
-# include <stdint.h>
+# include <limits.h>
+
+
 // ------------- Utils -------------
 int		ft_strcmp(const char *s1, const char *s2);
 size_t	ft_strlen(const char *s);
