@@ -6,7 +6,7 @@
 /*   By: masanz-s <masanz-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 12:47:09 by masanz-s          #+#    #+#             */
-/*   Updated: 2026/09/07 11:29:58 by masanz-s         ###   ########.fr       */
+/*   Updated: 2026/09/07 12:23:56 by masanz-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,16 @@
 # include <pthread.h>
 # include <limits.h>
 
+// ---------- Validation -----------
+int     	check_argv(int argc, char *argv[]);
+int			check_valid_num(char *argv[]);
+void		get_rules(char *argv[], int *arr);
 
 // ------------- Utils -------------
-int		ft_strcmp(const char *s1, const char *s2);
-size_t	ft_strlen(const char *s);
-int		ft_atoi(const char *nptr);
-void	*ft_memset(void *s, int c, size_t n);
-int		ft_isnumber(char *s);
+long long	ft_atoi(const char *nptr);
+int			ft_strcmp(const char *s1, const char *s2);
+size_t		ft_strlen(const char *s);
+void		*ft_memset(void *s, int c, size_t n);
+int			ft_isnumber(char *s);
 
 #endif

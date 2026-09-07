@@ -29,6 +29,7 @@ OBJS_DIR			:= objs
 OBJS_DIR_DEBUG		:= objs_debug
 
 SRCS				:= codexion.c \
+						validation.c \
 						utils.c
 
 OBJS				:= $(SRCS:%.c=$(OBJS_DIR)/%.o)
@@ -68,10 +69,10 @@ help:
 help-run:
 	@echo "${CYAN}To run the program the following arguments must be passed:${RESET}\n"
 
-	@echo "${BOLD}./codexion 'number_of_coders' 'time_to_burnout (in milliseconds)' \
-'time_to_compile (in milliseconds)' 'time_to_debug (in milliseconds)' \
-'time_to_refactor (in milliseconds)' 'number_of_compiles_required' \
-'dongle_cooldown (in milliseconds)' 'scheduler (fifo or edf)'${RESET}\n"
+	@echo "${BOLD}./codexion 1:'number_of_coders' 2:'time_to_burnout (in milliseconds)' \
+3:'time_to_compile (in milliseconds)' 4:'time_to_debug (in milliseconds)' \
+5:'time_to_refactor (in milliseconds)' 6:'number_of_compiles_required' \
+7:'dongle_cooldown (in milliseconds)' 8:'scheduler (fifo or edf)'${RESET}\n"
 
 	@echo "${YELLOW} For more information go to subject.pdf page 8."
 
@@ -97,6 +98,6 @@ fclean: clean
 	@echo "${RED}Removing '$(DEBUGEXEC)' file.${RESET}"
 	@$(RM) $(DEBUGEXEC)
 
-re: fclean all
+re: fclean all debug
 
 .PHONY: help help-run all debuf clean fclean re
