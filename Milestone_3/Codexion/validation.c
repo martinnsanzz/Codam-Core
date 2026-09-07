@@ -6,7 +6,7 @@
 /*   By: masanz-s <masanz-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 12:16:06 by masanz-s          #+#    #+#             */
-/*   Updated: 2026/09/07 12:33:28 by masanz-s         ###   ########.fr       */
+/*   Updated: 2026/09/07 13:29:56 by masanz-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,12 @@ int check_valid_num(char *argv[])
 	return (0);
 }
 
-void    get_rules(char *argv[], int *arr)
+void    get_rules(char *argv[], int *arr, char **scheduler)
 {
     int i;
 
     i = 0;
     while(i++ < 7)
-        arr[i - 1] = ft_atoi(argv[i]);
+		arr[i - 1] = (int)ft_atoi(argv[i]);
+	*scheduler = argv[8];
 }

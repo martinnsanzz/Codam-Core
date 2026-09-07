@@ -16,8 +16,9 @@ UNDERLINE			:= \033[4m
 
 # ------------------ Tools ------------------ #
 CC					:= cc
-CFLAGS				:= -Wall -Werror -Wextra
-GDBFLAG				:= -g
+C_FLAGS				:= -Wall -Werror -Wextra
+GDB_FLAG			:= -g
+LPTHREAD_FLAG		:= -lpthread
 RM					:= rm -rf
 
 
@@ -39,25 +40,25 @@ OBJS_DEBUG			:= $(SRCS:%.c=$(OBJS_DIR_DEBUG)/%.o)
 # --------------- Recipes --------------- #
 $(NAME): $(OBJS)
 	@echo "${YELLOW}Compiling program...\n${RESET}"
-	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+	@$(CC) $(C_FLAGS) $(OBJS) $(LPTHREAD_FLAG) -o $(NAME)
 
 $(OBJS_DIR):
 	@mkdir -p $(OBJS_DIR)
 
 $(OBJS_DIR)/%.o: %.c | $(OBJS_DIR)
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(C_FLAGS) -c $< -o $@
 
 
 # ------------ Debug Recipes ------------ #
 $(DEBUGEXEC): $(OBJS_DEBUG)
 	@echo "${PURPLE}Compiling program in debug mode...\n${RESET}"
-	@$(CC) $(GDBFLAG) $(OBJS_DEBUG) -o $(DEBUGEXEC)
+	@$(CC) $(GDB_FLAG) $(OBJS_DEBUG) $(LPTHREAD_FLAG) -o $(DEBUGEXEC)
 
 $(OBJS_DIR_DEBUG):
 	@mkdir -p $(OBJS_DIR_DEBUG)
 
 $(OBJS_DIR_DEBUG)/%.o: %.c | $(OBJS_DIR_DEBUG)
-	@$(CC) $(CFLAGS) $(GDBFLAG) -c $< -o $@
+	@$(CC) $(C_FLAGS) $(GDB_FLAG) -c $< -o $@
 
 
 # ------------------ Commands ------------------ #

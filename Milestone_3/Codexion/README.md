@@ -31,7 +31,7 @@ This is a list of multiple resources use through out the life-cycle of the proje
 ### Extra
 - [The Dining Philosophers Problem](https://pages.mtu.edu/~shene/NSF-3/e-Book/MUTEX/TM-example-philos-1.html)
 - [A simple Makefile Tutorial](https://www.cs.colby.edu/maxwell/courses/tutorials/maketutor/)
-
+- [The Dining Philosopers Problem in C](https://medium.com/swlh/the-dining-philosophers-problem-solution-in-c-90e2593f64e8)
 ---
 
 ## AI Usage

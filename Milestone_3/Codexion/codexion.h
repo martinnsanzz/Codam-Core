@@ -6,7 +6,7 @@
 /*   By: masanz-s <masanz-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 12:47:09 by masanz-s          #+#    #+#             */
-/*   Updated: 2026/09/07 12:23:56 by masanz-s         ###   ########.fr       */
+/*   Updated: 2026/09/07 13:19:44 by masanz-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,15 @@
 # include <pthread.h>
 # include <limits.h>
 
+// ------------- Coder -------------
+typedef struct s_coders{
+	int id;
+} t_coders;
+
 // ---------- Validation -----------
 int     	check_argv(int argc, char *argv[]);
 int			check_valid_num(char *argv[]);
-void		get_rules(char *argv[], int *arr);
+void		get_rules(char *argv[], int *arr, char **scheduler);
 
 // ------------- Utils -------------
 long long	ft_atoi(const char *nptr);
