@@ -6,7 +6,7 @@
 /*   By: masanz-s <masanz-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 12:47:12 by masanz-s          #+#    #+#             */
-/*   Updated: 2026/09/03 16:14:43 by masanz-s         ###   ########.fr       */
+/*   Updated: 2026/09/07 11:37:39 by masanz-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int     main(int argc, char *argv[])
     int rules[7];
     char *scheduler;
 
+	printf("%d\n", argc);
 	if (check_argv(argc, argv) == 0)
         return (0);
     get_rules(argv, rules);
