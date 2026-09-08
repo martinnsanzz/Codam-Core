@@ -58,7 +58,7 @@ $(OBJS_DIR_DEBUG):
 	@mkdir -p $(OBJS_DIR_DEBUG)
 
 $(OBJS_DIR_DEBUG)/%.o: %.c | $(OBJS_DIR_DEBUG)
-	@$(CC) $(C_FLAGS) $(GDB_FLAG) -c $< -o $@
+	@$(CC) $(GDB_FLAG) -c $< -o $@
 
 
 # ------------------ Commands ------------------ #

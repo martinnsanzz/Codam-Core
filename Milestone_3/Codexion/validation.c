@@ -14,9 +14,6 @@
 
 int     check_argv(int argc, char *argv[])
 {
-    int i;
-
-    i = 0;
     fprintf(stderr, "\033[0;31m");
 	if (argc != 9){
 		fprintf(stderr, "Program must have 8 arguments !!\n"
