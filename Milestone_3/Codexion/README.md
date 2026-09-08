@@ -27,6 +27,7 @@ This is a list of multiple resources use through out the life-cycle of the proje
 
 ### C Specifics
 [Error Handling in C](https://www.geeksforgeeks.org/c/error-handling-in-c/)
+[Threads on single Processors](https://www.youtube.com/watch?v=M9HHWFp84f0)
 
 ### Extra
 - [The Dining Philosophers Problem](https://pages.mtu.edu/~shene/NSF-3/e-Book/MUTEX/TM-example-philos-1.html)
