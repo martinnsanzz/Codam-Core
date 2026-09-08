@@ -31,7 +31,9 @@ OBJS_DIR_DEBUG		:= objs_debug
 
 SRCS				:= codexion.c \
 						validation.c \
-						utils.c
+						display.c \
+						utils/utils_1.c \
+						utils/utils_2.c
 
 OBJS				:= $(SRCS:%.c=$(OBJS_DIR)/%.o)
 OBJS_DEBUG			:= $(SRCS:%.c=$(OBJS_DIR_DEBUG)/%.o)
@@ -44,6 +46,7 @@ $(NAME): $(OBJS)
 
 $(OBJS_DIR):
 	@mkdir -p $(OBJS_DIR)
+	@mkdir -p $(OBJS_DIR)/utils
 
 $(OBJS_DIR)/%.o: %.c | $(OBJS_DIR)
 	@$(CC) $(C_FLAGS) -c $< -o $@
@@ -56,6 +59,7 @@ $(DEBUGEXEC): $(OBJS_DEBUG)
 
 $(OBJS_DIR_DEBUG):
 	@mkdir -p $(OBJS_DIR_DEBUG)
+	@mkdir -p $(OBJS_DIR_DEBUG)/utils
 
 $(OBJS_DIR_DEBUG)/%.o: %.c | $(OBJS_DIR_DEBUG)
 	@$(CC) $(GDB_FLAG) -c $< -o $@

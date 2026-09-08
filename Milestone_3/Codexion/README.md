@@ -26,13 +26,18 @@
 This is a list of multiple resources use through out the life-cycle of the project
 
 ### C Specifics
-[Error Handling in C](https://www.geeksforgeeks.org/c/error-handling-in-c/)
-[Threads on single Processors](https://www.youtube.com/watch?v=M9HHWFp84f0)
-
+- [Error Handling in C](https://www.geeksforgeeks.org/c/error-handling-in-c/)
+- [Threads on single Processors](https://www.youtube.com/watch?v=M9HHWFp84f0)
+- [Thread Management Function in C](https://www.geeksforgeeks.org/c/thread-functions-in-c-c/)
+- [Mutexes in C](https://medium.com/@sherniiazov.da/mutexes-in-c-ac2b0f1a6d34)
 ### Extra
 - [The Dining Philosophers Problem](https://pages.mtu.edu/~shene/NSF-3/e-Book/MUTEX/TM-example-philos-1.html)
 - [A simple Makefile Tutorial](https://www.cs.colby.edu/maxwell/courses/tutorials/maketutor/)
 - [The Dining Philosopers Problem in C](https://medium.com/swlh/the-dining-philosophers-problem-solution-in-c-90e2593f64e8)
+- [CPU Cores VS Threads Explained](https://www.youtube.com/watch?v=hwTYDQ0zZOw)
+- [Mutex lock for Linux Thread Synchronization](https://www.geeksforgeeks.org/linux-unix/mutex-lock-for-linux-thread-synchronization/)
+- [Multithreading vs Multiprocessing](https://www.youtube.com/watch?v=PgDaJEjlBuI)
+
 ---
 
 ## AI Usage
