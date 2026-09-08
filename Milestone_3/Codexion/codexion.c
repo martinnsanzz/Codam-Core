@@ -6,62 +6,66 @@
 /*   By: masanz-s <masanz-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 12:47:12 by masanz-s          #+#    #+#             */
-/*   Updated: 2026/09/03 16:14:43 by masanz-s         ###   ########.fr       */
+/*   Updated: 2026/09/07 15:19:58 by masanz-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-int     check_argv(int argc, char *argv[]);
-void    get_rules(char *argv[], int *arr);
+void create_threads(int *rules, pthread_t **threads);
+void join_threads(int *rules, pthread_t **threads);
+void *print_hello();
 
 int     main(int argc, char *argv[])
 {
-    int rules[7];
-    char *scheduler;
+    int			rules[7];
+    char		*scheduler;
+	pthread_t	*threads;
 
-	if (check_argv(argc, argv) == 0)
+	if (check_argv(argc, argv) == -1)
         return (0);
-    get_rules(argv, rules);
-    scheduler = argv[8];
+    get_rules(argv, rules, &scheduler);
+
+	threads = (pthread_t*) malloc(rules[0] * sizeof(pthread_t));
+	if (threads == NULL)
+		return (1);
+
+	create_threads(rules, &threads);
+	join_threads(rules, &threads);
 
 	return (0);
 }
 
-int     check_argv(int argc, char *argv[])
+void create_threads(int *rules, pthread_t **threads)
 {
-    int i;
-	
-    i = 0;
-    fprintf(stderr, "\033[0;31m");
-	if (argc != 9){
-		fprintf(stderr, "Program must run with contain 9 arguments !!\n"
-						" Run 'make help-run' for help.\n");
-		return (0);
+	int	i;
+
+	i = 0;
+	while(i < rules[0])
+	{
+		pthread_create(&(*threads)[i], NULL, print_hello, NULL);
+		// pthread_join((*threads)[i], NULL);
+		i++;
 	}
-	else if ((ft_strcmp(argv[8], "fifo")) && (ft_strcmp(argv[8], "edf"))){
-		fprintf(stderr, "Wrong scheduler {%s}: Allowed ['fifo', 'edf']\n", argv[8]);
-		return (0);
-	}
-	while (i++ < 7){
-		if (ft_isnumber(argv[i]) == 0){
-			fprintf(stderr, "Argument %d is an invalid int: {%s}\n", i, argv[i]);
-			return (0);
-		}
-		else if (ft_atoi(argv[i]) <= 0){
-            fprintf(stderr, "Value '%d' can't be less than 1: {%s}\n", i, argv[i]);
-            return(0);
-        }
-	}
-	fprintf(stderr, "\033[0m");
-	return (1);
 }
 
-void    get_rules(char *argv[], int *arr)
+void join_threads(int *rules, pthread_t **threads)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    while(i++ < 7)
-        arr[i - 1] = ft_atoi(argv[i]);
+	i = 0;
+	while(i < rules[0])
+	{
+		pthread_join((*threads)[i], NULL);
+		i++;
+	}
+	free(*threads);
+}
+
+void *print_hello(){
+	pthread_t thisThread = pthread_self();
+	printf("Current thread ID: %lu\n", (unsigned long)thisThread);
+	printf("Hello\n");
+	sleep(1);
+	return NULL;
 }

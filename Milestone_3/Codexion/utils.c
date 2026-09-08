@@ -6,7 +6,7 @@
 /*   By: masanz-s <masanz-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 12:47:15 by masanz-s          #+#    #+#             */
-/*   Updated: 2026/09/03 16:09:29 by masanz-s         ###   ########.fr       */
+/*   Updated: 2026/09/07 12:27:31 by masanz-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,10 @@ size_t	ft_strlen(const char *s)
 	return (len);
 }
 
-int	ft_atoi(const char *nptr)
+long long	ft_atoi(const char *nptr)
 {
-	int	num;
-	int	sign;
+	long long	num;
+	int			sign;
 
 	num = 0;
 	sign = 1;
@@ -56,6 +56,8 @@ int	ft_atoi(const char *nptr)
 		num = num * 10 + (*nptr - '0');
 		nptr++;
 	}
+	if (num > INT_MAX)
+		return (0);
 	return (num * sign);
 }
 
@@ -78,8 +80,8 @@ int	ft_isnumber(char *s)
 	i = 0;
 	while (s[i] != '\0')
 	{
-		if (!(s[i] >= '0' && s[i] <= '9'))
-			return (0);
+		if (!(s[i] >= '0' && s[i] <= '9') && s[i] != '-')
+				return (0);
 		i++;
 	}
 	return (1);

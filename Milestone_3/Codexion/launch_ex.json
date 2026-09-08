@@ -1,0 +1,29 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug Python",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": []
+        },
+        {
+            "name": "Debug C",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${fileDirname}/a.out.debug",
+            "args": ["5", "4", "3", "2", "1", "", "2", "fifo"],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "MIMode": "gdb",
+            "miDebuggerPath": "/opt/homebrew/bin/gdb",
+            "externalConsole": false,
+            "sourceFileMap": {
+                ".": "${fileDirname}"
+            }
+        }
+    ]
+}

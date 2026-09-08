@@ -16,8 +16,9 @@ UNDERLINE			:= \033[4m
 
 # ------------------ Tools ------------------ #
 CC					:= cc
-CFLAGS				:= -Wall -Werror -Wextra
-GDBFLAG				:= -g
+C_FLAGS				:= -Wall -Werror -Wextra
+GDB_FLAG			:= -g
+LPTHREAD_FLAG		:= -lpthread
 RM					:= rm -rf
 
 
@@ -29,6 +30,7 @@ OBJS_DIR			:= objs
 OBJS_DIR_DEBUG		:= objs_debug
 
 SRCS				:= codexion.c \
+						validation.c \
 						utils.c
 
 OBJS				:= $(SRCS:%.c=$(OBJS_DIR)/%.o)
@@ -38,25 +40,25 @@ OBJS_DEBUG			:= $(SRCS:%.c=$(OBJS_DIR_DEBUG)/%.o)
 # --------------- Recipes --------------- #
 $(NAME): $(OBJS)
 	@echo "${YELLOW}Compiling program...\n${RESET}"
-	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+	@$(CC) $(C_FLAGS) $(OBJS) $(LPTHREAD_FLAG) -o $(NAME)
 
 $(OBJS_DIR):
 	@mkdir -p $(OBJS_DIR)
 
 $(OBJS_DIR)/%.o: %.c | $(OBJS_DIR)
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(C_FLAGS) -c $< -o $@
 
 
 # ------------ Debug Recipes ------------ #
 $(DEBUGEXEC): $(OBJS_DEBUG)
 	@echo "${PURPLE}Compiling program in debug mode...\n${RESET}"
-	@$(CC) $(GDBFLAG) $(OBJS_DEBUG) -o $(DEBUGEXEC)
+	@$(CC) $(GDB_FLAG) $(OBJS_DEBUG) $(LPTHREAD_FLAG) -o $(DEBUGEXEC)
 
 $(OBJS_DIR_DEBUG):
 	@mkdir -p $(OBJS_DIR_DEBUG)
 
 $(OBJS_DIR_DEBUG)/%.o: %.c | $(OBJS_DIR_DEBUG)
-	@$(CC) $(CFLAGS) $(GDBFLAG) -c $< -o $@
+	@$(CC) $(C_FLAGS) $(GDB_FLAG) -c $< -o $@
 
 
 # ------------------ Commands ------------------ #
@@ -68,10 +70,10 @@ help:
 help-run:
 	@echo "${CYAN}To run the program the following arguments must be passed:${RESET}\n"
 
-	@echo "${BOLD}./codexion 'number_of_coders' 'time_to_burnout (in milliseconds)' \
-'time_to_compile (in milliseconds)' 'time_to_debug (in milliseconds)' \
-'time_to_refactor (in milliseconds)' 'number_of_compiles_required' \
-'dongle_cooldown (in milliseconds)' 'scheduler (fifo or edf)'${RESET}\n"
+	@echo "${BOLD}./codexion 1:'number_of_coders' 2:'time_to_burnout (in milliseconds)' \
+3:'time_to_compile (in milliseconds)' 4:'time_to_debug (in milliseconds)' \
+5:'time_to_refactor (in milliseconds)' 6:'number_of_compiles_required' \
+7:'dongle_cooldown (in milliseconds)' 8:'scheduler (fifo or edf)'${RESET}\n"
 
 	@echo "${YELLOW} For more information go to subject.pdf page 8."
 
@@ -97,6 +99,6 @@ fclean: clean
 	@echo "${RED}Removing '$(DEBUGEXEC)' file.${RESET}"
 	@$(RM) $(DEBUGEXEC)
 
-re: fclean all
+re: fclean all debug
 
 .PHONY: help help-run all debuf clean fclean re
