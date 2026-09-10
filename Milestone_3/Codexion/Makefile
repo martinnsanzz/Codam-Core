@@ -85,6 +85,24 @@ all: $(NAME)
 	@echo "${GREEN}Program is compiled and ready to use !! $(DEBUGGER)...${RESET}"
 	@echo "${BOLD}	Run ./$(NAME) $(DEBUGGER)...${RESET}"
 
+valgrind: $(NAME)
+	@echo "$(YELLOW)Runnin valgrind with stric flags with default arguments\n${RESET}"
+	@valgrind --leak-check=full \
+			  --show-leak-kinds=all \
+			  --errors-for-leak-kinds=all \
+			  --track-origins=yes --track-fds=yes \
+			  --show-reachable=yes \
+			  --num-callers=40 \
+			  --leak-resolution=high \
+			  --error-exitcode=99 \
+			  --log-file=valgrind.log \
+			  ./$(NAME) 5 4 3 2 1 4 2 fifo; \
+			  if [ $$? -ne 0 ]; then \
+			  	echo "$(RED)\nValgrind found errors — see valgrind.log${RESET}"; \
+			  else \
+			  	echo "$(GREEN)\nNo leaks found${RESET}"; \
+			  fi
+
 debug: $(DEBUGEXEC)
 	@echo "${GREEN}Debug program is compiled and ready to use !! $(DEBUGGER)...${RESET}"
 
@@ -95,6 +113,9 @@ clean:
 	@echo "${RED}Removing '$(OBJS_DIR_DEBUG)' folder.${RESET}"
 	@$(RM) $(OBJS_DIR_DEBUG)
 
+	@echo "${RED}Removing 'valgrind.log' file.${RESET}"
+	@$(RM) valgrind.log
+
 
 fclean: clean
 	@echo "${RED}Removing '$(NAME)' program.\n${RESET}"
@@ -103,6 +124,8 @@ fclean: clean
 	@echo "${RED}Removing '$(DEBUGEXEC)' file.${RESET}"
 	@$(RM) $(DEBUGEXEC)
 
-re: fclean all debug
+re: fclean all
 
-.PHONY: help help-run all debuf clean fclean re
+re-debug: fclean debug
+
+.PHONY: help help-run all valgrind debug clean fclean re re-debug

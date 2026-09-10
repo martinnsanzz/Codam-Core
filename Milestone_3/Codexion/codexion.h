@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   codexion.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: 2002mssm02 <2002mssm02@student.42.fr>      +#+  +:+       +#+        */
+/*   By: masanz-s <masanz-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 12:47:09 by masanz-s          #+#    #+#             */
-/*   Updated: 2026/09/08 11:16:12 by 2002mssm02       ###   ########.fr       */
+/*   Updated: 2026/09/10 15:00:41 by masanz-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,13 @@
 # include <sys/time.h>
 # include <pthread.h>
 # include <limits.h>
+# include <stdint.h>
 
 // ------------- Coder -------------
 typedef struct s_coders{
 	int id;
+	int left_dongle_i;
+	int right_dongle_i;
 } t_coders;
 
 // ---------- Validation -----------

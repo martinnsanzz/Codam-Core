@@ -30,6 +30,8 @@ This is a list of multiple resources use through out the life-cycle of the proje
 - [Threads on single Processors](https://www.youtube.com/watch?v=M9HHWFp84f0)
 - [Thread Management Function in C](https://www.geeksforgeeks.org/c/thread-functions-in-c-c/)
 - [Mutexes in C](https://medium.com/@sherniiazov.da/mutexes-in-c-ac2b0f1a6d34)
+- [Data Structures using C](https://www.geeksforgeeks.org/dsa/lmns-data-structures/)
+
 ### Extra
 - [The Dining Philosophers Problem](https://pages.mtu.edu/~shene/NSF-3/e-Book/MUTEX/TM-example-philos-1.html)
 - [A simple Makefile Tutorial](https://www.cs.colby.edu/maxwell/courses/tutorials/maketutor/)
