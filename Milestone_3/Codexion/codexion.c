@@ -6,7 +6,7 @@
 /*   By: masanz-s <masanz-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 12:47:12 by masanz-s          #+#    #+#             */
-/*   Updated: 2026/09/10 14:58:51 by masanz-s         ###   ########.fr       */
+/*   Updated: 2026/09/10 15:04:11 by masanz-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,13 @@ int     main(int argc, char *argv[])
         return (0);
     get_rules(argv, rules, &scheduler);
 
-	if (init_values(rules[0], &coders, &threads, &dongles))
+	if (init_coders(rules[0], &coders))
 		return (1);
+	if (init_values(rules[0], &threads, &dongles))
+	{
+		free(coders);
+		return (1);
+	}
 	clean_values(rules[0], &coders, &threads, &dongles);
 
 	return (0);
@@ -53,17 +58,15 @@ int	init_values(int num_coders, pthread_t **threads, pthread_mutex_t **dongles)
 {
 	int	tmp;
 
+	tmp = num_coders;
 	*threads = ft_calloc(num_coders, sizeof(pthread_t));
 	*dongles = ft_calloc(num_coders, sizeof(pthread_mutex_t));
 
 	if (*threads == NULL || *dongles == NULL)
 		return (1);
 
-	tmp = num_coders;
-	while(num_coders--){
-		(*coders)[num_coders].id = (num_coders + 1);
+	while(num_coders--)
 		pthread_mutex_init(&(*dongles)[num_coders], NULL);
-	}
 
 	num_coders = tmp;
 	while(num_coders--){
