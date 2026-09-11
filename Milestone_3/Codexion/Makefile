@@ -29,14 +29,17 @@ DEBUGEXEC			:= a.out.debug
 OBJS_DIR			:= objs
 OBJS_DIR_DEBUG		:= objs_debug
 
-SRCS				:= codexion.c \
-						validation.c \
-						display.c \
-						utils/utils_1.c \
-						utils/utils_2.c
+SRCS_DIR			:= srcs
+SRCS				:= $(addprefix $(SRCS_DIR)/, codexion.c \
+                                   				 validation.c \
+                                   				 display.c \
+                                   				 libft/ft_convert.c \
+                                   				 libft/ft_memory.c \
+                                   				 libft/ft_string.c \
+												 core/initialization.c)
 
-OBJS				:= $(SRCS:%.c=$(OBJS_DIR)/%.o)
-OBJS_DEBUG			:= $(SRCS:%.c=$(OBJS_DIR_DEBUG)/%.o)
+OBJS				:= $(SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)
+OBJS_DEBUG			:= $(SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR_DEBUG)/%.o)
 
 
 # --------------- Recipes --------------- #
@@ -46,9 +49,10 @@ $(NAME): $(OBJS)
 
 $(OBJS_DIR):
 	@mkdir -p $(OBJS_DIR)
-	@mkdir -p $(OBJS_DIR)/utils
+	@mkdir -p $(OBJS_DIR)/libft
+	@mkdir -p $(OBJS_DIR)/core
 
-$(OBJS_DIR)/%.o: %.c | $(OBJS_DIR)
+$(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c | $(OBJS_DIR)
 	@$(CC) $(C_FLAGS) -c $< -o $@
 
 
@@ -59,9 +63,10 @@ $(DEBUGEXEC): $(OBJS_DEBUG)
 
 $(OBJS_DIR_DEBUG):
 	@mkdir -p $(OBJS_DIR_DEBUG)
-	@mkdir -p $(OBJS_DIR_DEBUG)/utils
+	@mkdir -p $(OBJS_DIR_DEBUG)/libft
+	@mkdir -p $(OBJS_DIR_DEBUG)/core
 
-$(OBJS_DIR_DEBUG)/%.o: %.c | $(OBJS_DIR_DEBUG)
+$(OBJS_DIR_DEBUG)/%.o: $(SRCS_DIR)/%.c | $(OBJS_DIR_DEBUG)
 	@$(CC) $(GDB_FLAG) -c $< -o $@
 
 

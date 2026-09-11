@@ -6,11 +6,13 @@
 /*   By: masanz-s <masanz-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 12:16:06 by masanz-s          #+#    #+#             */
-/*   Updated: 2026/09/07 13:29:56 by masanz-s         ###   ########.fr       */
+/*   Updated: 2026/09/11 13:51:22 by masanz-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
+
+static int	ft_isnumber(char *s);
 
 int     check_argv(int argc, char *argv[])
 {
@@ -64,4 +66,18 @@ void    get_rules(char *argv[], int *arr, char **scheduler)
     while(i++ < 7)
 		arr[i - 1] = (int)ft_atoi(argv[i]);
 	*scheduler = argv[8];
+}
+
+static int	ft_isnumber(char *s)
+{
+	int i;
+
+	i = 0;
+	while (s[i] != '\0')
+	{
+		if (!(s[i] >= '0' && s[i] <= '9') && s[i] != '-')
+				return (0);
+		i++;
+	}
+	return (1);
 }

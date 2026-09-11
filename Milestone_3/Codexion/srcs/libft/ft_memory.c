@@ -1,42 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_2.c                                          :+:      :+:    :+:   */
+/*   ft_memory.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: 2002mssm02 <2002mssm02@student.42.fr>      +#+  +:+       +#+        */
+/*   By: masanz-s <masanz-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/08 12:47:15 by masanz-s          #+#    #+#             */
-/*   Updated: 2026/09/08 11:13:05 by 2002mssm02       ###   ########.fr       */
+/*   Updated: 2026/09/11 13:46:43 by masanz-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../codexion.h"
-
-static size_t	num_len(int num);
-
-char    *ft_itoa(int n)
-{
-    char	*num;
-	long	nb;
-	size_t	len;
-
-	nb = n;
-	len = num_len(nb) + (nb < 0);
-	num = ft_calloc(len + 1, sizeof(char));
-	if (num == NULL)
-		return (NULL);
-	if (nb < 0)
-	{
-		num[0] = '-';
-		nb *= -1;
-	}
-	while (len > (n < 0))
-	{
-		num[--len] = (nb % 10) + '0';
-		nb /= 10;
-	}
-	return (num);
-}
 
 void	ft_bzero(void *s, size_t n)
 {
@@ -67,19 +41,14 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	return (ptr);
 }
 
-static size_t	num_len(int num)
+void	*ft_memset(void *s, int c, size_t n)
 {
-	size_t	len;
-	long	nbum;
+	unsigned char	c_char;
+	unsigned char	*ptr;
 
-	len = 1;
-	nbum = num;
-	if (nbum < 0)
-		nbum *= -1;
-	while (nbum >= 10)
-	{
-		len++;
-		nbum /= 10;
-	}
-	return (len);
+	c_char = (unsigned char)c;
+	ptr = (unsigned char *)s;
+	while (n--)
+		*ptr++ = c_char;
+	return (s);
 }

@@ -39,6 +39,7 @@ This is a list of multiple resources use through out the life-cycle of the proje
 - [CPU Cores VS Threads Explained](https://www.youtube.com/watch?v=hwTYDQ0zZOw)
 - [Mutex lock for Linux Thread Synchronization](https://www.geeksforgeeks.org/linux-unix/mutex-lock-for-linux-thread-synchronization/)
 - [Multithreading vs Multiprocessing](https://www.youtube.com/watch?v=PgDaJEjlBuI)
+- [Lock (Computer Science)](https://en.wikipedia.org/wiki/Lock_(computer_science))
 
 ---
 
